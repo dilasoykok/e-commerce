@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Application: kullanım senaryoları (sorgular/komutlar), DTO'lar ve dış dünyaya açılan arayüzler.
+    Yalnızca Domain'e bağlıdır; EF Core, Redis, RabbitMQ gibi teknolojileri bilmez.
+  -->
+  <PropertyGroup>
+    <RootNamespace>Soykok.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Soykok.Domain/Soykok.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.*" />
+  </ItemGroup>
+
+</Project>

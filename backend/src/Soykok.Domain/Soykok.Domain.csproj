@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Domain: iş kuralları ve varlıklar. Hiçbir pakete ya da diğer katmana bağımlı değildir.
+  -->
+  <PropertyGroup>
+    <RootNamespace>Soykok.Domain</RootNamespace>
+  </PropertyGroup>
+
+</Project>

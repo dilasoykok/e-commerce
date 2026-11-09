@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Soykok.Domain/Soykok.Domain.csproj" />
+    <Project Path="src/Soykok.Application/Soykok.Application.csproj" />
+    <Project Path="src/Soykok.Infrastructure/Soykok.Infrastructure.csproj" />
+    <Project Path="src/Soykok.Api/Soykok.Api.csproj" />
+  </Folder>
+</Solution>

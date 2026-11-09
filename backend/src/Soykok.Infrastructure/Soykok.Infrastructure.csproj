@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Infrastructure: Application'daki arayüzlerin gerçek uygulamaları
+    (EF Core + PostgreSQL, Redis, RabbitMQ, Keycloak).
+  -->
+  <PropertyGroup>
+    <RootNamespace>Soykok.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Soykok.Application/Soykok.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Kimlik doğrulama (çerez, OIDC), health check'ler, yapılandırma -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.*" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.*" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Örnek katalog dll'in içine gömülür (yayın klasörüne kopyalama derdi olmaz) -->
+    <EmbeddedResource Include="Persistence/Seed/*.json" LogicalName="Seed.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

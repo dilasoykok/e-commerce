@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!--
+    Api (sunum katmanı): HTTP uç noktaları ve uygulamanın ayağa kaldırıldığı yer (composition root).
+    İş mantığı içermez; isteği Application'daki handler'a iletir, sonucu HTTP cevabına çevirir.
+  -->
+  <PropertyGroup>
+    <RootNamespace>Soykok.Api</RootNamespace>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Soykok.Application/Soykok.Application.csproj" />
+    <ProjectReference Include="../Soykok.Infrastructure/Soykok.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.*" />
+  </ItemGroup>
+
+</Project>

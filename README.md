@@ -53,11 +53,40 @@ docker compose ps
 
 API'yi araçlarla (curl, Postman) test ederken `Authorization: Bearer <token>` da kullanılabilir.
 
-## Backend API (`backend/Soykok.Api`)
+## Backend API (`backend/`)
 
-ASP.NET Core minimal API. PostgreSQL (EF Core), Redis (katalog önbelleği), RabbitMQ (olaylar) ve
-Keycloak (JWT) bağlı. İlk açılışta tabloları kurar ve `Data/Seed/*.json` içindeki örnek kataloğu
-yükler (frontend'deki `src/js/data/products.js`'ten üretildi; alan adları aynı).
+ASP.NET Core (.NET 10), **Clean Architecture** ile dört katman. PostgreSQL (EF Core), Redis
+(katalog önbelleği + oturumlar), RabbitMQ (olaylar) ve Keycloak bağlı. İlk açılışta tabloları kurar ve
+örnek kataloğu yükler (`Infrastructure/Persistence/Seed/*.json`, frontend'deki `products.js`'ten üretildi).
+
+### Katmanlar
+
+```
+backend/
+├── Soykok.slnx                  # çözüm dosyası (Rider / Visual Studio / dotnet CLI)
+├── Directory.Build.props        # ortak ayarlar (net10.0, nullable ...)
+└── src/
+    ├── Soykok.Domain/           # varlıklar ve iş kuralları — hiçbir şeye bağımlı değil
+    │   └── Catalog/             # Product, Category, CategoryGroup ...
+    ├── Soykok.Application/      # kullanım senaryoları — yalnızca Domain'e bağlı
+    │   ├── Common/              # Result/Error, IQueryHandler/ICommandHandler, arayüzler (repository, cache, olay)
+    │   └── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Contracts (DTO)
+    ├── Soykok.Infrastructure/   # arayüzlerin uygulamaları — Application'a bağlı
+    │   ├── Persistence/         # EF Core DbContext, konfigürasyonlar, repository'ler, örnek veri
+    │   ├── Caching/             # Redis katalog önbelleği
+    │   ├── Messaging/           # RabbitMQ olay yayıncısı
+    │   ├── Identity/            # Keycloak (OIDC + çerez + JWT), Redis oturum deposu
+    │   └── Health/              # PostgreSQL / Redis / RabbitMQ sağlık kontrolleri
+    └── Soykok.Api/              # HTTP uç noktaları ve başlangıç (Program.cs)
+```
+
+Bağımlılık yönü dışarıdan içe: **Api → Infrastructure → Application → Domain**.
+Bir uç nokta yalnızca isteği ilgili handler'a iletir; iş mantığı Application'da, kurallar Domain'dedir.
+Beklenen hatalar `Result`/`Error` ile döner ve Api'de HTTP koduna çevrilir
+(Validation → 400, NotFound → 404, Conflict → 409); iş kuralı ihlali (`DomainException`) → 400.
+
+Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz + sorgu/komut handler'ı
+(`DependencyInjection.cs`'e kaydı) → Infrastructure'da uygulaması → Api'de uç nokta.
 
 | Uç nokta                       | Yetki   | Açıklama |
 |--------------------------------|---------|----------|
@@ -102,8 +131,9 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost/api/me
 
 ### Yerelde (Docker olmadan) çalıştırma
 
-Altyapı Docker'da çalışırken: `cd backend/Soykok.Api && dotnet run`.
-`appsettings.json` localhost portlarını kullanır (Redis: 6380).
+Altyapı Docker'da çalışırken: `cd backend && dotnet run --project src/Soykok.Api`.
+`src/Soykok.Api/appsettings.json` localhost portlarını kullanır (Redis: 6380).
+Rider / Visual Studio'da `backend/Soykok.slnx` dosyasını açın.
 
 ## PostgreSQL
 
@@ -121,7 +151,7 @@ sıfırdan başlatmak için `docker compose down -v`.
 ├── keycloak/import/       # realm tanımı
 ├── postgres/init/         # ilk açılış SQL/betikleri
 ├── rabbitmq/              # yönetim paneli ayarı
-├── backend/               # ASP.NET Core API + Dockerfile
+├── backend/               # ASP.NET Core API (Clean Architecture) + Dockerfile
 └── soykok-ticaret/        # arayüz (Vite + Tailwind) + Dockerfile
 ```
 
