@@ -10,21 +10,30 @@ Tüm trafik **nginx** reverse proxy üzerinden geçer.
 | migrator    | `backend` (EF Core migrations)    | API'den önce çalışır ve kapanır          |
 | api         | `backend` (ASP.NET Core, .NET 10) | http://localhost/api/                    |
 | Keycloak    | `quay.io/keycloak/keycloak:26.0`  | http://localhost/auth/admin              |
-| PostgreSQL  | `postgres:17-alpine`              | `127.0.0.1:5432`                         |
-| Redis       | `redis:7-alpine`                  | `127.0.0.1:6379`                         |
-| RabbitMQ    | `rabbitmq:4-management-alpine`    | AMQP `127.0.0.1:5672`, panel http://localhost/rabbitmq/ |
+| PostgreSQL  | `postgres:17-alpine`              | `127.0.0.1:5432` (`POSTGRES_PORT`)       |
+| Redis       | `redis:7-alpine`                  | `127.0.0.1:6379` (`REDIS_PORT`)          |
+| RabbitMQ    | `rabbitmq:4-management-alpine`    | AMQP `127.0.0.1:5672` (`RABBITMQ_PORT`), panel http://localhost/rabbitmq/ |
 
 PostgreSQL, Redis ve RabbitMQ (AMQP) yalnızca `127.0.0.1`'e açılır; dışarıdan erişilemez.
+Bilgisayardaki portlar `.env`'den değiştirilebilir (bkz. [Sorun giderme](#sorun-giderme)); konteynerler
+birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 
 ## Kurulum
 
+Gerekenler: Docker Desktop. Bilgisayarda .NET SDK ya da Node.js kurulu olması gerekmez; her şey
+konteynerlerde derlenir.
+
 ```bash
-cp .env.example .env      # şifreleri değiştirin
+cp .env.example .env          # şifreleri değiştirin
 docker compose up -d --build
-docker compose ps
+docker compose ps             # migrator "Exited (0)", diğerleri running/healthy olmalı
+docker compose logs migrator  # "Veritabanı hazır"
+curl http://localhost/api/health   # {"status":"ok",...}
 ```
 
-İlk açılışta Keycloak'ın hazır olması ~30-60 sn sürebilir: `docker compose logs -f keycloak`
+Açılış sırası: `postgres` → **`migrator`** (migration + örnek veri, sonra kapanır) → `api` → `nginx`.
+`api` yalnızca migrator başarıyla biterse başlar. İlk açılışta Keycloak'ın hazır olması ~30-60 sn
+sürebilir: `docker compose logs -f keycloak`
 
 ## Keycloak
 
@@ -68,12 +77,17 @@ backend/
 ├── Directory.Build.props        # ortak ayarlar (net10.0, nullable ...)
 └── src/
     ├── Soykok.Domain/           # varlıklar ve iş kuralları — hiçbir şeye bağımlı değil
-    │   └── Catalog/             # Product, Category, CategoryGroup ...
+    │   ├── Catalog/             # Product, Category, CategoryGroup
+    │   ├── Customers/           # Customer, CustomerAddress, FavoriteProduct
+    │   ├── Ordering/            # Order, OrderItem, OrderStatusChange (durum geçişleri)
+    │   ├── Inventory/           # StockItem
+    │   ├── Reviews/             # ProductReview
+    │   └── Common/              # PostalAddress, InvoiceInfo, DomainException
     ├── Soykok.Application/      # kullanım senaryoları — yalnızca Domain'e bağlı
     │   ├── Common/              # Result/Error, IQueryHandler/ICommandHandler, arayüzler (repository, cache, olay)
     │   └── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Contracts (DTO)
     ├── Soykok.Infrastructure/   # arayüzlerin uygulamaları — Application'a bağlı
-    │   ├── Persistence/         # EF Core DbContext, konfigürasyonlar, repository'ler, örnek veri
+    │   ├── Persistence/         # EF Core DbContext, konfigürasyonlar, migration'lar, repository'ler, örnek veri
     │   ├── Caching/             # Redis katalog önbelleği
     │   ├── Messaging/           # RabbitMQ olay yayıncısı
     │   ├── Identity/            # Keycloak (OIDC + çerez + JWT), Redis oturum deposu
@@ -133,9 +147,17 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost/api/me
 
 ### Yerelde (Docker olmadan) çalıştırma
 
-Altyapı Docker'da çalışırken: `cd backend && dotnet run --project src/Soykok.Api`.
-`src/Soykok.Api/appsettings.json` localhost portlarını kullanır (Redis: 6380).
-Rider / Visual Studio'da `backend/Soykok.slnx` dosyasını açın.
+.NET 10 SDK gerekir. Altyapı Docker'da çalışırken:
+
+```bash
+cd backend
+dotnet run --project src/Soykok.Migrator   # bekleyen migration'lar + örnek veri
+dotnet run --project src/Soykok.Api
+```
+
+`appsettings.json` dosyaları bilgisayardaki portları kullanır (`localhost:5432`, Redis `localhost:6380`);
+`.env`'deki şifreleri değiştirdiyseniz buradakileri de güncelleyin. Rider / Visual Studio'da
+`backend/Soykok.slnx` dosyasını açın.
 
 ## PostgreSQL
 
@@ -144,7 +166,16 @@ Rider / Visual Studio'da `backend/Soykok.slnx` dosyasını açın.
 sıfırdan başlatmak için `docker compose down -v`.
 
 `ecommerce` veritabanının tabloları **migrator** servisi tarafından EF Core migration'larıyla kurulur;
-veritabanı boşsa örnek katalog (33 ürün) ve stok (ürün başına 250) yüklenir.
+veritabanı boşsa örnek katalog (33 ürün) ve stok (ürün başına 250) yüklenir. Tablolar modül başına
+şemalardadır (`catalog`, `customers`, `ordering`, `inventory`, `reviews`); migration geçmişi
+`public.__ef_migrations_history` tablosundadır.
+
+```bash
+# Tabloları gör
+docker compose exec postgres psql -U ecommerce -d ecommerce -c '\dt *.*'
+# Uygulanmış migration'lar
+docker compose exec postgres psql -U ecommerce -d ecommerce -c 'select * from public.__ef_migrations_history'
+```
 
 ### Yeni migration
 
@@ -167,6 +198,8 @@ Ayrıntılar: [`backend/docs/database.md`](backend/docs/database.md).
 ├── postgres/init/         # ilk açılış SQL/betikleri
 ├── rabbitmq/              # yönetim paneli ayarı
 ├── backend/               # ASP.NET Core API (Clean Architecture) + Dockerfile
+│   ├── docs/database.md   # şema, ER diyagramı, tasarım kararları
+│   └── scripts/           # add-migration.sh
 └── soykok-ticaret/        # arayüz (Vite + Tailwind) + Dockerfile
 ```
 
@@ -178,6 +211,21 @@ docker compose restart nginx          # nginx ayarı değişince
 docker compose up -d --build frontend # arayüzü yeniden derle
 docker compose up -d --build migrator api  # API'yi yeniden derle (bekleyen migration'larla)
 docker compose logs -f api            # API logları
+docker compose logs migrator          # migration sonucu
 docker compose down                   # durdur (veriler kalır)
 docker compose down -v                # durdur + tüm verileri sil
 ```
+
+## Sorun giderme
+
+| Belirti | Sebep / çözüm |
+|---------|---------------|
+| `ports are not available ... 6379` (ya da 5432, 5672) | Bilgisayarda aynı portu kullanan bir servis var (ör. Homebrew Redis). `.env`'de `REDIS_PORT=6380` gibi başka bir port verin; `docker compose up -d` |
+| `localhost bağlanmayı reddetti` | nginx çalışmıyor; genelde başka bir servis başlarken hata vermiştir. `docker compose ps -a` ve hatalı servisin `docker compose logs <servis>` çıktısına bakın |
+| `api` başlamıyor | Önce migrator'a bakın: `docker compose logs migrator`. API yalnızca migrator başarılıysa açılır |
+| Migrator ilk açılışta `Failed executing DbCommand ... __ef_migrations_history` yazıyor | Normal: migration geçmişi tablosu henüz yok, EF hemen ardından oluşturur |
+| Migrator `Hiç migration bulunamadı` diyor | `./backend/scripts/add-migration.sh InitialCreate` ile migration oluşturun |
+| Eski veritabanıyla migration hatası (`relation ... already exists`) | Veritabanı migration'sız kurulmuş. Yerel ortamda: `docker compose down -v && docker compose up -d --build` |
+| Ürün görselleri açılmıyor (403) | Görsel dosyaları Mac'te kısıtlı izinle duruyordu; frontend Dockerfile derlemede düzeltir. `docker compose up -d --build frontend` |
+| Keycloak realm değişikliği yansımıyor | Realm dosyası yalnızca realm yoksa içe aktarılır. Yerel ortamda: `docker compose down -v` |
+| Logda `libgssapi_krb5.so.2` | Bağlantı dizesinde `GSS Encryption Mode=Disable` yoksa çıkar (Kerberos kullanılmıyor); docker-compose ve appsettings'te ayarlı |
