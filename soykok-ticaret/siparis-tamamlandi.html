@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Siparişiniz Alındı | Soykök Ticaret"
+           description="Siparişiniz başarıyla oluşturuldu."></include>
+  <meta name="robots" content="noindex" />
+</head>
+<body class="bg-gray-50">
+
+  <include src="preloader.html"></include>
+
+  <include src="checkout-header.html"></include>
+
+  <main class="container-site py-8 lg:py-12" data-order-success>
+
+    <!-- Sipariş bulunamazsa -->
+    <div data-order-missing hidden class="checkout-card mx-auto max-w-lg text-center">
+      <p class="text-lg font-semibold">Gösterilecek sipariş bulunamadı</p>
+      <p class="mt-1 text-sm text-gray-500">Siparişinizin ayrıntıları e-posta adresinize gönderilmiştir.</p>
+      <a href="/" class="mt-6 inline-flex h-11 items-center gap-2 rounded bg-brand-900 px-6 text-sm font-semibold text-white hover:bg-brand-700">Ana Sayfaya Dön</a>
+    </div>
+
+    <div data-order-content hidden class="mx-auto max-w-3xl">
+
+      <!-- Adımlar -->
+      <ol class="flex items-center justify-center gap-2 text-xs font-medium text-green-700" aria-label="Sipariş adımları">
+        <li class="flex items-center gap-2"><span class="grid size-6 place-items-center rounded-full bg-green-600 text-white" aria-hidden="true">✓</span>Sepet</li>
+        <li class="h-px w-8 bg-green-600 sm:w-16" aria-hidden="true"></li>
+        <li class="flex items-center gap-2"><span class="grid size-6 place-items-center rounded-full bg-green-600 text-white" aria-hidden="true">✓</span>Teslimat ve Ödeme</li>
+        <li class="h-px w-8 bg-green-600 sm:w-16" aria-hidden="true"></li>
+        <li class="flex items-center gap-2" aria-current="step"><span class="grid size-6 place-items-center rounded-full bg-green-600 text-white" aria-hidden="true">✓</span>Onay</li>
+      </ol>
+
+      <section class="checkout-card mt-6 text-center">
+        <span class="mx-auto grid size-16 place-items-center rounded-full bg-green-50 text-green-600">
+          <i data-lucide="circle-check" class="size-9"></i>
+        </span>
+        <h1 class="mt-4 text-2xl font-bold">Teşekkürler <span data-order-name></span>, siparişiniz alındı!</h1>
+        <p class="mt-2 text-sm text-gray-600">
+          Sipariş numaranız: <strong data-order-number class="text-brand-900"></strong>
+        </p>
+        <p class="mt-1 text-xs text-gray-500">Sipariş özetiniz <strong data-order-email></strong> adresine gönderilecektir.</p>
+
+        <p data-order-demo hidden class="mx-auto mt-4 max-w-md rounded bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+          Bu bir demo siparişidir; gerçek ödeme alınmamıştır.
+        </p>
+      </section>
+
+      <!-- Havale talimatı -->
+      <section data-transfer-info hidden class="checkout-card mt-4" aria-labelledby="transferTitle">
+        <h2 id="transferTitle" class="flex items-center gap-2 text-base font-bold"><i data-lucide="landmark" class="size-5"></i> Havale / EFT Bilgileri</h2>
+        <p class="mt-2 text-xs text-gray-600">
+          Lütfen <strong data-transfer-amount></strong> tutarı 24 saat içinde aşağıdaki hesaba gönderin.
+          Açıklama kısmına sipariş numaranızı (<strong data-order-number></strong>) yazmayı unutmayın.
+        </p>
+        <dl class="mt-4 grid gap-2 rounded bg-gray-50 p-4 text-xs sm:grid-cols-[120px_1fr]">
+          <dt class="text-gray-500">Banka</dt><dd class="font-semibold">[Banka adı]</dd>
+          <dt class="text-gray-500">Hesap Sahibi</dt><dd class="font-semibold">[Hesap sahibi unvanı]</dd>
+          <dt class="text-gray-500">IBAN</dt><dd class="font-semibold tracking-wide">[TR00 0000 0000 0000 0000 0000 00]</dd>
+        </dl>
+      </section>
+
+      <!-- Özet -->
+      <section class="checkout-card mt-4" aria-labelledby="orderSummaryTitle">
+        <h2 id="orderSummaryTitle" class="text-base font-bold">Sipariş Özeti</h2>
+        <dl class="mt-4 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-2">
+          <div class="flex justify-between sm:block"><dt class="text-gray-500">Teslimat</dt><dd data-order-delivery class="font-semibold"></dd></div>
+          <div class="flex justify-between sm:block"><dt class="text-gray-500">Ödeme</dt><dd data-order-payment class="font-semibold"></dd></div>
+        </dl>
+
+        <ul data-order-items class="mt-4 divide-y divide-gray-100 border-t border-gray-200"></ul>
+
+        <dl class="mt-2 space-y-2 border-t border-gray-200 pt-4 text-sm">
+          <div class="flex justify-between"><dt class="text-gray-600">Ara Toplam</dt><dd data-order-subtotal class="font-semibold"></dd></div>
+          <div class="flex justify-between"><dt class="text-gray-600">Kargo</dt><dd data-order-shipping class="font-semibold"></dd></div>
+          <div class="flex justify-between border-t border-gray-200 pt-3 text-base"><dt class="font-bold">Toplam</dt><dd data-order-total class="font-bold"></dd></div>
+        </dl>
+      </section>
+
+      <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/siparislerim.html" data-track-link class="inline-flex h-11 items-center justify-center gap-2 rounded border border-brand-900 px-6 text-sm font-semibold text-brand-900 hover:bg-brand-900 hover:text-white">
+          <i data-lucide="truck" class="size-4"></i> Siparişimi Takip Et
+        </a>
+        <a href="/" class="inline-flex h-11 items-center justify-center gap-2 rounded bg-brand-900 px-6 text-sm font-semibold text-white hover:bg-brand-700">
+          Alışverişe Devam Et <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

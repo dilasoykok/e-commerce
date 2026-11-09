@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Siparişlerim | Soykök Ticaret"
+           description="Siparişlerinizi görüntüleyin ve sipariş numaranızla kargo durumunu takip edin."></include>
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main class="container-site py-6 lg:py-10" data-orders-page>
+
+    <nav aria-label="Sayfa yolu" class="text-xs text-gray-500">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-brand-900">Ana Sayfa</a></li>
+        <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+        <li aria-current="page" class="font-medium text-brand-900" data-orders-crumb>Sipariş Takibi</li>
+      </ol>
+    </nav>
+
+    <!-- ================= ÜYE: SİPARİŞLERİM ================= -->
+    <section data-member-view hidden class="mt-4">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold">Siparişlerim</h1>
+          <p class="mt-1 text-sm text-gray-500">
+            Merhaba <strong data-user-name></strong>, <span data-user-email></span> hesabına ait siparişler.
+          </p>
+        </div>
+        <button type="button" data-logout
+                class="inline-flex h-9 items-center gap-2 rounded border border-gray-300 px-4 text-xs font-medium hover:border-sale hover:text-sale">
+          <i data-lucide="log-out" class="size-4"></i> Çıkış Yap
+        </button>
+      </div>
+
+      <ul data-order-list class="mt-6 space-y-4"></ul>
+
+      <div data-orders-empty hidden class="mt-6 flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-14 text-center">
+        <span class="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+          <i data-lucide="package" class="size-7"></i>
+        </span>
+        <p class="mt-4 font-semibold">Henüz siparişiniz yok</p>
+        <p class="mt-1 text-sm text-gray-500">Verdiğiniz siparişler burada listelenir.</p>
+        <a href="/urunler.html" class="mt-5 inline-flex h-10 items-center gap-2 rounded bg-brand-900 px-5 text-sm font-semibold text-white hover:bg-brand-700">
+          Alışverişe Başla <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- ================= MİSAFİR: SİPARİŞ TAKİBİ ================= -->
+    <section data-guest-view hidden class="mt-4">
+      <h1 class="text-2xl font-bold">Sipariş Takibi</h1>
+      <p class="mt-1 text-sm text-gray-500">Sipariş numaranız ve siparişte kullandığınız e-posta ile siparişinizin durumunu görün.</p>
+
+      <div class="mt-6 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
+
+        <div>
+          <form data-track-form novalidate class="checkout-card grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+            <div>
+              <label for="trackNo" class="form-label">Sipariş Numarası</label>
+              <input id="trackNo" name="number" required placeholder="SYK-261019-1234" autocomplete="off"
+                     class="form-input uppercase placeholder:normal-case" />
+            </div>
+            <div>
+              <label for="trackEmail" class="form-label">E-posta</label>
+              <input id="trackEmail" name="email" type="email" required autocomplete="email" placeholder="ornek@mail.com" class="form-input" />
+            </div>
+            <button type="submit"
+                    class="flex h-10 items-center justify-center gap-2 rounded bg-brand-900 px-5 text-sm font-semibold text-white transition hover:bg-brand-700">
+              <i data-lucide="search" class="size-4"></i> Sorgula
+            </button>
+            <p data-track-alert role="alert" hidden class="rounded bg-red-50 px-3 py-2 text-xs text-sale sm:col-span-3"></p>
+            <p class="text-[11px] text-gray-500 sm:col-span-3">
+              Sipariş numaranız, sipariş onay sayfasında ve size gönderilen e-postada yazar (ör. SYK-261019-1234).
+            </p>
+          </form>
+
+          <div data-track-result class="mt-6"></div>
+        </div>
+
+        <!-- Üye girişi önerisi -->
+        <aside class="checkout-card">
+          <span class="grid size-11 place-items-center rounded-lg bg-brand-900 text-white"><i data-lucide="user" class="size-5"></i></span>
+          <h2 class="mt-4 font-bold">Üye misiniz?</h2>
+          <p class="mt-1 text-sm text-gray-600">Giriş yapın, tüm siparişlerinizi numara girmeden tek ekranda görün.</p>
+          <a href="/hesap.html?next=/siparislerim.html#giris"
+             class="mt-4 flex h-10 items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white hover:bg-brand-700">
+            <i data-lucide="log-in" class="size-4"></i> Giriş Yap
+          </a>
+          <a href="/hesap.html?next=/siparislerim.html#kayit"
+             class="mt-2 flex h-10 items-center justify-center rounded border border-gray-300 text-sm font-medium hover:border-brand-900">
+            Kayıt Ol
+          </a>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

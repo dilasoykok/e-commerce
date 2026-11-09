@@ -1,0 +1,88 @@
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Marka bandı: kendiliğinden kayma */
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  /* Koyu lacivert / antrasit (topbar, butonlar) */
+  --color-brand-950: #18212b;
+  --color-brand-900: #1f2a36;
+  --color-brand-800: #2a3846;
+  --color-brand-700: #374859;
+
+  /* Logodaki ahşap tonu */
+  --color-wood-400: #c08a4e;
+  --color-wood-500: #a8703a;
+  --color-wood-600: #8a5726;
+
+  /* İndirim / etiket */
+  --color-sale: #d92d20;
+}
+
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-inline: 1rem;
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-white text-brand-900 antialiased;
+  }
+
+  /* İkonlar JS ile SVG'ye dönüşene kadar yerini koru: içerik kaymasın */
+  i[data-lucide] {
+    display: inline-block;
+    flex-shrink: 0;
+  }
+}
+
+/* ---------- Form bileşenleri (ödeme, hesap vb.) ---------- */
+@layer components {
+  .form-label {
+    @apply mb-1.5 block text-xs font-medium text-brand-800;
+  }
+  .form-input {
+    @apply h-10 w-full rounded border border-gray-300 bg-white px-3 text-sm text-brand-900 transition placeholder:text-gray-400 focus:border-brand-700 focus:ring-2 focus:ring-brand-700/15 focus:outline-none disabled:bg-gray-100 aria-[invalid=true]:border-sale aria-[invalid=true]:ring-sale/15;
+  }
+  .form-error {
+    @apply mt-1 text-[11px] text-sale;
+  }
+  .checkout-card {
+    @apply rounded-md border border-gray-200 bg-white p-5 md:p-6;
+  }
+  .option-card {
+    @apply flex cursor-pointer gap-3 rounded-md border border-gray-200 p-4 transition hover:border-gray-300 has-checked:border-brand-900 has-checked:bg-brand-900/[0.03] has-checked:ring-1 has-checked:ring-brand-900;
+  }
+}
+
+/* ---------- Hero slayt yazıları ---------- */
+/* Görseller çapraz geçerken yazılar üst üste binmesin:
+   giden yazı hemen kaybolur, gelen yazı görsel oturduktan sonra belirir. */
+.hero-copy {
+  transition: opacity 0.5s ease 0.35s, transform 0.5s ease 0.35s;
+}
+[data-slide].opacity-0 .hero-copy {
+  opacity: 0;
+  transform: translateY(12px);
+  transition-duration: 0.15s;
+  transition-delay: 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy,
+  [data-slide].opacity-0 .hero-copy {
+    transition: none;
+    transform: none;
+  }
+}

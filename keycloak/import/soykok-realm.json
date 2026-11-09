@@ -1,0 +1,49 @@
+{
+  "realm": "soykok",
+  "displayName": "Soykök Ticaret",
+  "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "verifyEmail": false,
+  "sslRequired": "external",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["tr", "en"],
+  "defaultLocale": "tr",
+  "roles": {
+    "realm": [
+      { "name": "customer", "description": "Mağaza müşterisi" },
+      { "name": "admin", "description": "Mağaza yöneticisi" }
+    ]
+  },
+  "defaultRole": {
+    "name": "default-roles-soykok",
+    "composite": true,
+    "composites": {
+      "realm": ["offline_access", "uma_authorization", "customer"]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "soykok-web",
+      "name": "Soykök Ticaret Web",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "rootUrl": "http://localhost",
+      "baseUrl": "/",
+      "redirectUris": ["http://localhost/*", "http://localhost:5173/*"],
+      "webOrigins": ["http://localhost", "http://localhost:5173"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost/*##http://localhost:5173/*"
+      }
+    }
+  ]
+}

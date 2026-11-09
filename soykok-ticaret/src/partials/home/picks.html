@@ -1,0 +1,78 @@
+<!-- ================= SİZİN İÇİN SEÇTİKLERİMİZ ================= -->
+<section class="container-site mt-8" aria-labelledby="picksTitle">
+  <div class="mb-3 flex items-center justify-between">
+    <h2 id="picksTitle" class="text-lg font-bold">Sizin İçin Seçtiklerimiz</h2>
+    <a href="/urunler.html" class="flex items-center gap-1.5 text-xs font-medium hover:text-wood-600">
+      Tümünü Gör <i data-lucide="arrow-right" class="size-4"></i>
+    </a>
+  </div>
+
+  <div class="grid gap-4 lg:grid-cols-[238px_1fr]">
+
+    <!-- Sol sütun: Banner + Markalar -->
+    <aside class="flex flex-col gap-5">
+      <a href="#" class="group relative block h-[142px] overflow-hidden rounded-md bg-brand-800">
+        <img src="/images/banners/toplu-alim.jpg" alt="" loading="lazy"
+             class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105" />
+        <div class="absolute inset-0 bg-linear-to-t from-brand-950/90 via-brand-950/50 to-brand-950/10"></div>
+        <div class="absolute inset-x-0 bottom-0 p-4 text-white">
+          <p class="text-[11px] text-white/85">Profesyonellere Özel</p>
+          <h3 class="text-base font-bold">Toplu Alım Avantajları</h3>
+          <span class="mt-2.5 inline-flex h-7 items-center gap-2 rounded border border-white/70 px-3 text-[11px] font-medium transition group-hover:bg-white group-hover:text-brand-900">
+            Teklif Al <i data-lucide="arrow-right" class="size-3.5"></i>
+          </span>
+        </div>
+      </a>
+
+      <div>
+        <h3 class="mb-2.5 text-xs font-semibold">Popüler Markalar</h3>
+        <ul class="grid grid-cols-5 gap-1.5">
+          <li><a href="#" class="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"><img src="/images/brands/krono-original.png" alt="Krono Original" class="max-h-full w-auto object-contain" loading="lazy" /></a></li>
+          <li><a href="#" class="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"><img src="/images/brands/classen.png" alt="Classen" class="max-h-full w-auto object-contain" loading="lazy" /></a></li>
+          <li><a href="#" class="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"><img src="/images/brands/egger.png" alt="Egger" class="max-h-full w-auto object-contain" loading="lazy" /></a></li>
+          <li><a href="#" class="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"><img src="/images/brands/parador.png" alt="Parador" class="max-h-full w-auto object-contain" loading="lazy" /></a></li>
+          <li><a href="#" class="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"><img src="/images/brands/quick-step.png" alt="Quick-Step" class="max-h-full w-auto object-contain" loading="lazy" /></a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Ürün kartları -->
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+      <include src="components/product-card.html"
+               id="p1" href="/urun.html?id=p1" image="laminat-oak-naturel.jpg"
+               name="Laminat Parke - Oak Naturel 8mm" brand="Krono Original"
+               badge="Çok Satan" badgeClass="bg-sale"
+               rating="4.8" ratingWidth="96%" reviews="124"
+               oldPrice="1.250 TL" price="1.062 TL/m²" priceValue="1062" priceClass="text-sale"></include>
+
+      <include src="components/product-card.html"
+               id="p2" href="/urun.html?id=p2" image="vinil-stone-grey.jpg"
+               name="Vinil Parke - Stone Grey 5mm" brand="Classen"
+               badge="Yeni" badgeClass="bg-green-600"
+               rating="4.9" ratingWidth="98%" reviews="56"
+               price="2.850 TL/m²" priceValue="2850"></include>
+
+      <include src="components/product-card.html"
+               id="p3" href="/urun.html?id=p3" image="spc-mese.jpg"
+               name="SPC Parke - Meşe 4mm" brand="Egger"
+               badge="%10 İndirim" badgeClass="bg-sale"
+               rating="4.6" ratingWidth="92%" reviews="92"
+               price="1.580 TL/m²" priceValue="1580"></include>
+
+      <include src="components/product-card.html"
+               id="p4" href="/urun.html?id=p4" image="lvt-baliksirti.jpg"
+               name="LVT Parke - Balıksırtı 3mm" brand="Krono Original"
+               badge="Hızlı Teslimat" badgeClass="bg-brand-900"
+               rating="4.8" ratingWidth="96%" reviews="73"
+               oldPrice="1.890 TL" price="1.701 TL/m²" priceValue="1701" priceClass="text-sale"></include>
+
+      <include src="components/product-card.html"
+               id="p5" href="/urun.html?id=p5" image="deck-kompozit.jpg"
+               name="Deck - Kompozit Ahşap 20mm" brand="WPC"
+               badge="%20 İndirim" badgeClass="bg-sale"
+               rating="4.5" ratingWidth="90%" reviews="38"
+               oldPrice="1.950 TL" price="1.560 TL/m²" priceValue="1560" priceClass="text-sale"></include>
+    </ul>
+  </div>
+</section>
+<!-- ================= /SİZİN İÇİN SEÇTİKLERİMİZ ================= -->

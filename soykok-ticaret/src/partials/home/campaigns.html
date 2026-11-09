@@ -1,0 +1,41 @@
+<!-- KAMPANYALAR -->
+<section id="kampanyalar" class="container-site scroll-mt-28 py-10" aria-labelledby="campaignTitle">
+  <div>
+
+    <!-- ===== Kampanyalı ürünler slider ===== -->
+    <div data-product-slider="indirim">
+      <div class="mb-4 flex items-end justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-0.5 text-xs font-semibold text-sale">% İndirimde</span>
+          <h2 id="campaignTitle" class="mt-2 text-xl font-bold md:text-2xl">Kampanyalı Ürünler</h2>
+          <p class="mt-1 text-sm text-gray-500">İndirimdeki parke ve yapı malzemeleri</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a href="/urunler.html?indirim=1" class="mr-2 hidden items-center gap-1.5 text-xs font-medium hover:text-wood-600 sm:flex">
+            Tümünü Gör <i data-lucide="arrow-right" class="size-4"></i>
+          </a>
+          <button type="button" data-slider-prev aria-label="Önceki ürünler"
+                  class="grid size-10 place-items-center rounded-full border border-gray-300 bg-white transition hover:border-brand-900 hover:bg-brand-900 hover:text-white disabled:opacity-40">
+            <i data-lucide="arrow-left" class="size-4"></i>
+          </button>
+          <button type="button" data-slider-next aria-label="Sonraki ürünler"
+                  class="grid size-10 place-items-center rounded-full border border-gray-300 bg-white transition hover:border-brand-900 hover:bg-brand-900 hover:text-white disabled:opacity-40">
+            <i data-lucide="arrow-right" class="size-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Ürünler JS ile doldurulur (src/js/modules/product-slider.js) -->
+      <ul data-slider-track
+          class="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+                 [&>li]:w-[calc((100%_-_0.75rem)/2)] [&>li]:shrink-0 [&>li]:snap-start
+                 sm:[&>li]:w-[calc((100%_-_1.5rem)/3)] lg:[&>li]:w-[calc((100%_-_2.25rem)/4)] xl:[&>li]:w-[calc((100%_-_3rem)/5)]">
+      </ul>
+
+      <!-- Noktalar -->
+      <div data-slider-dots class="mt-4 flex justify-center gap-2"></div>
+    </div>
+
+  </div>
+</section>

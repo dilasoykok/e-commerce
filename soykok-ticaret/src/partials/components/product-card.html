@@ -1,0 +1,27 @@
+<li class="relative flex flex-col rounded-md border border-gray-200 bg-white p-3 transition hover:shadow-lg">
+  <span class="absolute top-2 left-2 z-10 rounded-sm px-2 py-0.5 text-[10px] font-semibold text-white empty:hidden {{badgeClass}}">{{badge}}</span>
+  <a href="{{href}}" class="block aspect-[2/1] overflow-hidden rounded-sm bg-gray-100">
+    <img src="/images/products/{{image}}" alt="{{name}}" loading="lazy" class="size-full object-cover" />
+  </a>
+  <h3 class="mt-3 text-xs leading-snug font-semibold"><a href="{{href}}" class="hover:text-wood-600">{{name}}</a></h3>
+  <p class="mt-0.5 text-[10px] text-gray-500">{{brand}}</p>
+  <div class="mt-1.5 flex items-center gap-1.5 text-[10px] text-gray-500">
+    <span class="relative inline-block leading-none" role="img" aria-label="5 üzerinden {{rating}} puan">
+      <span class="text-gray-300">★★★★★</span>
+      <span class="absolute inset-0 overflow-hidden text-amber-400" style="width: {{ratingWidth}}">★★★★★</span>
+    </span>
+    {{rating}} ({{reviews}})
+  </div>
+  <p class="mt-1.5 flex items-baseline gap-2">
+    <del class="text-[11px] text-gray-400 empty:hidden">{{oldPrice}}</del>
+    <ins class="text-sm font-bold no-underline {{priceClass}}">{{price}}</ins>
+  </p>
+  <div class="mt-auto flex items-center gap-2 pt-3">
+    <button type="button" data-add-to-cart data-id="{{id}}"
+            data-name="{{name}}" data-brand="{{brand}}" data-image="{{image}}" data-price="{{priceValue}}"
+            class="h-9 flex-1 rounded bg-brand-900 text-xs font-semibold text-white transition hover:bg-brand-700 disabled:opacity-80">Sepete Ekle</button>
+    <button type="button" data-fav="{{id}}" aria-pressed="false" aria-label="Favorilere ekle" class="grid size-9 place-items-center rounded transition hover:text-sale aria-pressed:text-sale aria-pressed:[&_svg]:fill-current">
+      <i data-lucide="heart" class="size-5"></i>
+    </button>
+  </div>
+</li>

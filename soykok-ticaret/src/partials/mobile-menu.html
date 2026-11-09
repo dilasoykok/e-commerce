@@ -1,0 +1,83 @@
+<!-- ================= MOBİL MENÜ ================= -->
+<div id="drawerOverlay" class="fixed inset-0 z-50 hidden bg-black/50 lg:hidden"></div>
+
+<aside id="mobileDrawer"
+       class="fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-sm -translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300 lg:hidden"
+       aria-label="Mobil menü" inert>
+  <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+    <include src="components/logo.html" id="Drawer" class="block h-9 w-auto text-brand-900"></include>
+    <button type="button" id="drawerClose" class="grid size-9 place-items-center rounded-md hover:bg-gray-100" aria-label="Menüyü kapat">
+      <i data-lucide="x" class="size-5"></i>
+    </button>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto text-sm">
+    <p class="px-4 pt-4 pb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">Kategoriler</p>
+
+    <details class="group border-b border-gray-100">
+      <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 font-medium [&::-webkit-details-marker]:hidden">
+        <i data-lucide="layers" class="size-5 text-brand-700"></i> Parke
+        <i data-lucide="chevron-down" class="ml-auto size-4 transition group-open:rotate-180"></i>
+      </summary>
+      <ul class="bg-gray-50 py-1 text-[13px] text-gray-600">
+        <li><a href="/urunler.html?kategori=laminat" class="block py-2 pl-12">Laminat Parke</a></li>
+        <li><a href="/urunler.html?kategori=masif" class="block py-2 pl-12">Masif Parke</a></li>
+        <li><a href="/urunler.html?kategori=vinil" class="block py-2 pl-12">Vinil Parke</a></li>
+        <li><a href="/urunler.html?kategori=spc" class="block py-2 pl-12">SPC Parke</a></li>
+        <li><a href="/urunler.html?kategori=lvt" class="block py-2 pl-12">LVT Parke</a></li>
+        <li><a href="/urunler.html?kategori=deck" class="block py-2 pl-12">Deck (Dış Mekan)</a></li>
+      </ul>
+    </details>
+
+    <details class="group border-b border-gray-100">
+      <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 font-medium [&::-webkit-details-marker]:hidden">
+        <i data-lucide="ruler" class="size-5 text-brand-700"></i> Aksesuarlar
+        <i data-lucide="chevron-down" class="ml-auto size-4 transition group-open:rotate-180"></i>
+      </summary>
+      <ul class="bg-gray-50 py-1 text-[13px] text-gray-600">
+        <li><a href="/urunler.html?kategori=supurgelik" class="block py-2 pl-12">Süpürgelik</a></li>
+        <li><a href="/urunler.html?kategori=profil" class="block py-2 pl-12">Profil</a></li>
+        <li><a href="/urunler.html?kategori=dis-kose" class="block py-2 pl-12">Dış Köşe</a></li>
+        <li><a href="/urunler.html?kategori=tamamlayici" class="block py-2 pl-12">Tamamlayıcılar</a></li>
+      </ul>
+    </details>
+
+    <details class="group border-b border-gray-100">
+      <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 font-medium [&::-webkit-details-marker]:hidden">
+        <i data-lucide="flask-conical" class="size-5 text-brand-700"></i> Yapı Kimyasalları
+        <i data-lucide="chevron-down" class="ml-auto size-4 transition group-open:rotate-180"></i>
+      </summary>
+      <ul class="bg-gray-50 py-1 text-[13px] text-gray-600">
+        <li><a href="/urunler.html?kategori=yapistirici" class="block py-2 pl-12">Yapıştırıcı</a></li>
+        <li><a href="/urunler.html?kategori=derz" class="block py-2 pl-12">Derz</a></li>
+        <li><a href="/urunler.html?kategori=su-yalitimi" class="block py-2 pl-12">Su Yalıtımı</a></li>
+      </ul>
+    </details>
+
+    <a href="/urunler.html?kategori=zemin" class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium"><i data-lucide="layout-grid" class="size-5 text-brand-700"></i> Zemin Kaplama Ürünleri</a>
+    <a href="/urunler.html?kategori=duvar" class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium"><i data-lucide="brick-wall" class="size-5 text-brand-700"></i> Duvar Kaplama</a>
+    <a href="/urunler.html?kategori=insaat" class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium"><i data-lucide="building-2" class="size-5 text-brand-700"></i> İnşaat Malzemeleri</a>
+    <a href="/urunler.html?kategori=dekorasyon" class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium"><i data-lucide="sofa" class="size-5 text-brand-700"></i> Dekorasyon Ürünleri</a>
+    <a href="/#markalar" class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium"><i data-lucide="boxes" class="size-5 text-brand-700"></i> Markalar</a>
+
+    <p class="px-4 pt-5 pb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">Menü</p>
+    <ul class="pb-4">
+      <li><a href="/" class="block px-4 py-2.5">Ana Sayfa</a></li>
+      <li><a href="/urunler.html?sirala=populer" class="block px-4 py-2.5">Çok Satanlar</a></li>
+      <li><a href="/siparislerim.html" class="block px-4 py-2.5">Sipariş Takibi</a></li>
+      <li><a href="#" class="block px-4 py-2.5">Projeler</a></li>
+      <li><a href="#" class="block px-4 py-2.5">Blog</a></li>
+    </ul>
+  </nav>
+    <div class="border-t border-gray-200 p-4">
+      <a href="/hesap.html#giris" data-account-link class="flex h-11 items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white">
+        <i data-lucide="user" class="size-4"></i> <span data-account-label>Giriş Yap / Kayıt Ol</span>
+      </a>
+    </div>
+  <div class="grid grid-cols-3 border-t border-gray-200 bg-gray-50 text-center text-xs">
+    <a href="/hakkimizda.html" class="py-3">Hakkımızda</a>
+    <a href="/magazalarimiz.html" class="border-x border-gray-200 py-3">Mağazalar</a>
+    <a href="/iletisim.html" class="py-3">İletişim</a>
+  </div>
+</aside>
+<!-- ================= /MOBİL MENÜ ================= -->

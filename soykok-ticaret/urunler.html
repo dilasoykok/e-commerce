@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Tüm Ürünler | Soykök Ticaret"
+           description="Laminat, masif, vinil, SPC ve LVT parke, deck, aksesuar ve yapı kimyasalları. Filtreleyin, karşılaştırın, güvenle alışveriş yapın."></include>
+</head>
+<body>
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main class="container-site py-6 lg:py-8" data-product-list>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Sayfa yolu" class="text-xs text-gray-500">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-brand-900">Ana Sayfa</a></li>
+        <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+        <li aria-current="page" class="font-medium text-brand-900" data-list-crumb>Tüm Ürünler</li>
+      </ol>
+    </nav>
+
+    <!-- Başlık + araç çubuğu -->
+    <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold" data-list-title>Tüm Ürünler</h1>
+        <p class="mt-0.5 text-sm text-gray-500" aria-live="polite">
+          <span data-result-count>0</span> ürün listeleniyor
+        </p>
+      </div>
+
+      <div class="flex w-full items-center gap-2 sm:w-auto">
+        <!-- Mobil: filtre aç/kapa -->
+        <button type="button" data-filter-toggle aria-expanded="false" aria-controls="filterPanel"
+                class="flex h-10 flex-1 items-center justify-center gap-2 rounded border border-gray-300 px-4 text-sm font-medium lg:hidden">
+          <i data-lucide="sliders-horizontal" class="size-4"></i> Filtrele
+        </button>
+
+        <label for="sortSelect" class="sr-only">Sırala</label>
+        <div class="relative flex-1 sm:flex-none">
+          <select id="sortSelect" data-sort
+                  class="h-10 w-full cursor-pointer appearance-none rounded border border-gray-300 bg-white pr-9 pl-3 text-sm focus:border-brand-700 focus:outline-none sm:w-60">
+          </select>
+          <i data-lucide="chevron-down" class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gray-500"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aktif filtre etiketleri -->
+    <div data-active-filters hidden class="mt-4 flex flex-wrap items-center gap-2"></div>
+
+    <div class="mt-6 grid items-start gap-6 lg:grid-cols-[250px_1fr]">
+
+      <!-- ============ FİLTRELER ============ -->
+      <aside id="filterPanel" data-filter-panel class="max-lg:hidden lg:sticky lg:top-4">
+        <form data-filters class="divide-y divide-gray-200 rounded-md border border-gray-200 bg-white" aria-label="Ürün filtreleri">
+
+          <fieldset class="p-4">
+            <legend class="mb-2 text-sm font-semibold">Kategori</legend>
+            <ul data-category-list></ul>
+          </fieldset>
+
+          <fieldset class="p-4">
+            <legend class="mb-2 text-sm font-semibold">Marka</legend>
+            <ul data-brand-list></ul>
+          </fieldset>
+
+          <fieldset class="p-4">
+            <legend class="mb-3 text-sm font-semibold">Fiyat (TL)</legend>
+            <div class="flex items-center gap-2">
+              <label for="minPrice" class="sr-only">En düşük fiyat</label>
+              <input id="minPrice" name="min" type="number" min="0" step="1" inputmode="numeric" placeholder="En az" class="form-input h-9" />
+              <span class="text-gray-400" aria-hidden="true">–</span>
+              <label for="maxPrice" class="sr-only">En yüksek fiyat</label>
+              <input id="maxPrice" name="max" type="number" min="0" step="1" inputmode="numeric" placeholder="En çok" class="form-input h-9" />
+            </div>
+          </fieldset>
+
+          <div class="p-4">
+            <label class="flex cursor-pointer items-center gap-2.5 text-sm">
+              <input type="checkbox" name="indirim" class="size-4 accent-brand-900" />
+              Sadece indirimli ürünler
+            </label>
+          </div>
+        </form>
+      </aside>
+
+      <!-- ============ ÜRÜNLER ============ -->
+      <section aria-label="Ürün listesi">
+        <ul data-products class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4"></ul>
+
+        <div class="mt-8 text-center">
+          <button type="button" data-load-more hidden
+                  class="inline-flex h-11 items-center rounded border border-brand-900 px-8 text-sm font-semibold text-brand-900 transition hover:bg-brand-900 hover:text-white">
+            Daha Fazla Göster
+          </button>
+        </div>
+
+        <!-- Sonuç yok -->
+        <div data-empty hidden class="flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-16 text-center">
+          <span class="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+            <i data-lucide="search-x" class="size-7"></i>
+          </span>
+          <p class="mt-4 font-semibold">Aradığınız kriterlere uygun ürün bulunamadı</p>
+          <p class="mt-1 text-sm text-gray-500">Filtreleri değiştirerek ya da temizleyerek tekrar deneyin.</p>
+          <button type="button" data-empty-reset
+                  class="mt-5 h-10 rounded bg-brand-900 px-5 text-sm font-semibold text-white hover:bg-brand-700">
+            Filtreleri Temizle
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

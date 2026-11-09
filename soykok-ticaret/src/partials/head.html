@@ -1,0 +1,68 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{title}}</title>
+<meta name="description" content="{{description}}" />
+<meta name="theme-color" content="#1f2a36" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+<!-- Stiller <head> içinde yüklenir: sayfa stilsiz görünüp sonradan "oturmaz" -->
+<link rel="stylesheet" href="/src/css/main.css" />
+
+<!-- Preloader için kritik CSS: ana CSS yüklenmeden önce de çalışmalı -->
+<style>
+  #preloader {
+    position: fixed; inset: 0; z-index: 9999;
+    display: grid; place-items: center;
+    background: #fff;
+    transition: opacity .35s ease, visibility .35s ease;
+    /* Güvenlik ağı: bir sorun olursa 2,5 sn sonra kendiliğinden kaybolur */
+    animation: preloader-failsafe 0s linear 2.5s forwards;
+  }
+  .is-loaded #preloader { opacity: 0; visibility: hidden; pointer-events: none; }
+  /* Aynı oturumda ikinci ve sonraki sayfalarda hiç gösterme */
+  .no-preloader #preloader { display: none; }
+  #preloader .pl-mark { width: 56px; height: 56px; animation: pl-pulse 1.1s ease-in-out infinite; }
+  #preloader .pl-bar { width: 120px; height: 3px; margin: 18px auto 0; border-radius: 3px; background: #eceae6; overflow: hidden; }
+  #preloader .pl-bar::after {
+    content: ""; display: block; width: 40%; height: 100%; border-radius: 3px; background: #a8703a;
+    animation: pl-slide 1.1s ease-in-out infinite;
+  }
+  @keyframes pl-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.92); opacity: .75; } }
+  @keyframes pl-slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+  @keyframes preloader-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #preloader .pl-mark, #preloader .pl-bar::after { animation: none; }
+  }
+</style>
+<noscript><style>#preloader { display: none !important; }</style></noscript>
+
+<!--
+  Preloader'ı kapatan küçük betik. Bilerek main.js'te DEĞİL, burada:
+  main.js tüm modülleri indirmeden çalışmaz; bu betik hiçbir şey beklemez.
+  - Oturumdaki ilk sayfada: HTML ve font hazır olunca (en fazla 0,6 sn) kapanır
+  - Sonraki sayfalarda: hiç gösterilmez
+-->
+<script>
+  (function () {
+    var root = document.documentElement;
+    var seen = false;
+    try {
+      seen = sessionStorage.getItem('syk-seen') === '1';
+      sessionStorage.setItem('syk-seen', '1');
+    } catch (e) {}
+
+    if (seen) {
+      root.classList.add('no-preloader', 'is-loaded');
+      return;
+    }
+
+    var done = function () { root.classList.add('is-loaded'); };
+    setTimeout(done, 600);
+    document.addEventListener('DOMContentLoaded', function () {
+      var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      fonts.then(done);
+    });
+  })();
+</script>
+
+<script type="module" src="/src/js/main.js"></script>

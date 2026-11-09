@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Ürün | Soykök Ticaret"
+           description="Soykök Ticaret ürün detayı"></include>
+</head>
+<body>
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main class="container-site py-6 lg:py-8" data-product-detail>
+
+    <!-- ============ ÜRÜN BULUNAMADI ============ -->
+    <div data-not-found hidden class="flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-20 text-center">
+      <span class="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+        <i data-lucide="search-x" class="size-7"></i>
+      </span>
+      <h1 class="mt-4 text-lg font-semibold">Ürün bulunamadı</h1>
+      <p class="mt-1 text-sm text-gray-500">Aradığınız ürün kaldırılmış ya da adresi değişmiş olabilir.</p>
+      <a href="/urunler.html" class="mt-5 inline-flex h-10 items-center rounded bg-brand-900 px-5 text-sm font-semibold text-white hover:bg-brand-700">
+        Tüm Ürünlere Göz At
+      </a>
+    </div>
+
+    <!-- ============ ÜRÜN ============ -->
+    <div data-content hidden>
+
+      <!-- Breadcrumb -->
+      <nav aria-label="Sayfa yolu" class="text-xs text-gray-500">
+        <ol class="flex flex-wrap items-center gap-1.5">
+          <li><a href="/" class="hover:text-brand-900">Ana Sayfa</a></li>
+          <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+          <li><a href="/urunler.html" class="hover:text-brand-900">Ürünler</a></li>
+          <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+          <li><a href="#" data-crumb-category class="hover:text-brand-900"></a></li>
+          <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+          <li aria-current="page" class="font-medium text-brand-900" data-crumb-name></li>
+        </ol>
+      </nav>
+
+      <div class="mt-5 grid gap-8 lg:grid-cols-2 lg:gap-12">
+
+        <!-- ===== Galeri ===== -->
+        <div>
+          <div class="relative overflow-hidden rounded-lg bg-gray-100">
+            <span data-badge hidden class="absolute top-3 left-3 z-10 rounded-sm px-2.5 py-1 text-xs font-semibold text-white"></span>
+            <img data-gallery-main src="" alt="" class="aspect-[4/3] w-full object-cover" fetchpriority="high" />
+          </div>
+          <ul data-gallery-thumbs class="mt-3 grid grid-cols-4 gap-3 sm:grid-cols-5"></ul>
+        </div>
+
+        <!-- ===== Bilgiler ===== -->
+        <div>
+          <p class="text-xs font-medium text-wood-600">
+            <span data-brand></span> · <span data-category></span>
+          </p>
+          <h1 data-name class="mt-1 text-2xl leading-snug font-bold sm:text-3xl"></h1>
+
+          <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+            <a href="#degerlendirmeler" data-goto-tab="yorum" class="flex items-center gap-1.5 hover:underline">
+              <span data-stars-wrap class="relative inline-block text-base leading-none" role="img">
+                <span class="text-gray-300">★★★★★</span>
+                <span data-stars class="absolute inset-0 overflow-hidden text-amber-400">★★★★★</span>
+              </span>
+              <strong data-rating class="text-brand-900"></strong>
+              <span data-reviews></span>
+            </a>
+            <span aria-hidden="true">|</span>
+            <span>Ürün kodu: <span data-sku class="font-medium text-brand-900"></span></span>
+          </div>
+
+          <!-- Fiyat -->
+          <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span data-price class="text-3xl font-bold"></span>
+            <del data-old-price hidden class="text-base text-gray-400"></del>
+            <span data-saving hidden class="rounded bg-sale/10 px-2 py-0.5 text-xs font-semibold text-sale"></span>
+          </div>
+          <p class="mt-1 text-[11px] text-gray-500">
+            KDV dahil <span data-pack hidden class="before:mx-1.5 before:content-['·']"></span>
+          </p>
+
+          <ul data-features class="mt-5 space-y-1.5 text-sm"></ul>
+
+          <!-- m² hesaplayıcı -->
+          <section data-calculator class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4" aria-labelledby="calcTitle">
+            <h2 id="calcTitle" class="flex items-center gap-2 text-sm font-semibold">
+              <i data-lucide="calculator" class="size-4 text-brand-700"></i> Kaç m² gerekli? Hesaplayın
+            </h2>
+            <form class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-[1fr_1fr_1fr_auto]" novalidate>
+              <div>
+                <label for="calcWidth" class="form-label">En (m)</label>
+                <input id="calcWidth" name="width" inputmode="decimal" placeholder="4,5" class="form-input h-9" />
+              </div>
+              <div>
+                <label for="calcLength" class="form-label">Boy (m)</label>
+                <input id="calcLength" name="length" inputmode="decimal" placeholder="3,2" class="form-input h-9" />
+              </div>
+              <div>
+                <label for="calcWaste" class="form-label">Fire payı</label>
+                <select id="calcWaste" name="waste" class="form-input h-9">
+                  <option value="5">%5 (düz döşeme)</option>
+                  <option value="10" selected>%10 (önerilen)</option>
+                  <option value="15">%15 (çapraz / balıksırtı)</option>
+                </select>
+              </div>
+              <div class="flex items-end">
+                <button type="submit" class="h-9 w-full rounded bg-brand-900 px-4 text-xs font-semibold text-white hover:bg-brand-700">Hesapla</button>
+              </div>
+            </form>
+            <div data-calc-result hidden class="mt-4 rounded border border-gray-200 bg-white p-3" aria-live="polite"></div>
+          </section>
+
+          <!-- Miktar + sepete ekle -->
+          <div class="mt-6 flex flex-wrap items-end gap-3">
+            <div>
+              <label for="qty" class="form-label">Miktar (<span data-unit></span>)</label>
+              <div class="inline-flex h-12 items-center overflow-hidden rounded border border-gray-300 bg-white">
+                <button type="button" data-qty-dec aria-label="Miktarı azalt" class="grid h-full w-11 place-items-center text-lg hover:bg-gray-100">−</button>
+                <input id="qty" type="number" min="1" max="999" value="1" inputmode="numeric"
+                       class="h-full w-16 border-x border-gray-300 text-center text-sm font-semibold [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
+                <button type="button" data-qty-inc aria-label="Miktarı artır" class="grid h-full w-11 place-items-center text-lg hover:bg-gray-100">+</button>
+              </div>
+            </div>
+
+            <button type="button" data-add-to-cart data-qty-from="#qty"
+                    class="h-12 min-w-48 flex-1 rounded bg-brand-900 px-6 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-80">
+              Sepete Ekle
+            </button>
+            <button type="button" data-fav aria-pressed="false" aria-label="Favorilere ekle"
+                    class="grid size-12 place-items-center rounded border border-gray-300 transition hover:border-sale hover:text-sale aria-pressed:border-sale aria-pressed:text-sale aria-pressed:[&_svg]:fill-current">
+              <i data-lucide="heart" class="size-5"></i>
+            </button>
+          </div>
+
+          <!-- Güven bandı -->
+          <ul class="mt-6 grid gap-3 border-t border-gray-200 pt-5 text-xs text-gray-600 sm:grid-cols-3">
+            <li class="flex items-center gap-2"><i data-lucide="truck" class="size-5 shrink-0 text-brand-700"></i> 1000 TL üzeri ücretsiz kargo</li>
+            <li class="flex items-center gap-2"><i data-lucide="swatch-book" class="size-5 shrink-0 text-brand-700"></i> <a href="/iletisim.html?konu=numune" class="underline hover:text-brand-900">Ücretsiz numune iste</a></li>
+            <li class="flex items-center gap-2"><i data-lucide="package" class="size-5 shrink-0 text-brand-700"></i> 14 gün kolay iade</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== Sekmeler ===== -->
+      <section class="mt-12">
+        <div role="tablist" aria-label="Ürün bilgileri" class="flex gap-6 overflow-x-auto border-b border-gray-200 text-sm font-semibold">
+          <button type="button" role="tab" id="tab-aciklama" data-tab="aciklama" aria-controls="panel-aciklama"
+                  class="-mb-px shrink-0 border-b-2 border-transparent pb-3 text-gray-500 aria-selected:border-brand-900 aria-selected:text-brand-900">Ürün Açıklaması</button>
+          <button type="button" role="tab" id="tab-ozellik" data-tab="ozellik" aria-controls="panel-ozellik"
+                  class="-mb-px shrink-0 border-b-2 border-transparent pb-3 text-gray-500 aria-selected:border-brand-900 aria-selected:text-brand-900">Teknik Özellikler</button>
+          <button type="button" role="tab" id="tab-kargo" data-tab="kargo" aria-controls="panel-kargo"
+                  class="-mb-px shrink-0 border-b-2 border-transparent pb-3 text-gray-500 aria-selected:border-brand-900 aria-selected:text-brand-900">Kargo ve İade</button>
+          <button type="button" role="tab" id="tab-yorum" data-tab="yorum" aria-controls="panel-yorum"
+                  class="-mb-px shrink-0 border-b-2 border-transparent pb-3 text-gray-500 aria-selected:border-brand-900 aria-selected:text-brand-900">Değerlendirmeler (<span data-review-tab-count>0</span>)</button>
+        </div>
+
+        <div role="tabpanel" id="panel-aciklama" aria-labelledby="tab-aciklama" data-tab-panel="aciklama" class="max-w-3xl py-6 text-sm leading-relaxed text-gray-700">
+          <p data-description></p>
+        </div>
+
+        <div role="tabpanel" id="panel-ozellik" aria-labelledby="tab-ozellik" data-tab-panel="ozellik" hidden class="py-6">
+          <table class="w-full max-w-2xl overflow-hidden rounded-md border border-gray-200 text-sm">
+            <tbody data-specs></tbody>
+          </table>
+        </div>
+
+        <div role="tabpanel" id="panel-kargo" aria-labelledby="tab-kargo" data-tab-panel="kargo" hidden class="max-w-3xl space-y-3 py-6 text-sm leading-relaxed text-gray-700">
+          <p><strong>Teslimat:</strong> Stokta olan ürünler 3–7 iş günü içinde kargoya verilir. 1000 TL ve üzeri siparişlerde kargo ücretsizdir.</p>
+          <p><strong>Mağazadan teslim:</strong> Safranbolu mağazamızdan ücretsiz teslim alabilirsiniz.</p>
+          <p><strong>İade:</strong> Kullanılmamış ve ambalajı açılmamış ürünleri teslimattan itibaren 14 gün içinde iade edebilirsiniz.</p>
+        </div>
+
+        <!-- ===== Değerlendirmeler ===== -->
+        <div role="tabpanel" id="panel-yorum" aria-labelledby="tab-yorum" data-tab-panel="yorum" hidden data-reviews-panel class="py-6">
+          <span id="degerlendirmeler" class="block scroll-mt-4"></span>
+          <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
+
+            <!-- Özet -->
+            <div class="h-fit rounded-lg border border-gray-200 p-5 text-center lg:sticky lg:top-4">
+              <p class="text-5xl font-bold" data-avg>0,0</p>
+              <div class="mt-2" data-avg-stars></div>
+              <p class="mt-1 text-xs text-gray-500" data-avg-count>0 değerlendirme</p>
+              <ul class="mt-5 space-y-1.5" data-distribution aria-label="Yazılı yorumların puan dağılımı"></ul>
+            </div>
+
+            <div>
+              <!-- Form -->
+              <form data-review-form novalidate class="rounded-lg border border-gray-200 p-5">
+                <h3 class="font-semibold">Bu ürünü değerlendirin</h3>
+
+                <fieldset class="mt-4">
+                  <legend class="form-label">Puanınız <span class="text-sale">*</span></legend>
+                  <div class="flex items-center gap-3">
+                    <!-- Gerçek radio düğmeleri: klavye (ok tuşları) ve ekran okuyucularla çalışır -->
+                    <div data-star-input class="flex text-3xl leading-none">
+                      <label data-star="1" class="cursor-pointer text-gray-300 transition has-focus-visible:outline-2 has-focus-visible:outline-brand-700"><input type="radio" name="rating" value="1" class="sr-only" /><span aria-hidden="true">★</span><span class="sr-only">1 yıldız – Çok kötü</span></label>
+                      <label data-star="2" class="cursor-pointer text-gray-300 transition has-focus-visible:outline-2 has-focus-visible:outline-brand-700"><input type="radio" name="rating" value="2" class="sr-only" /><span aria-hidden="true">★</span><span class="sr-only">2 yıldız – Kötü</span></label>
+                      <label data-star="3" class="cursor-pointer text-gray-300 transition has-focus-visible:outline-2 has-focus-visible:outline-brand-700"><input type="radio" name="rating" value="3" class="sr-only" /><span aria-hidden="true">★</span><span class="sr-only">3 yıldız – Orta</span></label>
+                      <label data-star="4" class="cursor-pointer text-gray-300 transition has-focus-visible:outline-2 has-focus-visible:outline-brand-700"><input type="radio" name="rating" value="4" class="sr-only" /><span aria-hidden="true">★</span><span class="sr-only">4 yıldız – İyi</span></label>
+                      <label data-star="5" class="cursor-pointer text-gray-300 transition has-focus-visible:outline-2 has-focus-visible:outline-brand-700"><input type="radio" name="rating" value="5" class="sr-only" /><span aria-hidden="true">★</span><span class="sr-only">5 yıldız – Mükemmel</span></label>
+                    </div>
+                    <span data-star-caption class="text-sm text-gray-500" aria-live="polite">Puan seçin</span>
+                  </div>
+                  <p data-error-for="rating" class="form-error" hidden></p>
+                </fieldset>
+
+                <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label for="reviewName" class="form-label">Adınız <span class="text-sale">*</span></label>
+                    <input id="reviewName" name="name" maxlength="40" autocomplete="given-name" placeholder="Örn. Ayşe K." class="form-input" />
+                    <p data-error-for="name" class="form-error" hidden></p>
+                  </div>
+                  <div>
+                    <label for="reviewTitle" class="form-label">Başlık <span class="font-normal text-gray-400">(isteğe bağlı)</span></label>
+                    <input id="reviewTitle" name="title" maxlength="60" placeholder="Örn. Döşemesi çok kolay" class="form-input" />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label for="reviewComment" class="form-label">Yorumunuz <span class="text-sale">*</span></label>
+                  <textarea id="reviewComment" name="comment" rows="4" maxlength="1000"
+                            placeholder="Ürünü nerede kullandınız, nelerini beğendiniz?"
+                            class="form-input h-auto py-2.5"></textarea>
+                  <p data-error-for="comment" class="form-error" hidden></p>
+                </div>
+
+                <p data-form-alert role="status" hidden class="mt-4 rounded bg-green-50 px-3 py-2 text-xs text-green-700"></p>
+
+                <button type="submit" class="mt-4 h-10 rounded bg-brand-900 px-6 text-sm font-semibold text-white transition hover:bg-brand-700">
+                  Değerlendirmeyi Gönder
+                </button>
+              </form>
+
+              <!-- Liste -->
+              <p data-review-empty class="mt-6 rounded-lg border border-dashed border-gray-300 px-5 py-8 text-center text-sm text-gray-500">
+                Henüz yazılı yorum yok. İlk yorumu siz yazın!
+              </p>
+              <ul data-review-list class="mt-2 divide-y divide-gray-100"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Benzer ürünler ===== -->
+      <section class="mt-10" aria-labelledby="relatedTitle">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 id="relatedTitle" class="text-lg font-bold">Benzer Ürünler</h2>
+          <a href="/urunler.html" data-related-link class="flex items-center gap-1.5 text-xs font-medium hover:text-wood-600">
+            Tümünü Gör <i data-lucide="arrow-right" class="size-4"></i>
+          </a>
+        </div>
+        <ul data-related class="grid grid-cols-2 gap-3 md:grid-cols-4"></ul>
+      </section>
+    </div>
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

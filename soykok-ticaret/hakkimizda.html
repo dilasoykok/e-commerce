@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Hakkımızda | Soykök Ticaret"
+           description="Soykök Ticaret; parke, zemin kaplama ve yapı malzemelerinde güvenilir markaları uygun fiyat ve uzman destekle sunar."></include>
+</head>
+<body>
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main>
+
+    <!-- ================= SAYFA BAŞLIĞI ================= -->
+    <section class="relative overflow-hidden bg-brand-900 text-white">
+      <img src="/images/hero/hero-1.jpg" alt="" class="absolute inset-0 size-full object-cover opacity-30" fetchpriority="high" />
+      <div class="absolute inset-0 bg-linear-to-r from-brand-950/90 via-brand-950/60 to-transparent"></div>
+
+      <div class="container-site relative py-14 lg:py-20">
+        <nav aria-label="Sayfa yolu" class="text-xs text-white/70">
+          <ol class="flex items-center gap-1.5">
+            <li><a href="/" class="hover:text-white">Ana Sayfa</a></li>
+            <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+            <li aria-current="page" class="text-white">Hakkımızda</li>
+          </ol>
+        </nav>
+
+        <p class="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Hakkımızda</p>
+        <h1 class="mt-2 max-w-2xl text-3xl leading-tight font-bold sm:text-4xl lg:text-[44px]">
+          Sağlam zeminler,<br />güvenilir bir adres.
+        </h1>
+        <p class="mt-4 max-w-xl text-sm text-white/85 sm:text-base">
+          [Kuruluş yılı]'den bu yana parke, zemin kaplama ve yapı malzemelerinde
+          doğru ürünü, doğru fiyatla ve uzman desteğiyle sunuyoruz.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= HİKÂYEMİZ ================= -->
+    <section class="container-site py-14 lg:py-20" aria-labelledby="storyTitle">
+      <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+
+        <!-- Görseller -->
+        <div class="relative">
+          <img src="/images/categories/parke.jpg" alt="Mağazamızdaki parke örnekleri"
+               class="aspect-[4/3] w-full rounded-lg object-cover" loading="lazy" />
+          <img src="/images/categories/deck.jpg" alt="Dış mekan deck uygulaması"
+               class="absolute -bottom-6 -right-2 hidden w-2/5 rounded-lg border-4 border-white object-cover shadow-xl sm:block lg:-right-6"
+               loading="lazy" />
+          <!-- Deneyim rozeti -->
+          <div class="absolute -top-4 -left-2 rounded-lg bg-wood-500 px-5 py-4 text-white shadow-lg lg:-left-6">
+            <p class="text-3xl leading-none font-bold">[XX]+</p>
+            <p class="mt-1 text-[11px] font-medium">yıllık tecrübe</p>
+          </div>
+        </div>
+
+        <!-- Metin -->
+        <div>
+          <p class="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Hikâyemiz</p>
+          <h2 id="storyTitle" class="mt-2 text-2xl font-bold sm:text-3xl">Küçük bir mağazadan Türkiye'nin her yerine</h2>
+
+          <div class="mt-5 space-y-4 text-sm leading-relaxed text-gray-600">
+            <p>
+              [Şirketin nasıl kurulduğunu anlatan 2–3 cümle. Örneğin: kurucunun kim olduğu,
+              ilk mağazanın nerede açıldığı ve hangi ihtiyaçtan doğduğu.]
+            </p>
+            <p>
+              [Bugün gelinen noktayı anlatan 2–3 cümle. Örneğin: kaç şehirde hizmet verildiği,
+              hangi ürün gruplarına genişlendiği, online satışa ne zaman başlandığı.]
+            </p>
+            <p>
+              Amacımız değişmedi: her müşterimize, evine ya da projesine en uygun zemini
+              seçerken güvenle danışabileceği bir adres olmak.
+            </p>
+          </div>
+
+          <ul class="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+            <li class="flex items-center gap-2.5"><i data-lucide="circle-check" class="size-5 shrink-0 text-wood-600"></i> Orijinal ve garantili ürünler</li>
+            <li class="flex items-center gap-2.5"><i data-lucide="circle-check" class="size-5 shrink-0 text-wood-600"></i> Ücretsiz numune hizmeti</li>
+            <li class="flex items-center gap-2.5"><i data-lucide="circle-check" class="size-5 shrink-0 text-wood-600"></i> Uzman ekipten keşif ve danışmanlık</li>
+            <li class="flex items-center gap-2.5"><i data-lucide="circle-check" class="size-5 shrink-0 text-wood-600"></i> Türkiye geneline hızlı teslimat</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SAYILARLA SOYKÖK ================= -->
+    <!-- data-count-to: hedef sayı, data-suffix: sonuna eklenecek (+, % vb.) -->
+    <section class="bg-gray-50 py-12 lg:py-16" aria-label="Sayılarla Soykök">
+      <div class="container-site">
+        <ul class="grid grid-cols-2 gap-6 text-center lg:grid-cols-4 lg:divide-x lg:divide-gray-200">
+          <li>
+            <p class="text-3xl font-bold text-brand-900 sm:text-4xl"><span data-count-to="20" data-suffix="+">20+</span></p>
+            <p class="mt-1 text-xs text-gray-500">Yıllık tecrübe</p>
+          </li>
+          <li>
+            <p class="text-3xl font-bold text-brand-900 sm:text-4xl"><span data-count-to="12450" data-suffix="+">12.450+</span></p>
+            <p class="mt-1 text-xs text-gray-500">Mutlu müşteri</p>
+          </li>
+          <li>
+            <p class="text-3xl font-bold text-brand-900 sm:text-4xl"><span data-count-to="1500" data-suffix="+">1.500+</span></p>
+            <p class="mt-1 text-xs text-gray-500">Ürün çeşidi</p>
+          </li>
+          <li>
+            <p class="text-3xl font-bold text-brand-900 sm:text-4xl"><span data-count-to="81">81</span></p>
+            <p class="mt-1 text-xs text-gray-500">İle teslimat</p>
+          </li>
+        </ul>
+        <p class="mt-6 text-center text-[11px] text-gray-400">[Bu sayıları gerçek verilerle güncelleyin.]</p>
+      </div>
+    </section>
+
+    <!-- ================= MİSYON & VİZYON ================= -->
+    <section class="container-site py-14 lg:py-20" aria-label="Misyon ve vizyon">
+      <div class="grid gap-5 md:grid-cols-2">
+        <article class="rounded-lg border border-gray-200 p-7">
+          <span class="grid size-12 place-items-center rounded-lg bg-wood-500/10 text-wood-600">
+            <i data-lucide="target" class="size-6"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-bold">Misyonumuz</h2>
+          <p class="mt-2 text-sm leading-relaxed text-gray-600">
+            Parke ve yapı malzemelerinde kaliteli ürünleri adil fiyatlarla sunmak; satış öncesinde ve
+            sonrasında müşterilerimizin yanında olarak her projeyi sorunsuz tamamlamalarına yardımcı olmak.
+          </p>
+        </article>
+
+        <article class="rounded-lg bg-brand-900 p-7 text-white">
+          <span class="grid size-12 place-items-center rounded-lg bg-white/10 text-wood-400">
+            <i data-lucide="eye" class="size-6"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-bold">Vizyonumuz</h2>
+          <p class="mt-2 text-sm leading-relaxed text-white/80">
+            Zemin ve yapı malzemeleri denince akla ilk gelen, güvenilirliği ve uzmanlığıyla
+            Türkiye'nin her yerinden ulaşılabilen bir marka olmak.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= DEĞERLERİMİZ ================= -->
+    <section class="bg-gray-50 py-14 lg:py-20" aria-labelledby="valuesTitle">
+      <div class="container-site">
+        <div class="mx-auto max-w-xl text-center">
+          <p class="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Değerlerimiz</p>
+          <h2 id="valuesTitle" class="mt-2 text-2xl font-bold sm:text-3xl">Bizi biz yapan ilkeler</h2>
+        </div>
+
+        <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200 transition hover:-translate-y-1 hover:shadow-md">
+            <i data-lucide="award" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Kalite</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Yalnızca güvendiğimiz, belgeli ve garantili ürünleri satışa sunarız.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200 transition hover:-translate-y-1 hover:shadow-md">
+            <i data-lucide="handshake" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Güven</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Şeffaf fiyat, açık iletişim ve verdiğimiz sözün arkasında durmak.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200 transition hover:-translate-y-1 hover:shadow-md">
+            <i data-lucide="users" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Uzmanlık</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Ürün seçiminden uygulamaya kadar her adımda deneyimli ekibimizle yanınızdayız.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200 transition hover:-translate-y-1 hover:shadow-md">
+            <i data-lucide="leaf" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Sorumluluk</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Çevreye duyarlı üretim yapan markaları ve sürdürülebilir ürünleri önceliklendiririz.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= YOLCULUĞUMUZ (ZAMAN ÇİZELGESİ) ================= -->
+    <section class="container-site py-14 lg:py-20" aria-labelledby="timelineTitle">
+      <div class="mx-auto max-w-xl text-center">
+        <p class="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Yolculuğumuz</p>
+        <h2 id="timelineTitle" class="mt-2 text-2xl font-bold sm:text-3xl">Yıllar içinde Soykök</h2>
+      </div>
+
+      <ol class="relative mx-auto mt-10 max-w-3xl border-l-2 border-gray-200 pl-8 md:border-l-0 md:pl-0">
+        <!-- Masaüstünde ortada dikey çizgi -->
+        <span class="absolute inset-y-0 left-1/2 hidden w-0.5 -translate-x-1/2 bg-gray-200 md:block" aria-hidden="true"></span>
+
+        <li class="relative mb-10 md:grid md:grid-cols-2 md:gap-12">
+          <span class="absolute top-1 -left-[41px] size-4 rounded-full border-4 border-white bg-wood-500 ring-2 ring-wood-500 md:left-1/2 md:-translate-x-1/2" aria-hidden="true"></span>
+          <div class="md:text-right">
+            <p class="text-sm font-bold text-wood-600">[Yıl]</p>
+            <h3 class="mt-1 font-semibold">İlk mağazamız açıldı</h3>
+            <p class="mt-1 text-xs leading-relaxed text-gray-600">[Kısa açıklama]</p>
+          </div>
+        </li>
+
+        <li class="relative mb-10 md:grid md:grid-cols-2 md:gap-12">
+          <span class="absolute top-1 -left-[41px] size-4 rounded-full border-4 border-white bg-wood-500 ring-2 ring-wood-500 md:left-1/2 md:-translate-x-1/2" aria-hidden="true"></span>
+          <div class="md:col-start-2">
+            <p class="text-sm font-bold text-wood-600">[Yıl]</p>
+            <h3 class="mt-1 font-semibold">Ürün yelpazemizi genişlettik</h3>
+            <p class="mt-1 text-xs leading-relaxed text-gray-600">[Kısa açıklama]</p>
+          </div>
+        </li>
+
+        <li class="relative mb-10 md:grid md:grid-cols-2 md:gap-12">
+          <span class="absolute top-1 -left-[41px] size-4 rounded-full border-4 border-white bg-wood-500 ring-2 ring-wood-500 md:left-1/2 md:-translate-x-1/2" aria-hidden="true"></span>
+          <div class="md:text-right">
+            <p class="text-sm font-bold text-wood-600">[Yıl]</p>
+            <h3 class="mt-1 font-semibold">Proje ve toplu satış birimi kuruldu</h3>
+            <p class="mt-1 text-xs leading-relaxed text-gray-600">[Kısa açıklama]</p>
+          </div>
+        </li>
+
+        <li class="relative md:grid md:grid-cols-2 md:gap-12">
+          <span class="absolute top-1 -left-[41px] size-4 rounded-full border-4 border-white bg-brand-900 ring-2 ring-brand-900 md:left-1/2 md:-translate-x-1/2" aria-hidden="true"></span>
+          <div class="md:col-start-2">
+            <p class="text-sm font-bold text-wood-600">[Yıl]</p>
+            <h3 class="mt-1 font-semibold">Online mağazamız yayında</h3>
+            <p class="mt-1 text-xs leading-relaxed text-gray-600">Artık Türkiye'nin her yerinden sipariş verebilirsiniz.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ================= ÇALIŞTIĞIMIZ MARKALAR ================= -->
+    <section class="border-y border-gray-200 py-10" aria-labelledby="brandsTitle">
+      <div class="container-site">
+        <h2 id="brandsTitle" class="text-center text-sm font-semibold text-gray-500">Yetkili satıcısı olduğumuz markalar</h2>
+        <ul class="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+          <li><img src="/images/brands/krono-original.png" alt="Krono Original" class="h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" loading="lazy" /></li>
+          <li><img src="/images/brands/classen.png" alt="Classen" class="h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" loading="lazy" /></li>
+          <li><img src="/images/brands/egger.png" alt="Egger" class="h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" loading="lazy" /></li>
+          <li><img src="/images/brands/parador.png" alt="Parador" class="h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" loading="lazy" /></li>
+          <li><img src="/images/brands/quick-step.png" alt="Quick-Step" class="h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" loading="lazy" /></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= KAPANIŞ (CTA) ================= -->
+    <section class="container-site py-14 lg:py-20">
+      <div class="relative overflow-hidden rounded-xl bg-brand-900 px-6 py-12 text-center text-white sm:px-12">
+        <img src="/images/categories/duvar.jpg" alt="" class="absolute inset-0 size-full object-cover opacity-15" loading="lazy" />
+        <div class="relative">
+          <h2 class="text-2xl font-bold sm:text-3xl">Projeniz için birlikte çalışalım</h2>
+          <p class="mx-auto mt-3 max-w-lg text-sm text-white/80">
+            Mağazamızı ziyaret edin ya da uzman ekibimizden ücretsiz danışmanlık ve proje teklifi alın.
+          </p>
+          <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href="#" class="inline-flex h-11 items-center justify-center gap-2 rounded bg-wood-500 px-6 text-sm font-semibold transition hover:bg-wood-600">
+              Proje Teklifi Al <i data-lucide="arrow-right" class="size-4"></i>
+            </a>
+            <a href="#" class="inline-flex h-11 items-center justify-center gap-2 rounded border border-white/40 px-6 text-sm font-semibold transition hover:bg-white hover:text-brand-900">
+              <i data-lucide="map-pin" class="size-4"></i> Mağazalarımız
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!-- ================= HEADER ================= -->
+<header class="relative z-40">
+
+  <!-- Üst bar -->
+  <div class="bg-brand-900 text-white">
+    <div class="container-site flex h-10 items-center justify-between text-xs">
+      <ul class="flex items-center gap-6">
+        <li class="flex items-center gap-2">
+          <i data-lucide="truck" class="size-4"></i>
+          <span>Türkiye'nin Her Yerine Hızlı Teslimat</span>
+        </li>
+        <li class="hidden items-center gap-2 md:flex">
+          <i data-lucide="shield-check" class="size-4"></i>
+          <span>%100 Güvenli Alışveriş</span>
+        </li>
+        <li class="hidden items-center gap-2 md:flex">
+          <i data-lucide="headset" class="size-4"></i>
+          <span>7/24 Destek</span>
+        </li>
+      </ul>
+
+      <div class="flex items-center">
+        <nav class="hidden items-center divide-x divide-white/30 lg:flex">
+          <a href="/hakkimizda.html" class="px-4 hover:text-wood-400">Hakkımızda</a>
+          <a href="/magazalarimiz.html" class="px-4 hover:text-wood-400">Mağazalarımız</a>
+          <a href="/iletisim.html" class="px-4 hover:text-wood-400">İletişim</a>
+          <a href="/siparislerim.html" class="px-4 hover:text-wood-400">Sipariş Takibi</a>
+        </nav>
+          <a href="/hesap.html#giris" data-account-link class="ml-4 flex items-center gap-2 hover:text-wood-400">
+            <i data-lucide="user" class="size-4"></i>
+            <span data-account-label>Hesabım</span>
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ana header -->
+  <div class="bg-white">
+    <div class="container-site flex flex-wrap items-center gap-x-6 gap-y-3 py-3 lg:h-[74px] lg:flex-nowrap lg:py-0">
+
+      <!-- Mobil menü butonu -->
+      <button type="button" id="mobileMenuBtn"
+              class="grid size-10 place-items-center rounded-md border border-gray-200 lg:hidden"
+              aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobileDrawer">
+        <i data-lucide="menu" class="size-5"></i>
+      </button>
+
+      <!-- Logo -->
+      <a href="/" class="shrink-0" aria-label="Soykök Ticaret Ana Sayfa">
+        <include src="components/logo.html" id="Header" class="block h-10 w-auto text-brand-900 lg:h-[52px]"></include>
+      </a>
+
+      <!-- Arama -->
+      <form action="/urunler.html" method="get" role="search"
+            class="order-last flex h-11 w-full overflow-hidden rounded-md border border-gray-300 focus-within:border-brand-700 lg:order-none lg:mx-auto lg:h-[38px] lg:max-w-[625px] lg:flex-1">
+        <label for="q" class="sr-only">Ürün ara</label>
+        <input id="q" name="q" type="search"
+               placeholder="Ürün, kategori veya marka arayın..."
+               class="min-w-0 flex-1 px-4 text-sm placeholder:text-gray-400 focus:outline-none" />
+
+        <div class="relative hidden border-l border-gray-200 sm:block">
+          <label for="cat" class="sr-only">Kategori</label>
+          <select id="cat" name="kategori"
+                  class="h-full w-40 cursor-pointer appearance-none bg-transparent pr-8 pl-4 text-xs text-gray-600 focus:outline-none">
+            <option value="">Tüm Kategoriler</option>
+            <option value="parke">Parke</option>
+            <option value="aksesuar">Aksesuarlar</option>
+            <option value="kimyasal">Yapı Kimyasalları</option>
+            <option value="zemin">Zemin Kaplama</option>
+            <option value="duvar">Duvar Kaplama</option>
+            <option value="insaat">İnşaat Malzemeleri</option>
+            <option value="dekorasyon">Dekorasyon Ürünleri</option>
+          </select>
+          <i data-lucide="chevron-down" class="pointer-events-none absolute top-1/2 right-3 size-3.5 -translate-y-1/2 text-gray-500"></i>
+        </div>
+
+        <button type="submit"
+                class="grid w-12 place-items-center bg-brand-900 text-white transition hover:bg-brand-700"
+                aria-label="Ara">
+          <i data-lucide="search" class="size-5"></i>
+        </button>
+      </form>
+
+      <!-- Favoriler & Sepet -->
+      <div class="ml-auto flex items-center gap-6 lg:ml-0">
+        <a href="#" class="group flex items-center gap-2 text-sm">
+          <span class="relative">
+            <i data-lucide="heart" class="size-6"></i>
+            <span data-fav-count class="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full bg-brand-900 text-[10px] font-semibold text-white">0</span>
+          </span>
+          <span class="hidden group-hover:text-wood-600 sm:inline">Favorilerim</span>
+        </a>
+
+        <a href="/sepet.html" data-cart-open aria-controls="cartDrawer" class="group flex items-center gap-2 text-sm">
+          <span class="relative">
+            <i data-lucide="shopping-cart" class="size-6"></i>
+            <span data-cart-count class="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full bg-brand-900 text-[10px] font-semibold text-white">0</span>
+          </span>
+          <span class="hidden group-hover:text-wood-600 sm:inline">Sepetim</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kategori + navigasyon bar -->
+  <div class="hidden border-y border-gray-200 bg-gray-50 lg:block">
+    <div class="container-site flex h-[44px] items-stretch">
+
+      <!-- Tüm Kategoriler + Mega menü -->
+      <div class="relative" id="megaWrap">
+        <button type="button" id="allCategoriesBtn"
+                class="flex h-full w-[218px] items-center gap-3 rounded-t-md bg-brand-900 px-4 text-sm font-semibold text-white"
+                aria-expanded="false" aria-controls="megaMenu">
+          <i data-lucide="menu" class="size-5"></i>
+          <span>Tüm Kategoriler</span>
+          <i data-lucide="chevron-down" class="ml-auto size-4"></i>
+        </button>
+
+        <!-- megaPinned="data-pinned" verilirse menü açık başlar ve dışarı tıklanınca kapanmaz -->
+        <div id="megaMenu" {{megaPinned}}
+             class="absolute top-full left-0 hidden data-pinned:block w-[218px] rounded-b-md bg-white shadow-xl ring-1 ring-black/5">
+          <ul class="py-1.5 text-[13px] text-brand-800">
+
+            <!-- PARKE -->
+            <li class="group/cat">
+              <a href="/urunler.html?kategori=parke" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50 group-hover/cat:bg-gray-100">
+                <i data-lucide="layers" class="size-5 text-brand-700"></i>
+                <span>Parke</span>
+                <i data-lucide="chevron-right" class="ml-auto size-4"></i>
+              </a>
+
+              <!-- Parke alt panel -->
+              <div class="absolute top-0 left-full hidden min-h-full w-[172px] rounded-r-md border-l border-gray-100 bg-white px-3 py-3 shadow-xl group-hover/cat:block group-focus-within/cat:block">
+                <a href="/urunler.html?kategori=parke" class="mb-2 flex items-center border-b border-gray-100 pb-2 text-xs font-semibold hover:text-wood-600">Parke Çeşitleri <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a>
+                <ul class="space-y-0.5 text-xs text-gray-600">
+                  <li><a href="/urunler.html?kategori=laminat" class="flex items-center py-1.5 hover:text-wood-600">Laminat Parke <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?kategori=masif" class="flex items-center py-1.5 hover:text-wood-600">Masif Parke <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?kategori=vinil" class="flex items-center py-1.5 hover:text-wood-600">Vinil Parke <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?kategori=spc" class="flex items-center py-1.5 hover:text-wood-600">SPC Parke <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?kategori=lvt" class="flex items-center py-1.5 hover:text-wood-600">LVT Parke <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?kategori=deck" class="flex items-center py-1.5 hover:text-wood-600">Deck (Dış Mekan) <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                </ul>
+
+                <p class="mt-4 mb-2 border-b border-gray-100 pb-2 text-xs font-semibold">Markalar</p>
+                <ul class="space-y-0.5 text-xs text-gray-600">
+                  <li><a href="/urunler.html?marka=Krono%20Original" class="flex items-center py-1.5 hover:text-wood-600">Krono Original <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?marka=Classen" class="flex items-center py-1.5 hover:text-wood-600">Classen <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?marka=Egger" class="flex items-center py-1.5 hover:text-wood-600">Egger <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?marka=Parador" class="flex items-center py-1.5 hover:text-wood-600">Parador <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/urunler.html?marka=Quick-Step" class="flex items-center py-1.5 hover:text-wood-600">Quick-Step <i data-lucide="chevron-right" class="ml-auto size-3.5"></i></a></li>
+                  <li><a href="/#markalar" class="block py-1.5 hover:text-wood-600">Diğer Markalar</a></li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- AKSESUARLAR -->
+            <li class="group/cat">
+              <a href="/urunler.html?kategori=aksesuar" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50 group-hover/cat:bg-gray-100">
+                <i data-lucide="ruler" class="size-5 text-brand-700"></i>
+                <span>Aksesuarlar</span>
+                <i data-lucide="chevron-right" class="ml-auto size-4"></i>
+              </a>
+              <div class="absolute top-0 left-full hidden min-h-full w-[172px] rounded-r-md border-l border-gray-100 bg-white px-3 py-3 shadow-xl group-hover/cat:block group-focus-within/cat:block">
+                <a href="/urunler.html?kategori=aksesuar" class="mb-2 block border-b border-gray-100 pb-2 text-xs font-semibold hover:text-wood-600">Aksesuarlar</a>
+                <ul class="space-y-0.5 text-xs text-gray-600">
+                  <li><a href="/urunler.html?kategori=supurgelik" class="block py-1.5 hover:text-wood-600">Süpürgelik</a></li>
+                  <li><a href="/urunler.html?kategori=profil" class="block py-1.5 hover:text-wood-600">Profil</a></li>
+                  <li><a href="/urunler.html?kategori=dis-kose" class="block py-1.5 hover:text-wood-600">Dış Köşe</a></li>
+                  <li><a href="/urunler.html?kategori=tamamlayici" class="block py-1.5 hover:text-wood-600">Tamamlayıcılar</a></li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- YAPI KİMYASALLARI -->
+            <li class="group/cat">
+              <a href="/urunler.html?kategori=kimyasal" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50 group-hover/cat:bg-gray-100">
+                <i data-lucide="flask-conical" class="size-5 text-brand-700"></i>
+                <span>Yapı Kimyasalları</span>
+                <i data-lucide="chevron-right" class="ml-auto size-4"></i>
+              </a>
+              <div class="absolute top-0 left-full hidden min-h-full w-[172px] rounded-r-md border-l border-gray-100 bg-white px-3 py-3 shadow-xl group-hover/cat:block group-focus-within/cat:block">
+                <a href="/urunler.html?kategori=kimyasal" class="mb-2 block border-b border-gray-100 pb-2 text-xs font-semibold hover:text-wood-600">Yapı Kimyasalları</a>
+                <ul class="space-y-0.5 text-xs text-gray-600">
+                  <li><a href="/urunler.html?kategori=yapistirici" class="block py-1.5 hover:text-wood-600">Yapıştırıcı</a></li>
+                  <li><a href="/urunler.html?kategori=derz" class="block py-1.5 hover:text-wood-600">Derz</a></li>
+                  <li><a href="/urunler.html?kategori=su-yalitimi" class="block py-1.5 hover:text-wood-600">Su Yalıtımı</a></li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- Diğer kategoriler -->
+            <li><a href="/urunler.html?kategori=zemin" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50"><i data-lucide="layout-grid" class="size-5 text-brand-700"></i><span>Zemin Kaplama Ürünleri</span><i data-lucide="chevron-right" class="ml-auto size-4"></i></a></li>
+            <li><a href="/urunler.html?kategori=duvar" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50"><i data-lucide="brick-wall" class="size-5 text-brand-700"></i><span>Duvar Kaplama</span><i data-lucide="chevron-right" class="ml-auto size-4"></i></a></li>
+            <li><a href="/urunler.html?kategori=insaat" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50"><i data-lucide="building-2" class="size-5 text-brand-700"></i><span>İnşaat Malzemeleri</span><i data-lucide="chevron-right" class="ml-auto size-4"></i></a></li>
+            <li><a href="/urunler.html?kategori=dekorasyon" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50"><i data-lucide="sofa" class="size-5 text-brand-700"></i><span>Dekorasyon Ürünleri</span><i data-lucide="chevron-right" class="ml-auto size-4"></i></a></li>
+            <li><a href="/#markalar" class="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50"><i data-lucide="boxes" class="size-5 text-brand-700"></i><span>Markalar</span><i data-lucide="chevron-right" class="ml-auto size-4"></i></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <nav class="ml-8 flex items-center gap-10 text-sm font-medium">
+        <a href="/" class="hover:text-wood-600">Ana Sayfa</a>
+        <a href="/urunler.html?sirala=populer" class="hover:text-wood-600">Çok Satanlar</a>
+        <a href="#" class="hover:text-wood-600">Projeler</a>
+        <a href="#" class="hover:text-wood-600">Blog</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<!-- ================= /HEADER ================= -->

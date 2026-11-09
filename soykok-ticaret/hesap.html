@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Hesabım | Soykök Ticaret"
+           description="Soykök Ticaret'e üye olun veya hesabınıza giriş yapın."></include>
+  <meta name="robots" content="noindex" />
+</head>
+<body class="bg-gray-50">
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main class="container-site py-8 lg:py-12" data-auth-page>
+    <div class="mx-auto grid max-w-5xl items-stretch overflow-hidden rounded-lg border border-gray-200 bg-white lg:grid-cols-[1fr_1.1fr]">
+
+      <!-- Sol: tanıtım paneli (masaüstü) -->
+      <aside class="relative hidden overflow-hidden bg-brand-900 p-10 text-white lg:flex lg:flex-col">
+        <img src="/images/hero/hero-1.jpg" alt="" class="absolute inset-0 size-full object-cover opacity-25" />
+        <div class="relative flex flex-1 flex-col">
+          <include src="components/logo.html" id="Auth" class="block h-11 w-auto text-white"></include>
+          <h2 class="mt-auto text-2xl leading-snug font-bold">Hayalinizdeki zemine<br />bir adım daha yakınsınız.</h2>
+          <ul class="mt-6 space-y-3 text-sm text-white/85">
+            <li class="flex items-center gap-3"><i data-lucide="package" class="size-5 text-wood-400"></i> Siparişlerinizi kolayca takip edin</li>
+            <li class="flex items-center gap-3"><i data-lucide="heart" class="size-5 text-wood-400"></i> Favori ürünlerinizi kaydedin</li>
+            <li class="flex items-center gap-3"><i data-lucide="star" class="size-5 text-wood-400"></i> Üyelere özel kampanyalardan yararlanın</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Sağ: formlar -->
+      <section class="p-6 sm:p-10">
+
+        <!-- Sekmeler -->
+        <div role="tablist" aria-label="Hesap işlemleri" class="grid grid-cols-2 rounded-md bg-gray-100 p-1 text-sm font-semibold">
+          <button type="button" role="tab" id="tab-kayit" data-auth-tab="kayit" aria-controls="panel-kayit"
+                  class="h-10 rounded text-gray-500 transition aria-selected:bg-white aria-selected:text-brand-900 aria-selected:shadow-sm">
+            Kayıt Ol
+          </button>
+          <button type="button" role="tab" id="tab-giris" data-auth-tab="giris" aria-controls="panel-giris"
+                  class="h-10 rounded text-gray-500 transition aria-selected:bg-white aria-selected:text-brand-900 aria-selected:shadow-sm">
+            Giriş Yap
+          </button>
+        </div>
+
+        <!-- ============ KAYIT ============ -->
+        <div role="tabpanel" id="panel-kayit" aria-labelledby="tab-kayit" data-auth-panel="kayit" class="mt-7">
+          <h1 class="text-xl font-bold">Yeni Hesap Oluştur</h1>
+          <p class="mt-1 text-xs text-gray-500">Birkaç saniyede üye olun, alışverişe hemen başlayın.</p>
+
+          <form data-auth-form="register" novalidate class="mt-6 space-y-4">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="regFirstName" class="form-label">Ad <span class="text-sale">*</span></label>
+                <input id="regFirstName" name="firstName" required autocomplete="given-name" class="form-input" />
+                <p data-error-for="firstName" class="form-error" hidden></p>
+              </div>
+              <div>
+                <label for="regLastName" class="form-label">Soyad <span class="text-sale">*</span></label>
+                <input id="regLastName" name="lastName" required autocomplete="family-name" class="form-input" />
+                <p data-error-for="lastName" class="form-error" hidden></p>
+              </div>
+            </div>
+
+            <div>
+              <label for="regEmail" class="form-label">E-posta <span class="text-sale">*</span></label>
+              <input id="regEmail" name="email" type="email" required autocomplete="email" placeholder="ornek@mail.com" class="form-input" />
+              <p data-error-for="email" class="form-error" hidden></p>
+            </div>
+
+            <div>
+              <label for="regPhone" class="form-label">Cep Telefonu <span class="font-normal text-gray-400">(isteğe bağlı)</span></label>
+              <input id="regPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="05XX XXX XX XX" maxlength="14" class="form-input" data-phone />
+              <p data-error-for="phone" class="form-error" hidden></p>
+            </div>
+
+            <div>
+              <label for="regPassword" class="form-label">Şifre <span class="text-sale">*</span></label>
+              <div class="relative">
+                <input id="regPassword" name="password" type="password" required minlength="8" autocomplete="new-password"
+                       class="form-input pr-11" data-password-rules />
+                <button type="button" data-toggle-password aria-label="Şifreyi göster" aria-pressed="false"
+                        class="absolute inset-y-0 right-0 grid w-11 place-items-center text-gray-400 hover:text-brand-900">
+                  <span data-icon-show><i data-lucide="eye" class="size-4"></i></span>
+                  <span data-icon-hide hidden><i data-lucide="eye-off" class="size-4"></i></span>
+                </button>
+              </div>
+              <!-- Şifre kuralları: yazdıkça yeşile döner -->
+              <ul class="mt-2 grid grid-cols-2 gap-1 text-[11px] text-gray-500" data-password-hints>
+                <li data-rule="length" class="flex items-center gap-1.5 data-[ok=true]:text-green-700"><span aria-hidden="true">•</span> En az 8 karakter</li>
+                <li data-rule="letter" class="flex items-center gap-1.5 data-[ok=true]:text-green-700"><span aria-hidden="true">•</span> En az bir harf</li>
+                <li data-rule="number" class="flex items-center gap-1.5 data-[ok=true]:text-green-700"><span aria-hidden="true">•</span> En az bir rakam</li>
+              </ul>
+              <p data-error-for="password" class="form-error" hidden></p>
+            </div>
+
+            <div>
+              <label for="regPassword2" class="form-label">Şifre Tekrar <span class="text-sale">*</span></label>
+              <input id="regPassword2" name="passwordConfirm" type="password" required autocomplete="new-password" class="form-input" data-match="password" />
+              <p data-error-for="passwordConfirm" class="form-error" hidden></p>
+            </div>
+
+            <div class="space-y-3 pt-1 text-xs">
+              <div>
+                <label class="flex cursor-pointer items-start gap-3">
+                  <input type="checkbox" name="terms" required class="mt-0.5 size-4 shrink-0 accent-brand-900" />
+                  <span>
+                    <a href="#" class="font-semibold underline hover:text-wood-600">Üyelik Sözleşmesi</a>'ni okudum, kabul ediyorum.
+                    <span class="text-sale">*</span>
+                  </span>
+                </label>
+                <p data-error-for="terms" class="form-error pl-7" hidden></p>
+              </div>
+              <label class="flex cursor-pointer items-start gap-3 text-gray-600">
+                <input type="checkbox" name="marketing" class="mt-0.5 size-4 shrink-0 accent-brand-900" />
+                <span>Kampanya ve fırsatlardan e-posta ve SMS ile haberdar olmak istiyorum.</span>
+              </label>
+              <p class="text-[11px] text-gray-500">
+                Kişisel verileriniz <a href="#" class="underline hover:text-brand-900">KVKK Aydınlatma Metni</a> kapsamında işlenir.
+              </p>
+            </div>
+
+            <p data-form-alert role="alert" hidden class="rounded px-3 py-2 text-xs"></p>
+
+            <button type="submit" data-submit
+                    class="flex h-11 w-full items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:cursor-wait disabled:opacity-70">
+              <i data-lucide="user-plus" class="size-4"></i>
+              <span data-submit-label>Kayıt Ol</span>
+            </button>
+
+            <p class="text-center text-xs text-gray-500">
+              Zaten üye misiniz? <a href="#giris" data-auth-switch="giris" class="font-semibold text-brand-900 hover:text-wood-600">Giriş yapın</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- ============ GİRİŞ ============ -->
+        <div role="tabpanel" id="panel-giris" aria-labelledby="tab-giris" data-auth-panel="giris" hidden class="mt-7">
+          <h1 class="text-xl font-bold">Tekrar Hoş Geldiniz</h1>
+          <p class="mt-1 text-xs text-gray-500">Hesabınıza giriş yaparak siparişlerinizi takip edin.</p>
+
+          <form data-auth-form="login" novalidate class="mt-6 space-y-4">
+            <div>
+              <label for="loginEmail" class="form-label">E-posta</label>
+              <input id="loginEmail" name="email" type="email" required autocomplete="email" placeholder="ornek@mail.com" class="form-input" />
+              <p data-error-for="email" class="form-error" hidden></p>
+            </div>
+
+            <div>
+              <div class="mb-1.5 flex items-center justify-between">
+                <label for="loginPassword" class="form-label mb-0">Şifre</label>
+                <a href="#" class="text-[11px] font-medium text-gray-500 hover:text-wood-600">Şifremi Unuttum</a>
+              </div>
+              <div class="relative">
+                <input id="loginPassword" name="password" type="password" required autocomplete="current-password" class="form-input pr-11" />
+                <button type="button" data-toggle-password aria-label="Şifreyi göster" aria-pressed="false"
+                        class="absolute inset-y-0 right-0 grid w-11 place-items-center text-gray-400 hover:text-brand-900">
+                  <span data-icon-show><i data-lucide="eye" class="size-4"></i></span>
+                  <span data-icon-hide hidden><i data-lucide="eye-off" class="size-4"></i></span>
+                </button>
+              </div>
+              <p data-error-for="password" class="form-error" hidden></p>
+            </div>
+
+            <label class="flex cursor-pointer items-center gap-3 text-xs text-gray-600">
+              <input type="checkbox" name="remember" class="size-4 accent-brand-900" /> Beni hatırla
+            </label>
+
+            <p data-form-alert role="alert" hidden class="rounded px-3 py-2 text-xs"></p>
+
+            <button type="submit" data-submit
+                    class="flex h-11 w-full items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:cursor-wait disabled:opacity-70">
+              <i data-lucide="log-in" class="size-4"></i>
+              <span data-submit-label>Giriş Yap</span>
+            </button>
+
+            <p class="text-center text-xs text-gray-500">
+              Hesabınız yok mu? <a href="#kayit" data-auth-switch="kayit" class="font-semibold text-brand-900 hover:text-wood-600">Hemen kayıt olun</a>
+            </p>
+          </form>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

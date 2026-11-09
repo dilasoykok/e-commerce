@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Mağazamız | Soykök Ticaret – Safranbolu, Karabük"
+           description="Soykök Ticaret Safranbolu mağazası: adres, çalışma saatleri, yol tarifi ve iletişim bilgileri."></include>
+</head>
+<body>
+
+  <include src="preloader.html"></include>
+  <include src="header.html"></include>
+  <include src="mobile-menu.html"></include>
+  <include src="cart-drawer.html"></include>
+
+  <main>
+
+    <!-- ================= SAYFA BAŞLIĞI ================= -->
+    <section class="relative overflow-hidden bg-brand-900 text-white">
+      <img src="/images/categories/parke.jpg" alt="" class="absolute inset-0 size-full object-cover opacity-25" fetchpriority="high" />
+      <div class="absolute inset-0 bg-linear-to-r from-brand-950/90 via-brand-950/60 to-transparent"></div>
+
+      <div class="container-site relative py-12 lg:py-16">
+        <nav aria-label="Sayfa yolu" class="text-xs text-white/70">
+          <ol class="flex items-center gap-1.5">
+            <li><a href="/" class="hover:text-white">Ana Sayfa</a></li>
+            <li aria-hidden="true"><i data-lucide="chevron-right" class="size-3.5"></i></li>
+            <li aria-current="page" class="text-white">Mağazamız</li>
+          </ol>
+        </nav>
+
+        <p class="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Mağazamız</p>
+        <h1 class="mt-2 text-3xl leading-tight font-bold sm:text-4xl">Sizi showroom'umuzda ağırlayalım</h1>
+        <p class="mt-3 max-w-xl text-sm text-white/85 sm:text-base">
+          Parke ve kaplama ürünlerimizi yerinde görün, dokunun, uzman ekibimizle birlikte
+          mekânınıza en uygun seçimi yapın.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= MAĞAZA + HARİTA ================= -->
+    <section class="container-site py-10 lg:py-14" aria-labelledby="storeName">
+      <div class="grid overflow-hidden rounded-lg border border-gray-200 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+
+        <!-- Mağaza bilgileri -->
+        <!--
+          data-store-hours: çalışma saatleri (0 = Pazar, 1 = Pazartesi ... 6 = Cumartesi).
+          Kapalı günler için null yazın. "Şu an açık" rozeti ve tablo buradan hesaplanır.
+        -->
+        <article class="p-6 sm:p-8"
+                 data-store
+                 data-store-hours='{"1":["09:00","19:00"],"2":["09:00","19:00"],"3":["09:00","19:00"],"4":["09:00","19:00"],"5":["09:00","19:00"],"6":["09:00","18:00"],"0":null}'>
+
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="flex items-center gap-1.5 text-xs font-medium text-wood-600">
+                <i data-lucide="store" class="size-4"></i> Merkez Mağaza &amp; Showroom
+              </p>
+              <h2 id="storeName" class="mt-1 text-2xl font-bold">Safranbolu</h2>
+              <p class="text-sm text-gray-500">Karabük</p>
+            </div>
+
+            <!-- JS ile "Şu an açık / kapalı" olarak doldurulur -->
+            <span data-store-status hidden
+                  class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold data-[open=true]:bg-green-50 data-[open=true]:text-green-700 data-[open=false]:bg-red-50 data-[open=false]:text-sale">
+              <span class="size-2 rounded-full bg-current"></span>
+              <span data-store-status-text></span>
+            </span>
+          </div>
+
+          <!-- İletişim -->
+          <ul class="mt-6 space-y-4 text-sm">
+            <li class="flex gap-3">
+              <i data-lucide="map-pin" class="mt-0.5 size-5 shrink-0 text-brand-700"></i>
+              <address class="not-italic">
+                [Mahalle, Cadde/Sokak, No]<br />
+                [Posta kodu] Safranbolu / Karabük
+              </address>
+            </li>
+            <li class="flex gap-3">
+              <i data-lucide="phone" class="mt-0.5 size-5 shrink-0 text-brand-700"></i>
+              <a href="tel:+900000000000" class="font-medium hover:text-wood-600">[0 370 000 00 00]</a>
+            </li>
+            <li class="flex gap-3">
+              <i data-lucide="mail" class="mt-0.5 size-5 shrink-0 text-brand-700"></i>
+              <a href="mailto:info@ornek.com" class="hover:text-wood-600">[info@alanadiniz.com]</a>
+            </li>
+          </ul>
+
+          <!-- Çalışma saatleri -->
+          <div class="mt-7">
+            <h3 class="flex items-center gap-2 text-sm font-semibold">
+              <i data-lucide="clock" class="size-4 text-brand-700"></i> Çalışma Saatleri
+            </h3>
+            <!-- Satırlar JS ile oluşturulur; JS kapalıysa aşağıdaki özet görünür -->
+            <table class="mt-3 w-full text-sm" data-store-table>
+              <tbody>
+                <tr><td class="py-1 text-gray-600">Pazartesi – Cuma</td><td class="py-1 text-right font-medium">09:00 – 19:00</td></tr>
+                <tr><td class="py-1 text-gray-600">Cumartesi</td><td class="py-1 text-right font-medium">09:00 – 18:00</td></tr>
+                <tr><td class="py-1 text-gray-600">Pazar</td><td class="py-1 text-right font-medium text-sale">Kapalı</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-[11px] text-gray-400">[Saatleri kendi çalışma saatlerinizle güncelleyin.]</p>
+          </div>
+
+          <!-- Butonlar -->
+          <div class="mt-7 grid gap-2 sm:grid-cols-2">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Safranbolu%2C+Karab%C3%BCk"
+               target="_blank" rel="noopener"
+               class="inline-flex h-11 items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white transition hover:bg-brand-700">
+              <i data-lucide="navigation" class="size-4"></i> Yol Tarifi Al
+            </a>
+            <a href="tel:+900000000000"
+               class="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-brand-900">
+              <i data-lucide="phone" class="size-4"></i> Hemen Ara
+            </a>
+            <a href="https://wa.me/900000000000" target="_blank" rel="noopener"
+               class="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-green-600 hover:text-green-700 sm:col-span-2">
+              <i data-lucide="message-circle" class="size-4"></i> WhatsApp'tan Yazın
+            </a>
+          </div>
+        </article>
+
+        <!-- Harita -->
+        <div class="relative min-h-[320px] bg-gray-100 lg:min-h-full">
+          <iframe
+            title="Soykök Ticaret Safranbolu mağazası harita konumu"
+            src="https://www.google.com/maps?q=Safranbolu,+Karab%C3%BCk&z=14&output=embed"
+            class="absolute inset-0 size-full border-0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MAĞAZADA SİZİ NELER BEKLİYOR ================= -->
+    <section class="bg-gray-50 py-14 lg:py-16" aria-labelledby="servicesTitle">
+      <div class="container-site">
+        <div class="mx-auto max-w-xl text-center">
+          <p class="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Mağaza Hizmetleri</p>
+          <h2 id="servicesTitle" class="mt-2 text-2xl font-bold sm:text-3xl">Mağazamızda sizi neler bekliyor?</h2>
+        </div>
+
+        <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <i data-lucide="layers" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Geniş Showroom</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Laminat, masif, SPC ve vinil parkeleri gerçek ışıkta, yan yana karşılaştırın.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <i data-lucide="swatch-book" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Ücretsiz Numune</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Beğendiğiniz ürünlerin numunesini alın, evinizde deneyin.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <i data-lucide="ruler" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Keşif ve Ölçü</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Uzman ekibimiz mekânınızı ölçer, ihtiyaç duyulan malzemeyi hesaplar.</p>
+          </li>
+          <li class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <i data-lucide="truck" class="size-8 text-wood-600"></i>
+            <h3 class="mt-4 font-semibold">Teslimat</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray-600">Mağazadan aldığınız ürünleri adresinize kadar teslim ediyoruz.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= ONLINE YÖNLENDİRME ================= -->
+    <section class="container-site py-14 lg:py-16">
+      <div class="flex flex-col items-center justify-between gap-6 rounded-xl border border-gray-200 p-8 text-center md:flex-row md:text-left">
+        <div>
+          <h2 class="text-xl font-bold">Safranbolu'ya uzak mısınız?</h2>
+          <p class="mt-1 text-sm text-gray-600">Tüm ürünlerimizi online sipariş verebilir, Türkiye'nin her yerine teslimat alabilirsiniz.</p>
+        </div>
+        <a href="/" class="inline-flex h-11 shrink-0 items-center gap-2 rounded bg-wood-500 px-6 text-sm font-semibold text-white transition hover:bg-wood-600">
+          Online Alışverişe Başla <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <include src="head.html"
+           title="Ödeme | Soykök Ticaret"
+           description="Teslimat ve ödeme bilgilerinizi girerek siparişinizi tamamlayın."></include>
+  <meta name="robots" content="noindex" />
+</head>
+<body class="bg-gray-50">
+
+  <include src="preloader.html"></include>
+
+  <include src="checkout-header.html"></include>
+
+  <main class="container-site py-6 lg:py-8" data-checkout-page>
+
+    <!-- Adımlar -->
+    <ol class="flex items-center gap-2 text-xs font-medium" aria-label="Sipariş adımları">
+      <li class="flex items-center gap-2 text-green-700">
+        <span class="grid size-6 place-items-center rounded-full bg-green-600 text-white" aria-hidden="true">✓</span>
+        <a href="/sepet.html" class="hover:underline">Sepet</a>
+      </li>
+      <li class="h-px w-8 bg-gray-300 sm:w-16" aria-hidden="true"></li>
+      <li class="flex items-center gap-2 text-brand-900" aria-current="step">
+        <span class="grid size-6 place-items-center rounded-full bg-brand-900 text-white" aria-hidden="true">2</span>
+        Teslimat ve Ödeme
+      </li>
+      <li class="h-px w-8 bg-gray-300 sm:w-16" aria-hidden="true"></li>
+      <li class="flex items-center gap-2 text-gray-400">
+        <span class="grid size-6 place-items-center rounded-full border border-gray-300" aria-hidden="true">3</span>
+        Onay
+      </li>
+    </ol>
+
+    <h1 class="mt-5 text-2xl font-bold">Teslimat ve Ödeme</h1>
+
+    <div class="mt-6 grid items-start gap-6 lg:grid-cols-[1fr_380px]">
+
+      <form id="checkoutForm" novalidate class="space-y-5">
+
+        <!-- 1. İletişim ve adres -->
+        <section class="checkout-card" aria-labelledby="secAddress">
+          <h2 id="secAddress" class="flex items-center gap-3 text-base font-bold">
+            <span class="grid size-7 place-items-center rounded-full bg-brand-900 text-xs text-white">1</span>
+            İletişim ve Teslimat Adresi
+          </h2>
+
+          <p data-guest-hint class="mt-3 rounded bg-gray-50 px-3 py-2 text-xs text-gray-600">
+            Üye misiniz? <a href="/hesap.html?next=/odeme.html#giris" class="font-semibold text-brand-900 underline hover:text-wood-600">Giriş yapın</a>,
+            siparişiniz hesabınızda görünsün. Üye olmadan da devam edebilir, siparişinizi sipariş numarasıyla takip edebilirsiniz.
+          </p>
+
+          <div class="mt-5 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="firstName" class="form-label">Ad <span class="text-sale">*</span></label>
+              <input id="firstName" name="firstName" required autocomplete="given-name" class="form-input" />
+              <p data-error-for="firstName" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="lastName" class="form-label">Soyad <span class="text-sale">*</span></label>
+              <input id="lastName" name="lastName" required autocomplete="family-name" class="form-input" />
+              <p data-error-for="lastName" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="email" class="form-label">E-posta <span class="text-sale">*</span></label>
+              <input id="email" name="email" type="email" required autocomplete="email" placeholder="ornek@mail.com" class="form-input" />
+              <p data-error-for="email" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="phone" class="form-label">Cep Telefonu <span class="text-sale">*</span></label>
+              <input id="phone" name="phone" type="tel" required autocomplete="tel-national" inputmode="tel" placeholder="05XX XXX XX XX" maxlength="14" class="form-input" />
+              <p data-error-for="phone" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="city" class="form-label">İl <span class="text-sale">*</span></label>
+              <select id="city" name="city" required autocomplete="address-level1" class="form-input" data-province-select>
+                <option value="">Seçiniz</option>
+              </select>
+              <p data-error-for="city" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="district" class="form-label">İlçe <span class="text-sale">*</span></label>
+              <input id="district" name="district" required autocomplete="address-level2" class="form-input" />
+              <p data-error-for="district" class="form-error" hidden></p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="address" class="form-label">Açık Adres <span class="text-sale">*</span></label>
+              <textarea id="address" name="address" required minlength="10" rows="3" autocomplete="street-address"
+                        placeholder="Mahalle, cadde/sokak, bina no, daire no"
+                        class="form-input h-auto py-2.5"></textarea>
+              <p data-error-for="address" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="postalCode" class="form-label">Posta Kodu <span class="font-normal text-gray-400">(isteğe bağlı)</span></label>
+              <input id="postalCode" name="postalCode" inputmode="numeric" pattern="\d{5}" maxlength="5" autocomplete="postal-code" class="form-input"
+                     data-pattern-msg="Posta kodu 5 haneli olmalıdır." />
+              <p data-error-for="postalCode" class="form-error" hidden></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Fatura -->
+        <section class="checkout-card" aria-labelledby="secInvoice">
+          <h2 id="secInvoice" class="flex items-center gap-3 text-base font-bold">
+            <span class="grid size-7 place-items-center rounded-full bg-brand-900 text-xs text-white">2</span>
+            Fatura Bilgileri
+          </h2>
+
+          <fieldset class="mt-5">
+            <legend class="sr-only">Fatura türü</legend>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <label class="option-card items-center">
+                <input type="radio" name="invoiceType" value="individual" checked class="size-4 accent-brand-900" />
+                <span class="text-sm font-medium">Bireysel</span>
+              </label>
+              <label class="option-card items-center">
+                <input type="radio" name="invoiceType" value="corporate" class="size-4 accent-brand-900" />
+                <span class="text-sm font-medium">Kurumsal</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Kurumsal seçilince açılır; kapalıyken disabled olduğu için doğrulamaya girmez -->
+          <fieldset data-corporate-fields disabled hidden class="mt-4 grid gap-4 sm:grid-cols-2">
+            <legend class="sr-only">Kurumsal fatura bilgileri</legend>
+            <div class="sm:col-span-2">
+              <label for="companyName" class="form-label">Firma Unvanı <span class="text-sale">*</span></label>
+              <input id="companyName" name="companyName" required autocomplete="organization" class="form-input" />
+              <p data-error-for="companyName" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="taxOffice" class="form-label">Vergi Dairesi <span class="text-sale">*</span></label>
+              <input id="taxOffice" name="taxOffice" required class="form-input" />
+              <p data-error-for="taxOffice" class="form-error" hidden></p>
+            </div>
+            <div>
+              <label for="taxNumber" class="form-label">Vergi Numarası <span class="text-sale">*</span></label>
+              <input id="taxNumber" name="taxNumber" required inputmode="numeric" pattern="\d{10}" maxlength="10" class="form-input"
+                     data-pattern-msg="Vergi numarası 10 haneli olmalıdır." />
+              <p data-error-for="taxNumber" class="form-error" hidden></p>
+            </div>
+          </fieldset>
+
+          <p class="mt-4 flex items-start gap-2 text-[11px] text-gray-500">
+            <i data-lucide="info" class="mt-px size-3.5 shrink-0"></i>
+            Faturanız teslimat adresine düzenlenir ve e-posta adresinize gönderilir.
+          </p>
+        </section>
+
+        <!-- 3. Teslimat yöntemi -->
+        <section class="checkout-card" aria-labelledby="secDelivery">
+          <h2 id="secDelivery" class="flex items-center gap-3 text-base font-bold">
+            <span class="grid size-7 place-items-center rounded-full bg-brand-900 text-xs text-white">3</span>
+            Teslimat Yöntemi
+          </h2>
+
+          <fieldset class="mt-5 grid gap-3 sm:grid-cols-2">
+            <legend class="sr-only">Teslimat yöntemi</legend>
+            <label class="option-card">
+              <input type="radio" name="delivery" value="cargo" checked class="mt-0.5 size-4 accent-brand-900" />
+              <span class="flex-1">
+                <span class="flex items-center justify-between gap-2 text-sm font-semibold">
+                  <span class="flex items-center gap-2"><i data-lucide="truck" class="size-4"></i> Adrese Teslim</span>
+                  <span data-cargo-price class="text-xs font-semibold"></span>
+                </span>
+                <span class="mt-1 block text-[11px] text-gray-500">Kargo ile 3–7 iş günü içinde teslim.</span>
+              </span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="delivery" value="store" class="mt-0.5 size-4 accent-brand-900" />
+              <span class="flex-1">
+                <span class="flex items-center justify-between gap-2 text-sm font-semibold">
+                  <span class="flex items-center gap-2"><i data-lucide="store" class="size-4"></i> Mağazadan Teslim Al</span>
+                  <span class="text-xs font-semibold text-green-700">Ücretsiz</span>
+                </span>
+                <span class="mt-1 block text-[11px] text-gray-500">Hazır olduğunda SMS ile bilgilendirilirsiniz.</span>
+              </span>
+            </label>
+          </fieldset>
+        </section>
+
+        <!-- 4. Ödeme yöntemi -->
+        <section class="checkout-card" aria-labelledby="secPayment">
+          <h2 id="secPayment" class="flex items-center gap-3 text-base font-bold">
+            <span class="grid size-7 place-items-center rounded-full bg-brand-900 text-xs text-white">4</span>
+            Ödeme Yöntemi
+          </h2>
+
+          <fieldset class="mt-5 space-y-3">
+            <legend class="sr-only">Ödeme yöntemi</legend>
+            <label class="option-card">
+              <input type="radio" name="payment" value="card" checked class="mt-0.5 size-4 accent-brand-900" />
+              <span class="flex-1">
+                <span class="flex items-center gap-2 text-sm font-semibold"><i data-lucide="credit-card" class="size-4"></i> Kredi / Banka Kartı</span>
+                <span class="mt-1 block text-[11px] text-gray-500">
+                  Siparişi onayladıktan sonra ödeme kuruluşunun 3D Secure güvenli ödeme ekranına yönlendirilirsiniz.
+                  Kart bilgileriniz sitemizde işlenmez ve saklanmaz.
+                </span>
+              </span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="payment" value="transfer" class="mt-0.5 size-4 accent-brand-900" />
+              <span class="flex-1">
+                <span class="flex items-center gap-2 text-sm font-semibold"><i data-lucide="landmark" class="size-4"></i> Havale / EFT</span>
+                <span class="mt-1 block text-[11px] text-gray-500">
+                  IBAN bilgileri sipariş onayından sonra gösterilir. Ödemenin 24 saat içinde yapılması gerekir.
+                </span>
+              </span>
+            </label>
+          </fieldset>
+
+          <div class="mt-5">
+            <label for="note" class="form-label">Sipariş Notu <span class="font-normal text-gray-400">(isteğe bağlı)</span></label>
+            <textarea id="note" name="note" rows="2" maxlength="500" placeholder="Teslimatla ilgili eklemek istedikleriniz"
+                      class="form-input h-auto py-2.5"></textarea>
+          </div>
+        </section>
+
+        <!-- Sözleşmeler -->
+        <section class="checkout-card space-y-3 text-xs" aria-label="Sözleşmeler">
+          <div>
+            <label class="flex cursor-pointer items-start gap-3">
+              <input type="checkbox" id="terms" name="terms" required class="mt-0.5 size-4 shrink-0 accent-brand-900" />
+              <span>
+                <a href="#" class="font-semibold underline hover:text-wood-600">Ön Bilgilendirme Formu</a>'nu ve
+                <a href="#" class="font-semibold underline hover:text-wood-600">Mesafeli Satış Sözleşmesi</a>'ni okudum, onaylıyorum.
+                <span class="text-sale">*</span>
+              </span>
+            </label>
+            <p data-error-for="terms" class="form-error pl-7" hidden></p>
+          </div>
+          <label class="flex cursor-pointer items-start gap-3 text-gray-600">
+            <input type="checkbox" name="marketing" class="mt-0.5 size-4 shrink-0 accent-brand-900" />
+            <span>Kampanya ve fırsatlardan e-posta ve SMS ile haberdar olmak istiyorum.</span>
+          </label>
+          <p class="text-[11px] text-gray-500">
+            Kişisel verileriniz <a href="#" class="underline hover:text-brand-900">KVKK Aydınlatma Metni</a> kapsamında, siparişinizin
+            yerine getirilmesi amacıyla işlenir.
+          </p>
+        </section>
+      </form>
+
+      <!-- Sipariş özeti -->
+      <aside aria-labelledby="summaryTitle" class="checkout-card lg:sticky lg:top-4">
+        <div class="flex items-center justify-between">
+          <h2 id="summaryTitle" class="text-base font-bold">Sipariş Özeti</h2>
+          <a href="/sepet.html" class="text-xs font-medium text-gray-500 hover:text-brand-900">Düzenle</a>
+        </div>
+
+        <ul data-summary-items class="mt-4 max-h-72 divide-y divide-gray-100 overflow-y-auto"></ul>
+
+        <dl class="mt-4 space-y-2 border-t border-gray-200 pt-4 text-sm">
+          <div class="flex justify-between"><dt class="text-gray-600">Ara Toplam</dt><dd data-sum-subtotal class="font-semibold">0 TL</dd></div>
+          <div class="flex justify-between"><dt class="text-gray-600">Kargo</dt><dd data-sum-shipping class="font-semibold">0 TL</dd></div>
+          <div class="flex justify-between border-t border-gray-200 pt-3 text-base"><dt class="font-bold">Toplam</dt><dd data-sum-total class="font-bold">0 TL</dd></div>
+        </dl>
+        <p class="mt-1 text-right text-[11px] text-gray-500">KDV dahil</p>
+
+        <p data-form-alert role="alert" hidden class="mt-4 rounded bg-red-50 px-3 py-2 text-xs text-sale"></p>
+
+        <button type="submit" form="checkoutForm" data-submit
+                class="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:cursor-wait disabled:opacity-70">
+          <i data-lucide="lock" class="size-4"></i>
+          <span data-submit-label>Siparişi Onayla</span>
+        </button>
+
+        <ul class="mt-5 space-y-2 border-t border-gray-200 pt-4 text-[11px] text-gray-600">
+          <li class="flex items-center gap-2"><i data-lucide="shield-check" class="size-4 text-brand-700"></i> 3D Secure ile güvenli ödeme</li>
+          <li class="flex items-center gap-2"><i data-lucide="package" class="size-4 text-brand-700"></i> 14 gün içinde kolay iade</li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <include src="footer.html"></include>
+
+</body>
+</html>
