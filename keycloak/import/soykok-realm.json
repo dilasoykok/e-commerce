@@ -41,27 +41,30 @@
   },
   "clients": [
     {
-      "clientId": "soykok-web",
+      "clientId": "soykok-bff",
       "name": "Soykök Ticaret Web",
+      "description": "Site girişi (backend üzerinden, oturum çerezi)",
       "enabled": true,
-      "publicClient": true,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${KEYCLOAK_BFF_SECRET}",
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
       "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
       "rootUrl": "http://localhost",
       "baseUrl": "/",
       "redirectUris": [
-        "http://localhost/*",
-        "http://localhost:5173/*"
+        "http://localhost/api/auth/callback",
+        "http://localhost:5173/api/auth/callback"
       ],
       "webOrigins": [
-        "http://localhost",
-        "http://localhost:5173"
+        "+"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
-        "post.logout.redirect.uris": "http://localhost/*##http://localhost:5173/*"
+        "post.logout.redirect.uris": "http://localhost/api/auth/signout-callback##http://localhost:5173/api/auth/signout-callback"
       },
       "protocolMappers": [
         {

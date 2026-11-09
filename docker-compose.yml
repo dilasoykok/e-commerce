@@ -55,9 +55,11 @@ services:
       RabbitMQ__Username: ${RABBITMQ_USER}
       RabbitMQ__Password: ${RABBITMQ_PASSWORD}
       RabbitMQ__VirtualHost: ${RABBITMQ_VHOST:-/}
-      Keycloak__MetadataAddress: http://keycloak:8080/auth/realms/soykok/.well-known/openid-configuration
-      Keycloak__Issuer: ${PUBLIC_URL:-http://localhost}/auth/realms/soykok
+      Keycloak__Authority: ${PUBLIC_URL:-http://localhost}/auth/realms/soykok
+      Keycloak__InternalAuthority: http://keycloak:8080/auth/realms/soykok
       Keycloak__Audience: soykok-api
+      Keycloak__ClientId: soykok-bff
+      Keycloak__ClientSecret: ${KEYCLOAK_BFF_SECRET:-dev-bff-secret-change-me}
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,6 +96,8 @@ services:
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"   # api servisi Keycloak'a iç ağdan (keycloak:8080) erişebilsin
       KC_PROXY_HEADERS: xforwarded
       KC_HEALTH_ENABLED: "true"
+      # realm dosyasındaki ${KEYCLOAK_BFF_SECRET} yer tutucusu bununla doldurulur
+      KEYCLOAK_BFF_SECRET: ${KEYCLOAK_BFF_SECRET:-dev-bff-secret-change-me}
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import:ro
     depends_on:

@@ -1,7 +1,7 @@
 import { cart, formatTL } from '../store/cart.js';
 import { placeOrder } from '../store/order.js';
 import { PROVINCES } from '../data/provinces.js';
-import { getUser } from '../store/session.js';
+import { getUser, loadUser } from '../store/session.js';
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -81,13 +81,16 @@ export function initCheckout() {
   let placing = false;
 
   // Üye girişi yapılmışsa ad, soyad ve e-postayı doldur; sipariş hesaba bağlanır
-  const user = getUser();
-  if (user) {
-    for (const key of ['firstName', 'lastName', 'email']) {
-      if (form.elements[key] && !form.elements[key].value && user[key]) form.elements[key].value = user[key];
+  const applyUser = (user) => {
+    if (user) {
+      for (const key of ['firstName', 'lastName', 'email']) {
+        if (form.elements[key] && !form.elements[key].value && user[key]) form.elements[key].value = user[key];
+      }
     }
-  }
-  page.querySelector('[data-guest-hint]')?.toggleAttribute('hidden', Boolean(user));
+    page.querySelector('[data-guest-hint]')?.toggleAttribute('hidden', Boolean(user));
+  };
+  applyUser(getUser()); // önbellekten hemen
+  loadUser().then(applyUser); // sunucudan güncel
   let state = null;
 
   // İl listesi

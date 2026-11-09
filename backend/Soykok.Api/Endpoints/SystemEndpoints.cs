@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Caching.Distributed;
+using Soykok.Api.Contracts;
 using Soykok.Api.Data;
 using Soykok.Api.Infrastructure;
 
@@ -29,14 +30,8 @@ public static class SystemEndpoints
         }).WithTags("System");
 
         // Giriş yapmış kullanıcının Keycloak bilgileri
-        api.MapGet("/me", (ClaimsPrincipal user) => Results.Ok(new
-        {
-            id = user.FindFirst("sub")?.Value,
-            username = user.Identity?.Name,
-            email = user.FindFirst("email")?.Value,
-            name = user.FindFirst("name")?.Value,
-            roles = user.FindAll(KeycloakAuth.RoleClaim).Select(c => c.Value).ToArray(),
-        })).RequireAuthorization().WithTags("System");
+        api.MapGet("/me", (ClaimsPrincipal user) => Results.Ok(UserInfo.From(user)))
+            .RequireAuthorization().WithTags("System");
 
         return api;
     }

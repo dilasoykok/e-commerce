@@ -7,7 +7,7 @@
  */
 import { formatTL } from '../store/cart.js';
 import { findOrder, getOrdersOf, getOrderStage, STAGES } from '../store/order.js';
-import { getUser, signOut } from '../store/session.js';
+import { loadUser, signOut } from '../store/session.js';
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -131,10 +131,7 @@ function renderMember(page, user, openNo) {
     )
     .join('');
 
-  page.querySelector('[data-logout]').addEventListener('click', () => {
-    signOut();
-    window.location.assign('/siparislerim.html');
-  });
+  page.querySelector('[data-logout]').addEventListener('click', () => signOut('/siparislerim.html'));
 }
 
 /* ---------- Misafir görünümü ---------- */
@@ -180,12 +177,12 @@ function renderGuest(page, prefillNo) {
   });
 }
 
-export function initOrders() {
+export async function initOrders() {
   const page = document.querySelector('[data-orders-page]');
   if (!page) return;
 
   const no = (new URLSearchParams(location.search).get('no') ?? '').trim().toUpperCase();
-  const user = getUser();
+  const user = await loadUser();
   if (user) renderMember(page, user, no);
   else renderGuest(page, no);
 }

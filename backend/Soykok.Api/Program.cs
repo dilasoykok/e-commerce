@@ -20,7 +20,7 @@ builder.Services.AddStackExchangeRedisCache(o =>
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMQ"));
 builder.Services.AddSingleton<IEventPublisher, RabbitMqPublisher>();
 
-// Keycloak (JWT)
+// Keycloak (site için oturum çerezi, araçlar için JWT)
 builder.Services.AddKeycloakAuth(builder.Configuration);
 
 builder.Services.AddScoped<CatalogCache>();
@@ -38,6 +38,7 @@ app.UseAuthorization();
 app.MapOpenApi("/api/openapi/{documentName}.json");
 var api = app.MapGroup("/api");
 api.MapSystemEndpoints();
+api.MapAuthEndpoints();
 api.MapCatalogEndpoints();
 
 await InitializeDatabaseAsync(app);

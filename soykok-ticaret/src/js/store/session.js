@@ -1,69 +1,105 @@
 /**
- * Üye oturumu (geçici / demo).
+ * Üye oturumu — Keycloak + backend.
  *
- * Backend gelene kadar giriş yapan üyenin yalnızca adı ve e-postası
- * tarayıcıda tutulur. ŞİFRE HİÇBİR YERDE SAKLANMAZ.
+ * Giriş ve kayıt Keycloak'ın sayfasında yapılır; şifre bu siteye hiç gelmez.
+ * Oturum, backend'in verdiği HttpOnly çerezde tutulur (JavaScript token'ı göremez).
+ * Burada yalnızca ekranda göstermek için kullanıcının adı/e-postası sekme boyunca
+ * önbelleğe alınır; doğru bilgi her sayfada GET /api/auth/user ile tazelenir.
  *
- * Backend hazır olunca:
- *   - Oturum, sunucunun verdiği HttpOnly çerezle tutulur
- *   - getUser() → GET /api/me ile doldurulur
- *   - signOut() → POST /api/auth/logout
+ *   getUser()   → önbellekteki kullanıcı (anında, eski olabilir) ya da null
+ *   loadUser()  → sunucudan güncel kullanıcı (Promise)
+ *   loginUrl() / registerUrl() / signOut()
  */
 
-const SESSION_KEY = 'soykok-session';
-const PROFILES_KEY = 'soykok-profiles'; // demo: kayıt olanların adı (şifre yok)
+const CACHE_KEY = 'soykok-user';
+const LEGACY_KEYS = ['soykok-session', 'soykok-profiles']; // eski demo oturumu
 
-const read = (store, key, fallback) => {
+const normalizeEmail = (email) => String(email ?? '').trim().toLocaleLowerCase('tr-TR');
+
+function readCache() {
   try {
-    return JSON.parse(store.getItem(key)) ?? fallback;
+    return JSON.parse(sessionStorage.getItem(CACHE_KEY)) ?? null;
   } catch {
-    return fallback;
+    return null;
   }
-};
-const write = (store, key, value) => {
+}
+
+function writeCache(user) {
   try {
-    store.setItem(key, JSON.stringify(value));
+    if (user) sessionStorage.setItem(CACHE_KEY, JSON.stringify(user));
+    else sessionStorage.removeItem(CACHE_KEY);
   } catch {
     /* depolama kapalıysa sessizce geç */
   }
-};
+}
 
-const normalizeEmail = (email) => String(email).trim().toLocaleLowerCase('tr-TR');
+function clearLegacy() {
+  try {
+    LEGACY_KEYS.forEach((key) => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+  } catch {
+    /* yok say */
+  }
+}
+
+/** API cevabını sitenin kullandığı biçime çevirir */
+function toUser(u) {
+  const email = normalizeEmail(u.email ?? u.username);
+  return {
+    id: u.id ?? null,
+    email,
+    firstName: u.firstName || u.name || email.split('@')[0],
+    lastName: u.lastName ?? '',
+    roles: u.roles ?? [],
+  };
+}
 
 export function getUser() {
-  return read(localStorage, SESSION_KEY, null) ?? read(sessionStorage, SESSION_KEY, null);
+  return readCache();
 }
 
 export const isLoggedIn = () => Boolean(getUser());
 
-/** Kayıtta adı-soyadı hatırla ki girişte "Merhaba Ayşe" diyebilelim */
-export function saveProfile({ firstName, lastName, email }) {
-  const profiles = read(localStorage, PROFILES_KEY, {});
-  profiles[normalizeEmail(email)] = { firstName, lastName };
-  write(localStorage, PROFILES_KEY, profiles);
+export const isAdmin = (user = getUser()) => Boolean(user?.roles?.includes('admin'));
+
+let pending = null;
+
+/** Oturumu sunucudan bir kez sorar; aynı sayfadaki sonraki çağrılar aynı sonucu bekler. */
+export function loadUser() {
+  pending ??= (async () => {
+    clearLegacy();
+    try {
+      const res = await fetch('/api/auth/user', {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const user = data.authenticated ? toUser(data.user) : null;
+      writeCache(user);
+      return user;
+    } catch (err) {
+      console.warn('[session] Oturum bilgisi alınamadı.', err);
+      return readCache();
+    }
+  })();
+  return pending;
 }
 
-/** remember=false ise oturum sekme kapanınca biter */
-export function signIn(email, { remember = true } = {}) {
-  const key = normalizeEmail(email);
-  const profile = read(localStorage, PROFILES_KEY, {})[key];
-  const user = {
-    email: key,
-    firstName: profile?.firstName || key.split('@')[0],
-    lastName: profile?.lastName || '',
-  };
-  signOut();
-  write(remember ? localStorage : sessionStorage, SESSION_KEY, user);
-  return user;
-}
+const here = () => location.pathname + location.search;
 
-export function signOut() {
-  try {
-    localStorage.removeItem(SESSION_KEY);
-    sessionStorage.removeItem(SESSION_KEY);
-  } catch {
-    /* yok say */
-  }
+/** Keycloak giriş sayfası; girişten sonra `next` adresine dönülür */
+export const loginUrl = (next = here()) => `/api/auth/login?returnUrl=${encodeURIComponent(next)}`;
+
+/** Keycloak kayıt sayfası; kayıttan sonra `next` adresine dönülür */
+export const registerUrl = (next = here()) => `/api/auth/register?returnUrl=${encodeURIComponent(next)}`;
+
+/** Sitedeki ve Keycloak'taki oturumu kapatır, sonra `next` adresine döner */
+export function signOut(next = '/') {
+  writeCache(null);
+  location.assign(`/api/auth/logout?returnUrl=${encodeURIComponent(next)}`);
 }
 
 export { normalizeEmail };

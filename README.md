@@ -30,16 +30,28 @@ docker compose ps
 - Yönetim konsolu: http://localhost/auth/admin — kullanıcı/şifre `.env` içindeki `KEYCLOAK_ADMIN*`
 - `keycloak/import/soykok-realm.json` ilk açılışta otomatik içe aktarılır:
   - Realm: **soykok** (kayıt açık, e-posta ile giriş, Türkçe arayüz)
-  - Client: **soykok-web** (public, Authorization Code + PKCE)
+  - Client: **soykok-bff** — site girişi; backend üzerinden Authorization Code + PKCE, gizli anahtar `.env` → `KEYCLOAK_BFF_SECRET`
   - Roller: `customer` (varsayılan), `admin`
   - Client: **soykok-dev** — yalnızca yerel API testi için şifreyle token alma (password grant)
   - Geliştirme kullanıcısı: `admin@soykok.local` / `Admin123!` (rol: admin) — **canlıya çıkmadan silin**
   - Token'lara `soykok-api` audience'ı eklenir (API bunu doğrular)
 - Realm dosyası yalnızca realm **yoksa** içe aktarılır. Değişiklikten sonra yeniden yüklemek için
   `docker compose down -v && docker compose up -d --build` (tüm yerel veriler silinir).
-- Arayüzden OIDC ayarları:
-  - Issuer: `http://localhost/auth/realms/soykok`
-  - Client ID: `soykok-web`
+- Issuer: `http://localhost/auth/realms/soykok`
+- "Şifremi unuttum" ve e-posta doğrulama için Keycloak'ta SMTP ayarı gerekir
+  (Yönetim konsolu → soykok realm → Realm settings → Email).
+- `PUBLIC_URL` değişirse (ör. canlı alan adı) realm dosyasındaki `soykok-bff` yönlendirme adreslerini de güncelleyin.
+
+### Site girişi nasıl çalışır
+
+1. `hesap.html`'deki **Giriş Yap / Kayıt Ol** butonları `/api/auth/login` ya da `/api/auth/register`'a gider.
+2. Backend tarayıcıyı Keycloak'ın giriş/kayıt sayfasına yönlendirir; şifre siteye hiç gelmez.
+3. Keycloak `/api/auth/callback`'e döner; backend **HttpOnly** `soykok.session` çerezi verir.
+   Oturum bilgisi (kullanıcı, roller, token'lar) **Redis**'te tutulur, çerez yalnızca anahtarı taşır.
+4. Sayfalar giriş durumunu `GET /api/auth/user` ile öğrenir (`src/js/store/session.js`).
+5. Çıkış: `/api/auth/logout` hem sitedeki hem Keycloak'taki oturumu kapatır.
+
+API'yi araçlarla (curl, Postman) test ederken `Authorization: Bearer <token>` da kullanılabilir.
 
 ## Backend API (`backend/Soykok.Api`)
 
@@ -56,7 +68,11 @@ yükler (frontend'deki `src/js/data/products.js`'ten üretildi; alan adları ayn
 | `POST /api/products`           | admin   | Ürün ekle |
 | `PUT /api/products/{id}`       | admin   | Ürün güncelle |
 | `DELETE /api/products/{id}`    | admin   | Ürün sil |
-| `GET /api/me`                  | giriş   | Token'daki kullanıcı ve roller |
+| `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
+| `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
+| `GET /api/auth/login`          | herkes  | Keycloak girişine yönlendirir (`?returnUrl=/...`) |
+| `GET /api/auth/register`       | herkes  | Keycloak kayıt formuna yönlendirir (`?returnUrl=/...`) |
+| `GET /api/auth/logout`         | herkes  | Oturumu kapatır (`?returnUrl=/...`) |
 | `GET /api/openapi/v1.json`     | herkes  | OpenAPI şeması |
 
 Ürün ekleme/güncelleme/silme `soykok.events` (topic) exchange'ine `product.created`,
