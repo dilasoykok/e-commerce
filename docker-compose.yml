@@ -37,12 +37,33 @@ services:
       - soykok-net
 
   # ---------------------------------------------------------------
+  # Veritabanı migration'ları — API'den önce çalışır, işi bitince kapanır
+  # ---------------------------------------------------------------
+  migrator:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: migrator
+    image: soykok/migrator:latest
+    container_name: soykok-migrator
+    restart: "no"
+    environment:
+      DOTNET_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - soykok-net
+
+  # ---------------------------------------------------------------
   # Backend API — ASP.NET Core (.NET 10), /api altında yayınlanır
   # ---------------------------------------------------------------
   api:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      target: api
     image: soykok/api:latest
     container_name: soykok-api
     restart: unless-stopped
@@ -61,8 +82,8 @@ services:
       Keycloak__ClientId: soykok-bff
       Keycloak__ClientSecret: ${KEYCLOAK_BFF_SECRET:-dev-bff-secret-change-me}
     depends_on:
-      postgres:
-        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
       rabbitmq:

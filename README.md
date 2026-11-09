@@ -7,6 +7,7 @@ Tüm trafik **nginx** reverse proxy üzerinden geçer.
 |-------------|-----------------------------------|------------------------------------------|
 | nginx       | `nginx:1.27-alpine`               | http://localhost (tek giriş noktası)     |
 | frontend    | `soykok-ticaret` (Vite build)     | http://localhost/                        |
+| migrator    | `backend` (EF Core migrations)    | API'den önce çalışır ve kapanır          |
 | api         | `backend` (ASP.NET Core, .NET 10) | http://localhost/api/                    |
 | Keycloak    | `quay.io/keycloak/keycloak:26.0`  | http://localhost/auth/admin              |
 | PostgreSQL  | `postgres:17-alpine`              | `127.0.0.1:5432`                         |
@@ -56,8 +57,8 @@ API'yi araçlarla (curl, Postman) test ederken `Authorization: Bearer <token>` d
 ## Backend API (`backend/`)
 
 ASP.NET Core (.NET 10), **Clean Architecture** ile dört katman. PostgreSQL (EF Core), Redis
-(katalog önbelleği + oturumlar), RabbitMQ (olaylar) ve Keycloak bağlı. İlk açılışta tabloları kurar ve
-örnek kataloğu yükler (`Infrastructure/Persistence/Seed/*.json`, frontend'deki `products.js`'ten üretildi).
+(katalog önbelleği + oturumlar), RabbitMQ (olaylar) ve Keycloak bağlı. Veritabanı şeması EF Core
+migration'larıyla yönetilir; **şema, ER diyagramı ve tasarım kararları: [`backend/docs/database.md`](backend/docs/database.md)**.
 
 ### Katmanlar
 
@@ -77,7 +78,8 @@ backend/
     │   ├── Messaging/           # RabbitMQ olay yayıncısı
     │   ├── Identity/            # Keycloak (OIDC + çerez + JWT), Redis oturum deposu
     │   └── Health/              # PostgreSQL / Redis / RabbitMQ sağlık kontrolleri
-    └── Soykok.Api/              # HTTP uç noktaları ve başlangıç (Program.cs)
+    ├── Soykok.Api/              # HTTP uç noktaları ve başlangıç (Program.cs)
+    └── Soykok.Migrator/         # migration + örnek veri; Docker'da API'den önce çalışır
 ```
 
 Bağımlılık yönü dışarıdan içe: **Api → Infrastructure → Application → Domain**.
@@ -141,6 +143,19 @@ Rider / Visual Studio'da `backend/Soykok.slnx` dosyasını açın.
 (`postgres/init/01-create-keycloak-db.sh`). Init betikleri yalnızca volume ilk oluşturulurken çalışır;
 sıfırdan başlatmak için `docker compose down -v`.
 
+`ecommerce` veritabanının tabloları **migrator** servisi tarafından EF Core migration'larıyla kurulur;
+veritabanı boşsa örnek katalog (33 ürün) ve stok (ürün başına 250) yüklenir.
+
+### Yeni migration
+
+```bash
+./backend/scripts/add-migration.sh <MigrationAdi>   # .NET SDK gerekmez, Docker içinde çalışır
+docker compose up -d --build migrator api           # uygula
+docker compose logs migrator                        # sonucu gör
+```
+
+Ayrıntılar: [`backend/docs/database.md`](backend/docs/database.md).
+
 ## Klasör yapısı
 
 ```
@@ -161,7 +176,7 @@ sıfırdan başlatmak için `docker compose down -v`.
 docker compose logs -f nginx          # log izle
 docker compose restart nginx          # nginx ayarı değişince
 docker compose up -d --build frontend # arayüzü yeniden derle
-docker compose up -d --build api      # API'yi yeniden derle
+docker compose up -d --build migrator api  # API'yi yeniden derle (bekleyen migration'larla)
 docker compose logs -f api            # API logları
 docker compose down                   # durdur (veriler kalır)
 docker compose down -v                # durdur + tüm verileri sil

@@ -2,7 +2,6 @@ using Soykok.Api.Endpoints;
 using Soykok.Api.Http;
 using Soykok.Application;
 using Soykok.Infrastructure;
-using Soykok.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,5 +27,5 @@ api.MapSystemEndpoints();
 api.MapAuthEndpoints();
 api.MapCatalogEndpoints();
 
-await app.Services.InitializeDatabaseAsync();
+// Veritabanı migration'ları ayrı "migrator" servisinde uygulanır (bkz. Soykok.Migrator)
 app.Run();

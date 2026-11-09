@@ -11,7 +11,7 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> e)
     {
-        e.ToTable("products");
+        e.ToTable("products", Schemas.Catalog);
         e.HasKey(x => x.Id);
         e.Property(x => x.Id).HasMaxLength(64);
         e.Property(x => x.Name).HasMaxLength(256);

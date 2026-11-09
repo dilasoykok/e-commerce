@@ -8,7 +8,7 @@ internal sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> e)
     {
-        e.ToTable("categories");
+        e.ToTable("categories", Schemas.Catalog);
         e.HasKey(x => x.Slug);
         e.Property(x => x.Slug).HasMaxLength(64);
         e.Property(x => x.Name).HasMaxLength(128);
@@ -19,7 +19,7 @@ internal sealed class CategoryGroupConfiguration : IEntityTypeConfiguration<Cate
 {
     public void Configure(EntityTypeBuilder<CategoryGroup> e)
     {
-        e.ToTable("category_groups");
+        e.ToTable("category_groups", Schemas.Catalog);
         e.HasKey(x => x.Slug);
         e.Property(x => x.Slug).HasMaxLength(64);
         e.Property(x => x.Label).HasMaxLength(128);

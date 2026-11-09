@@ -13,14 +13,22 @@ namespace Soykok.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+    /// <summary>Yalnızca veritabanı katmanı (API ve migrator ortak kullanır).</summary>
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration config)
     {
-        // PostgreSQL (EF Core)
-        services.AddDbContext<AppDbContext>(o => o.UseNpgsql(config.GetConnectionString("Postgres")));
+        services.AddDbContext<AppDbContext>(o => o.UseNpgsql(config.GetConnectionString("Postgres"),
+            npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "public")));
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ICatalogReadRepository, CatalogReadRepository>();
+        return services;
+    }
+
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+    {
+        // PostgreSQL (EF Core)
+        services.AddPersistence(config);
 
         // Redis (önbellek + oturumlar)
         services.AddStackExchangeRedisCache(o =>
