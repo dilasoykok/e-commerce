@@ -1,12 +1,12 @@
 # Soykök Ticaret — E-Ticaret Altyapısı (Docker)
 
-Arayüz (`soykok-ticaret/`) ve altyapı servisleri tek bir `docker compose` ile ayağa kalkar.
+Arayüz (`soykok-web/`, Next.js) ve altyapı servisleri tek bir `docker compose` ile ayağa kalkar.
 Tüm trafik **nginx** reverse proxy üzerinden geçer.
 
 | Servis      | İmaj                              | Erişim                                   |
 |-------------|-----------------------------------|------------------------------------------|
 | nginx       | `nginx:1.27-alpine`               | http://localhost (tek giriş noktası)     |
-| frontend    | `soykok-ticaret` (Vite build)     | http://localhost/                        |
+| frontend    | `soykok-web` (Next.js standalone) | http://localhost/                        |
 | migrator    | `backend` (EF Core migrations)    | API'den önce çalışır ve kapanır          |
 | api         | `backend` (ASP.NET Core, .NET 10) | http://localhost/api/                    |
 | Keycloak    | `quay.io/keycloak/keycloak:26.0`  | http://localhost/auth/admin              |
@@ -123,12 +123,30 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 Ürün ekleme/güncelleme/silme `soykok.events` (topic) exchange'ine `product.created`,
 `product.updated`, `product.deleted` olaylarını yayınlar.
 
-### Arayüz bağlantısı
+### Arayüz bağlantısı (soykok-web)
 
-Ürün listesi (`urunler.html`), ürün detayı (`urun.html`) ve ana sayfa slider'ları ürünleri
-`soykok-ticaret/src/js/store/catalog.js` üzerinden `/api`'den çeker. API'ye ulaşılamazsa
-`src/js/data/products.js`'teki statik veriye düşer. `npm run dev` (port 5173) sırasında `/api` ve
-`/auth` istekleri Vite proxy'siyle Docker'daki nginx'e (`http://localhost`) yönlendirilir.
+| Katman | Nerede | Ne için |
+|--------|--------|---------|
+| `src/lib/api/` | sunucu + tarayıcı | Tüm uç noktalar tek yerde (`endpoints.ts`); hatalar `ApiError` (ProblemDetails) |
+| `src/lib/catalog.ts` | sunucu | Sayfaların ürün/kategori verisi. 60 sn önbellek, `catalog` etiketi. API yoksa `src/data/products.ts` |
+| `src/hooks/` (TanStack Query) | tarayıcı | Oturum (`useUser`), admin listeleri ve ekle/güncelle/sil |
+| `src/store/` (Zustand) | tarayıcı | Sepet, favoriler, çekmeceler (API'ye gitmeyen durum) |
+
+Admin bir ürünü değiştirince hem tarayıcıdaki sorgular hem sunucudaki `catalog` önbelleği yenilenir
+(`src/app/actions/catalog.ts`). Yönetim paneli: http://localhost/admin/urunler (`admin` rolü gerekir).
+
+**Geliştirme** (sayfalar kaydedince anında yenilenir; giriş/çıkış da çalışır):
+
+```bash
+# .env:  FRONTEND_UPSTREAM=http://host.docker.internal:3000
+docker compose up -d nginx            # api, keycloak ... bağımlılıklarıyla birlikte; frontend konteyneri açılmaz
+cd soykok-web && npm install && npm run dev
+# → http://localhost  (3000 portunu doğrudan açmayın: Keycloak girişi yalnızca nginx üzerinden çalışır)
+```
+
+Production'da `FRONTEND_UPSTREAM` boş bırakılır (varsayılan `http://frontend:3000`) ve
+`docker compose up -d --build` Next.js'i de konteynerde çalıştırır. Eski statik arayüz
+`soykok-ticaret/` klasöründe duruyor; artık derlenmiyor.
 
 ### Hızlı test
 
@@ -193,21 +211,22 @@ Ayrıntılar: [`backend/docs/database.md`](backend/docs/database.md).
 .
 ├── docker-compose.yml
 ├── .env.example
-├── nginx/                 # reverse proxy
+├── nginx/                 # reverse proxy (templates/default.conf.template)
 ├── keycloak/import/       # realm tanımı
 ├── postgres/init/         # ilk açılış SQL/betikleri
 ├── rabbitmq/              # yönetim paneli ayarı
 ├── backend/               # ASP.NET Core API (Clean Architecture) + Dockerfile
 │   ├── docs/database.md   # şema, ER diyagramı, tasarım kararları
 │   └── scripts/           # add-migration.sh
-└── soykok-ticaret/        # arayüz (Vite + Tailwind) + Dockerfile
+├── soykok-web/            # arayüz (Next.js + Tailwind) + Dockerfile
+└── soykok-ticaret/        # eski statik arayüz (Vite) — artık kullanılmıyor
 ```
 
 ## Sık kullanılan komutlar
 
 ```bash
 docker compose logs -f nginx          # log izle
-docker compose restart nginx          # nginx ayarı değişince
+docker compose up -d --force-recreate nginx  # nginx ayarı ya da FRONTEND_UPSTREAM değişince
 docker compose up -d --build frontend # arayüzü yeniden derle
 docker compose up -d --build migrator api  # API'yi yeniden derle (bekleyen migration'larla)
 docker compose logs -f api            # API logları
@@ -227,5 +246,8 @@ docker compose down -v                # durdur + tüm verileri sil
 | Migrator `Hiç migration bulunamadı` diyor | `./backend/scripts/add-migration.sh InitialCreate` ile migration oluşturun |
 | Eski veritabanıyla migration hatası (`relation ... already exists`) | Veritabanı migration'sız kurulmuş. Yerel ortamda: `docker compose down -v && docker compose up -d --build` |
 | Ürün görselleri açılmıyor (403) | Görsel dosyaları Mac'te kısıtlı izinle duruyordu; frontend Dockerfile derlemede düzeltir. `docker compose up -d --build frontend` |
+| http://localhost `502 Bad Gateway` | nginx arayüze ulaşamıyor. Geliştirmede `npm run dev` çalışıyor mu? `.env`'deki `FRONTEND_UPSTREAM` doğru mu? Değiştirdiyseniz `docker compose up -d --force-recreate nginx` |
+| Girişten sonra eski siteye / 3000 portuna dönmüyor | Siteyi http://localhost:3000 yerine http://localhost üzerinden açın; Keycloak dönüş adresi nginx'e göre ayarlı |
+| `frontend` derlemesi `npm ci` hatası veriyor | `soykok-web/package-lock.json` güncel değil. Bilgisayarda `cd soykok-web && npm install` çalıştırıp tekrar deneyin |
 | Keycloak realm değişikliği yansımıyor | Realm dosyası yalnızca realm yoksa içe aktarılır. Yerel ortamda: `docker compose down -v` |
 | Logda `libgssapi_krb5.so.2` | Bağlantı dizesinde `GSS Encryption Mode=Disable` yoksa çıkar (Kerberos kullanılmıyor); docker-compose ve appsettings'te ayarlı |

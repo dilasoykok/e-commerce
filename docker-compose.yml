@@ -12,9 +12,14 @@ services:
       - "${HTTP_PORT:-80}:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/templates:/etc/nginx/templates:ro
+    environment:
+      FRONTEND_UPSTREAM: ${FRONTEND_UPSTREAM:-http://frontend:3000}
+    extra_hosts:
+      # Geliştirmede bilgisayardaki `npm run dev`'e ulaşmak için (Linux'ta da çalışsın)
+      - "host.docker.internal:host-gateway"
+    # frontend burada yok: geliştirmede Next.js Docker yerine bilgisayarda çalışabilir
     depends_on:
-      - frontend
       - api
       - keycloak
       - rabbitmq
@@ -22,17 +27,20 @@ services:
       - soykok-net
 
   # ---------------------------------------------------------------
-  # Arayüz (soykok-ticaret — Vite + Tailwind, statik build)
+  # Arayüz (soykok-web — Next.js, standalone sunucu)
+  # Sunucuda çizilen sayfalar ürünleri doğrudan api servisinden çeker.
   # ---------------------------------------------------------------
   frontend:
     build:
-      context: ./soykok-ticaret
+      context: ./soykok-web
       dockerfile: Dockerfile
     image: soykok/frontend:latest
     container_name: soykok-frontend
     restart: unless-stopped
+    environment:
+      API_URL: http://api:8080/api
     expose:
-      - "80"
+      - "3000"
     networks:
       - soykok-net
 
