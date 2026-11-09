@@ -5,7 +5,7 @@ namespace Soykok.Infrastructure.Persistence;
 
 /// <summary>
 /// Kolon, anahtar, ilişki ve index adlarını PostgreSQL alışkanlığına uygun snake_case yapar:
-/// OldPrice → old_price, ShippingAddress_City → shipping_address_city, IX_orders_CustomerId → ix_orders_customer_id.
+/// OldPrice → old_price, ShippingAddress.City → shipping_address_city, IX_orders_CustomerId → ix_orders_customer_id.
 /// (Tablo adları yapılandırmalarda zaten snake_case verilir.)
 /// </summary>
 internal static class SnakeCaseNaming
@@ -14,14 +14,30 @@ internal static class SnakeCaseNaming
     {
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
+            // Tabloya gömülü değer nesneleri (PostalAddress, BuyerInfo ...) sahibinin satırını paylaşır:
+            // anahtar kolonları sahibinin "id" kolonudur ve EF bunu kendisi eşler; o kolonlara ve
+            // sahibine bağlayan ilişkiye dokunmuyoruz. (Anahtar adı yine dönüştürülür: pk_<tablo>.)
+            var owned = entity.IsOwned();
+            // Gömülü kolonlara sahiplik adını ön ek yap: Buyer.Email → buyer_email, Invoice.Type → invoice_type
+            var prefix = owned && entity.FindOwnership()?.PrincipalToDependent?.Name is { } navigation
+                ? ToSnakeCase(navigation) + "_"
+                : string.Empty;
+
             foreach (var property in entity.GetProperties())
-                property.SetColumnName(ToSnakeCase(property.GetColumnName()));
+            {
+                if (owned && property.IsPrimaryKey()) continue;
+                var name = owned ? property.Name : property.GetColumnName();
+                property.SetColumnName(prefix + ToSnakeCase(name));
+            }
 
             foreach (var key in entity.GetKeys())
                 if (key.GetName() is { } name) key.SetName(ToSnakeCase(name));
 
-            foreach (var foreignKey in entity.GetForeignKeys())
-                if (foreignKey.GetConstraintName() is { } name) foreignKey.SetConstraintName(ToSnakeCase(name));
+            if (!owned)
+            {
+                foreach (var foreignKey in entity.GetForeignKeys())
+                    if (foreignKey.GetConstraintName() is { } name) foreignKey.SetConstraintName(ToSnakeCase(name));
+            }
 
             foreach (var index in entity.GetIndexes())
                 if (index.GetDatabaseName() is { } name) index.SetDatabaseName(ToSnakeCase(name));

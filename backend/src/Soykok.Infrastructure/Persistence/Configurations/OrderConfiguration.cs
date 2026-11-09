@@ -28,7 +28,7 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
             b.Property(x => x.FirstName).HasMaxLength(100);
             b.Property(x => x.LastName).HasMaxLength(100);
             b.Property(x => x.Phone).HasMaxLength(20);
-            b.HasIndex(x => x.Email); // misafir sipariş takibi: numara + e-posta
+            b.HasIndex(x => x.Email).HasDatabaseName("ix_orders_buyer_email"); // misafir sipariş takibi: numara + e-posta
         });
         e.Navigation(x => x.Buyer).IsRequired();
 

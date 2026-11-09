@@ -24,14 +24,15 @@ docker run --rm \
   mcr.microsoft.com/dotnet/sdk:10.0 \
   sh -c '
     set -e
+    # Linux konteynerinde oluşan derleme klasörlerini her durumda temizle (Mac/IDE derlemesiyle karışmasın)
+    trap "rm -rf src/*/bin src/*/obj" EXIT
     dotnet tool install dotnet-ef --tool-path /tmp/tools --version "10.*" > /dev/null
+    # dotnet ef proje bilgisini okumadan önce paketlerin indirilmiş olmasını bekler
+    dotnet restore src/Soykok.Migrator/Soykok.Migrator.csproj
     /tmp/tools/dotnet-ef migrations add "$1" \
       --project src/Soykok.Infrastructure \
       --startup-project src/Soykok.Migrator \
-      --output-dir Persistence/Migrations \
-      --namespace Soykok.Infrastructure.Persistence.Migrations
-    # Linux konteynerinde oluşan derleme klasörlerini temizle (Mac/IDE derlemesiyle karışmasın)
-    rm -rf src/*/bin src/*/obj
+      --output-dir Persistence/Migrations
   ' sh "$1"
 
 echo "Migration oluşturuldu: backend/src/Soykok.Infrastructure/Persistence/Migrations/"
