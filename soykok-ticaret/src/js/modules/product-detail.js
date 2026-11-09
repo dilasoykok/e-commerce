@@ -6,7 +6,7 @@
  *  - m² hesaplayıcı: oda ölçüsü + fire payı → gereken m² ve paket sayısı
  *  - Miktar seçimi, sepete ekleme, sekmeler, benzer ürünler
  */
-import { PRODUCTS, CATEGORIES, CATEGORY_GROUPS, PRODUCT_DETAILS, DEFAULT_DETAILS } from '../data/products.js';
+import { PRODUCTS, CATEGORIES, CATEGORY_GROUPS, DEFAULT_DETAILS, loadCatalog, loadProductDetail } from '../store/catalog.js';
 import { formatTL } from '../store/cart.js';
 import { productCard } from './product-list.js';
 import { initReviews } from './reviews.js';
@@ -173,9 +173,11 @@ function initTabs(page) {
 
 /* ---------- Sayfa ---------- */
 
-export function initProductDetail() {
+export async function initProductDetail() {
   const page = document.querySelector('[data-product-detail]');
   if (!page) return;
+
+  await loadCatalog(); // ürünler API'den (yoksa statik veriden)
 
   const id = new URLSearchParams(location.search).get('id');
   const product = PRODUCTS.find((p) => p.id === id);
@@ -186,7 +188,7 @@ export function initProductDetail() {
     return;
   }
 
-  const details = { ...DEFAULT_DETAILS, ...PRODUCT_DETAILS[product.id] };
+  const details = { ...DEFAULT_DETAILS, ...(await loadProductDetail(product.id)) };
   const unit = product.unit ?? 'm²';
   const categoryLabel = CATEGORIES[product.category];
   const set = (selector, value) => page.querySelectorAll(selector).forEach((el) => (el.textContent = value));

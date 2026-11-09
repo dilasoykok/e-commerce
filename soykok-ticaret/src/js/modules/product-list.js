@@ -6,7 +6,7 @@
  *  - "Daha Fazla Göster" ile sayfalama
  *  - Filtreler adres çubuğuna yazılır: ?kategori=parke&sirala=fiyat-artan
  */
-import { PRODUCTS, CATEGORIES, CATEGORY_GROUPS, GROUP_LABELS } from '../data/products.js';
+import { PRODUCTS, CATEGORIES, CATEGORY_GROUPS, GROUP_LABELS, loadCatalog } from '../store/catalog.js';
 import { formatTL } from '../store/cart.js';
 
 const PAGE_SIZE = 8;
@@ -161,9 +161,11 @@ function checkboxList(name, options, selected, counts) {
 
 /* ---------- Sayfa ---------- */
 
-export function initProductList() {
+export async function initProductList() {
   const page = document.querySelector('[data-product-list]');
   if (!page) return;
+
+  await loadCatalog(); // ürünler API'den (yoksa statik veriden)
 
   const form = page.querySelector('[data-filters]');
   const grid = page.querySelector('[data-products]');

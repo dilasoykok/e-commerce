@@ -9,7 +9,7 @@
  * İçinde data-slider-track (ul), data-slider-prev, data-slider-next ve
  * data-slider-dots bulunmalı. data-limit="10" ile ürün sayısı sınırlanabilir.
  */
-import { PRODUCTS } from '../data/products.js';
+import { PRODUCTS, loadCatalog } from '../store/catalog.js';
 import { productCard } from './product-list.js';
 
 const indirimOrani = (p) => (p.oldPrice - p.price) / p.oldPrice;
@@ -96,6 +96,10 @@ function initSlider(slider) {
   noktalariCiz();
 }
 
-export function initProductSliders() {
-  document.querySelectorAll('[data-product-slider]').forEach(initSlider);
+export async function initProductSliders() {
+  const sliders = document.querySelectorAll('[data-product-slider]');
+  if (!sliders.length) return;
+
+  await loadCatalog(); // ürünler API'den (yoksa statik veriden)
+  sliders.forEach(initSlider);
 }

@@ -62,6 +62,13 @@ yükler (frontend'deki `src/js/data/products.js`'ten üretildi; alan adları ayn
 Ürün ekleme/güncelleme/silme `soykok.events` (topic) exchange'ine `product.created`,
 `product.updated`, `product.deleted` olaylarını yayınlar.
 
+### Arayüz bağlantısı
+
+Ürün listesi (`urunler.html`), ürün detayı (`urun.html`) ve ana sayfa slider'ları ürünleri
+`soykok-ticaret/src/js/store/catalog.js` üzerinden `/api`'den çeker. API'ye ulaşılamazsa
+`src/js/data/products.js`'teki statik veriye düşer. `npm run dev` (port 5173) sırasında `/api` ve
+`/auth` istekleri Vite proxy'siyle Docker'daki nginx'e (`http://localhost`) yönlendirilir.
+
 ### Hızlı test
 
 ```bash

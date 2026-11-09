@@ -15,8 +15,18 @@ const pages = Object.fromEntries(
     .map((file) => [file.replace(/\.html$/, ''), resolve(root, file)]),
 );
 
+// `npm run dev` sırasında /api ve /auth istekleri Docker'daki nginx'e gider.
+// Farklı bir adres için: API_PROXY=http://localhost:8080 npm run dev
+const apiProxy = process.env.API_PROXY ?? 'http://localhost';
+
 export default defineConfig({
   plugins: [htmlInclude(), tailwindcss()],
+  server: {
+    proxy: {
+      '/api': { target: apiProxy, changeOrigin: false },
+      '/auth': { target: apiProxy, changeOrigin: false },
+    },
+  },
   build: {
     rollupOptions: {
       input: pages,
