@@ -15,6 +15,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - frontend
+      - api
       - keycloak
       - rabbitmq
     networks:
@@ -32,6 +33,42 @@ services:
     restart: unless-stopped
     expose:
       - "80"
+    networks:
+      - soykok-net
+
+  # ---------------------------------------------------------------
+  # Backend API — ASP.NET Core (.NET 10), /api altında yayınlanır
+  # ---------------------------------------------------------------
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: soykok/api:latest
+    container_name: soykok-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: redis:6379,password=${REDIS_PASSWORD},abortConnect=false
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__Port: "5672"
+      RabbitMQ__Username: ${RABBITMQ_USER}
+      RabbitMQ__Password: ${RABBITMQ_PASSWORD}
+      RabbitMQ__VirtualHost: ${RABBITMQ_VHOST:-/}
+      Keycloak__MetadataAddress: http://keycloak:8080/auth/realms/soykok/.well-known/openid-configuration
+      Keycloak__Issuer: ${PUBLIC_URL:-http://localhost}/auth/realms/soykok
+      Keycloak__Audience: soykok-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    expose:
+      - "8080"
     networks:
       - soykok-net
 
@@ -54,6 +91,7 @@ services:
       KC_HTTP_RELATIVE_PATH: /auth
       KC_HOSTNAME: ${PUBLIC_URL:-http://localhost}/auth
       KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"   # api servisi Keycloak'a iç ağdan (keycloak:8080) erişebilsin
       KC_PROXY_HEADERS: xforwarded
       KC_HEALTH_ENABLED: "true"
     volumes:

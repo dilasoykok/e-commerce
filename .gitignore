@@ -3,3 +3,10 @@ node_modules/
 dist/
 .DS_Store
 *.log
+
+# .NET
+bin/
+obj/
+.vs/
+.idea/
+*.user

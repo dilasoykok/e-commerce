@@ -1,0 +1,137 @@
+{
+  "categories": [
+    {
+      "slug": "laminat",
+      "name": "Laminat Parke",
+      "sortOrder": 1
+    },
+    {
+      "slug": "masif",
+      "name": "Masif Parke",
+      "sortOrder": 2
+    },
+    {
+      "slug": "vinil",
+      "name": "Vinil Parke",
+      "sortOrder": 3
+    },
+    {
+      "slug": "spc",
+      "name": "SPC Parke",
+      "sortOrder": 4
+    },
+    {
+      "slug": "lvt",
+      "name": "LVT Parke",
+      "sortOrder": 5
+    },
+    {
+      "slug": "deck",
+      "name": "Deck (Dış Mekan)",
+      "sortOrder": 6
+    },
+    {
+      "slug": "supurgelik",
+      "name": "Süpürgelik",
+      "sortOrder": 7
+    },
+    {
+      "slug": "profil",
+      "name": "Profil",
+      "sortOrder": 8
+    },
+    {
+      "slug": "dis-kose",
+      "name": "Dış Köşe",
+      "sortOrder": 9
+    },
+    {
+      "slug": "tamamlayici",
+      "name": "Tamamlayıcılar",
+      "sortOrder": 10
+    },
+    {
+      "slug": "yapistirici",
+      "name": "Yapıştırıcı",
+      "sortOrder": 11
+    },
+    {
+      "slug": "derz",
+      "name": "Derz",
+      "sortOrder": 12
+    },
+    {
+      "slug": "su-yalitimi",
+      "name": "Su Yalıtımı",
+      "sortOrder": 13
+    },
+    {
+      "slug": "duvar",
+      "name": "Duvar Kaplama",
+      "sortOrder": 14
+    },
+    {
+      "slug": "insaat",
+      "name": "İnşaat Malzemeleri",
+      "sortOrder": 15
+    },
+    {
+      "slug": "dekorasyon",
+      "name": "Dekorasyon Ürünleri",
+      "sortOrder": 16
+    }
+  ],
+  "groups": [
+    {
+      "slug": "parke",
+      "label": "Parke Çeşitleri",
+      "categories": [
+        "laminat",
+        "masif",
+        "vinil",
+        "spc",
+        "lvt",
+        "deck"
+      ],
+      "sortOrder": 1
+    },
+    {
+      "slug": "aksesuar",
+      "label": "Aksesuarlar",
+      "categories": [
+        "supurgelik",
+        "profil",
+        "dis-kose",
+        "tamamlayici"
+      ],
+      "sortOrder": 2
+    },
+    {
+      "slug": "kimyasal",
+      "label": "Yapı Kimyasalları",
+      "categories": [
+        "yapistirici",
+        "derz",
+        "su-yalitimi"
+      ],
+      "sortOrder": 3
+    },
+    {
+      "slug": "zemin",
+      "label": "Zemin Kaplama Ürünleri",
+      "categories": [
+        "laminat",
+        "masif",
+        "vinil",
+        "spc",
+        "lvt",
+        "deck",
+        "supurgelik",
+        "profil",
+        "dis-kose",
+        "tamamlayici"
+      ],
+      "sortOrder": 4
+    }
+  ]
+}

@@ -11,19 +11,32 @@
   "verifyEmail": false,
   "sslRequired": "external",
   "internationalizationEnabled": true,
-  "supportedLocales": ["tr", "en"],
+  "supportedLocales": [
+    "tr",
+    "en"
+  ],
   "defaultLocale": "tr",
   "roles": {
     "realm": [
-      { "name": "customer", "description": "Mağaza müşterisi" },
-      { "name": "admin", "description": "Mağaza yöneticisi" }
+      {
+        "name": "customer",
+        "description": "Mağaza müşterisi"
+      },
+      {
+        "name": "admin",
+        "description": "Mağaza yöneticisi"
+      }
     ]
   },
   "defaultRole": {
     "name": "default-roles-soykok",
     "composite": true,
     "composites": {
-      "realm": ["offline_access", "uma_authorization", "customer"]
+      "realm": [
+        "offline_access",
+        "uma_authorization",
+        "customer"
+      ]
     }
   },
   "clients": [
@@ -38,12 +51,76 @@
       "implicitFlowEnabled": false,
       "rootUrl": "http://localhost",
       "baseUrl": "/",
-      "redirectUris": ["http://localhost/*", "http://localhost:5173/*"],
-      "webOrigins": ["http://localhost", "http://localhost:5173"],
+      "redirectUris": [
+        "http://localhost/*",
+        "http://localhost:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost",
+        "http://localhost:5173"
+      ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
         "post.logout.redirect.uris": "http://localhost/*##http://localhost:5173/*"
-      }
+      },
+      "protocolMappers": [
+        {
+          "name": "soykok-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "soykok-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "soykok-dev",
+      "name": "Geliştirme / API testi (yalnızca yerel)",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "protocolMappers": [
+        {
+          "name": "soykok-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "soykok-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin@soykok.local",
+      "email": "admin@soykok.local",
+      "firstName": "Soykök",
+      "lastName": "Admin",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "default-roles-soykok",
+        "admin"
+      ]
     }
   ]
 }
