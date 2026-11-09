@@ -6,7 +6,8 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
+# public/ içindeki dosyalar Mac'teki izinleriyle (ör. 600) kopyalanır; nginx okuyabilsin
+RUN npm run build && chmod -R a+rX dist
 
 # ---------- 2) Serve: statik dosyalar ----------
 FROM nginx:1.27-alpine
