@@ -10,6 +10,7 @@ import { useCart, useCartHydrated } from '@/store/cart';
 import { formatTL } from '@/lib/format';
 import { BANK_TRANSFER, deliveryLabel, paymentLabel } from '@/lib/orders';
 import type { OrderDetail } from '@/lib/types';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
 
@@ -160,7 +161,7 @@ export default function OrderSuccess({ paidNumber }: { paidNumber?: string | nul
           {order.items.map((item) => (
             <li key={item.productId} className="flex items-center gap-3 py-3">
               <span className="relative h-12 w-16 shrink-0 overflow-hidden rounded bg-gray-100">
-                {item.image && <Image src={`/images/products/${item.image}`} alt="" fill sizes="64px" className="object-cover" />}
+                {item.image && <Image src={productImageSrc(item.image)} unoptimized={isUploadedImage(item.image)} alt="" fill sizes="64px" className="object-cover" />}
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold">{item.productName}</p>

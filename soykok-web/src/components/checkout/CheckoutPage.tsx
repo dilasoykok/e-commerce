@@ -15,6 +15,7 @@ import { formatTL } from '@/lib/format';
 import { saveLastOrder } from '@/lib/last-order';
 import { PROVINCES_SORTED } from '@/data/provinces';
 import type { DeliveryMethod, PaymentMethod, PlaceOrderInput } from '@/lib/types';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
 type Errors = Record<string, string>;
@@ -421,7 +422,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
           {summary.items.map((item) => (
             <li key={item.id} className="flex gap-3 py-3">
               <span className="relative h-12 w-16 shrink-0 overflow-hidden rounded bg-gray-100">
-                {item.image && <Image src={`/images/products/${item.image}`} alt="" fill sizes="64px" className="object-cover" />}
+                {item.image && <Image src={productImageSrc(item.image)} unoptimized={isUploadedImage(item.image)} alt="" fill sizes="64px" className="object-cover" />}
                 <span className="absolute -top-0 -right-0 grid min-w-5 place-items-center rounded-bl bg-brand-900 px-1 text-[10px] font-semibold text-white">
                   {item.qty}
                 </span>

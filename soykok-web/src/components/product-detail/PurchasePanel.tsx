@@ -8,12 +8,14 @@ import { formatTL } from '@/lib/format';
 import type { CartProduct } from '@/store/cart';
 
 const MAX_QTY = 999;
-const clamp = (n: number) => Math.min(Math.max(Math.floor(n) || 1, 1), MAX_QTY);
+const LOW_STOCK = 10;
 const fmt = (n: number) => n.toLocaleString('tr-TR', { maximumFractionDigits: 2 });
 
 type Props = {
   product: CartProduct & { unit: string };
   boxM2: number | null;
+  /** null/yok → stok takibi yok */
+  stock?: number | null;
 };
 
 /**
@@ -21,7 +23,10 @@ type Props = {
  * (eski product-detail.js → initCalculator + initQuantity). Hesaplayıcı yalnızca
  * m² ile satılan ürünlerde görünür ve sonucu tek tıkla miktar kutusuna aktarır.
  */
-export default function PurchasePanel({ product, boxM2 }: Props) {
+export default function PurchasePanel({ product, boxM2, stock = null }: Props) {
+  const soldOut = stock === 0;
+  const maxQty = stock == null ? MAX_QTY : Math.min(MAX_QTY, Math.max(stock, 1));
+  const clamp = (n: number) => Math.min(Math.max(Math.floor(n) || 1, 1), maxQty);
   const [qty, setQty] = useState(1);
   const [draft, setDraft] = useState('1');
 
@@ -34,6 +39,22 @@ export default function PurchasePanel({ product, boxM2 }: Props) {
   return (
     <>
       {product.unit === 'm²' && <AreaCalculator price={product.price} boxM2={boxM2} onUse={setBoth} />}
+
+      {soldOut ? (
+        <p className="mt-6 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-sale">
+          Bu ürün şu an stokta yok.{' '}
+          <a href="/iletisim" className="font-normal underline">
+            Bilgi almak için bize ulaşın
+          </a>
+        </p>
+      ) : (
+        stock != null &&
+        stock <= LOW_STOCK && (
+          <p className="mt-6 text-sm font-semibold text-amber-600">
+            Son {stock} {product.unit} stokta
+          </p>
+        )
+      )}
 
       <div className="mt-6 flex flex-wrap items-end gap-3">
         <div>
@@ -54,7 +75,7 @@ export default function PurchasePanel({ product, boxM2 }: Props) {
               id="qty"
               type="number"
               min={1}
-              max={MAX_QTY}
+              max={maxQty}
               inputMode="numeric"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
@@ -65,6 +86,7 @@ export default function PurchasePanel({ product, boxM2 }: Props) {
             <button
               type="button"
               onClick={() => setBoth(qty + 1)}
+              disabled={soldOut || qty >= maxQty}
               aria-label="Miktarı artır"
               className="grid h-full w-11 place-items-center text-lg hover:bg-gray-100"
             >
@@ -77,6 +99,7 @@ export default function PurchasePanel({ product, boxM2 }: Props) {
           <AddToCartButton
             product={product}
             qty={qty}
+            soldOut={soldOut}
             className="h-12 w-full rounded bg-brand-900 px-6 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-80"
           />
         </div>

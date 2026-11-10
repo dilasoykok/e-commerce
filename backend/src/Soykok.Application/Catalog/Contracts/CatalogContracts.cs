@@ -8,11 +8,13 @@ namespace Soykok.Application.Catalog.Contracts;
 public sealed record ProductListItem(
     string Id, string Name, string Brand, string Category, string? Unit, string Image,
     decimal Price, decimal? OldPrice, double Rating, int Reviews,
-    string? Badge, string? BadgeType, DateOnly AddedAt, int Sales, int SortOrder)
+    string? Badge, string? BadgeType, DateOnly AddedAt, int Sales, int SortOrder,
+    // Stok adedi; null → stok takibi yok (sınırsız satılır)
+    int? Stock = null)
 {
-    public static ProductListItem From(Product p) => new(
+    public static ProductListItem From(Product p, int? stock) => new(
         p.Id, p.Name, p.Brand, p.CategorySlug, p.Unit, p.Image, p.Price, p.OldPrice,
-        p.Rating, p.Reviews, p.Badge, p.BadgeType, p.AddedAt, p.Sales, p.SortOrder);
+        p.Rating, p.Reviews, p.Badge, p.BadgeType, p.AddedAt, p.Sales, p.SortOrder, stock);
 }
 
 public sealed record ProductDetail(
@@ -20,13 +22,15 @@ public sealed record ProductDetail(
     decimal Price, decimal? OldPrice, double Rating, int Reviews,
     string? Badge, string? BadgeType, DateOnly AddedAt, int Sales,
     decimal? BoxM2, string[] Images, string? Description, string[] Features,
-    Dictionary<string, string> Specs)
+    Dictionary<string, string> Specs,
+    // Stok adedi; null → stok takibi yok (sınırsız satılır)
+    int? Stock = null)
 {
-    public static ProductDetail From(Product p) => new(
+    public static ProductDetail From(Product p, int? stock) => new(
         p.Id, p.Name, p.Brand, p.CategorySlug, p.Unit, p.Image, p.Price, p.OldPrice,
         p.Rating, p.Reviews, p.Badge, p.BadgeType, p.AddedAt, p.Sales,
         p.BoxM2, p.Images, p.Description, p.Features,
-        p.Specs.ToDictionary(s => s.Label, s => s.Value));
+        p.Specs.ToDictionary(s => s.Label, s => s.Value), stock);
 }
 
 public sealed record ProductPage(int Total, int Page, int PageSize, IReadOnlyList<ProductListItem> Items);
@@ -56,7 +60,9 @@ public sealed record ProductInput(
     string[]? Images,
     string? Description,
     string[]? Features,
-    Dictionary<string, string>? Specs)
+    Dictionary<string, string>? Specs,
+    // Gönderilmezse stok değişmez (admin başka alanı düzenlerken siparişlerle düşen stok ezilmesin)
+    StockInput? Stock = null)
 {
     public ProductInfo ToInfo() => new(
         Name, Brand, Category, Unit, Image, Price, OldPrice, Badge, BadgeType, BoxM2,
@@ -65,6 +71,9 @@ public sealed record ProductInput(
         Features ?? Array.Empty<string>(),
         (Specs ?? new Dictionary<string, string>()).Select(kv => new ProductSpec(kv.Key, kv.Value)).ToList());
 }
+
+/// <summary>Stok ayarı: Track=false → takip yok (sınırsız); Track=true → Quantity adede eşitlenir.</summary>
+public sealed record StockInput(bool Track, int Quantity);
 
 /// <summary>Mesaj kuyruğuna giden ürün olayı (product.created / product.updated / product.deleted).</summary>
 public sealed record ProductChangedEvent(string ProductId, string Name, decimal Price, string Change, DateTimeOffset OccurredAt);

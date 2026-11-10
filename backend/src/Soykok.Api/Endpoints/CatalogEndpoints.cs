@@ -15,11 +15,12 @@ public static class CatalogEndpoints
     public sealed record CreateProductRequest(
         string? Id, string Name, string Brand, string Category, string? Unit, string Image,
         decimal Price, decimal? OldPrice, string? Badge, string? BadgeType, decimal? BoxM2,
-        string[]? Images, string? Description, string[]? Features, Dictionary<string, string>? Specs)
+        string[]? Images, string? Description, string[]? Features, Dictionary<string, string>? Specs,
+        StockInput? Stock = null)
     {
         public ProductInput ToInput() => new(
             Name, Brand, Category, Unit, Image, Price, OldPrice, Badge, BadgeType, BoxM2,
-            Images, Description, Features, Specs);
+            Images, Description, Features, Specs, Stock);
     }
 
     public static RouteGroupBuilder MapCatalogEndpoints(this RouteGroupBuilder api)

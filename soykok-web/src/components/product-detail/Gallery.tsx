@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 /** Ürün galerisi: büyük görsel + küçük resimler (eski product-detail.js → initGallery) */
 export default function Gallery({ images, name, badge }: { images: string[]; name: string; badge?: React.ReactNode }) {
@@ -15,7 +16,8 @@ export default function Gallery({ images, name, badge }: { images: string[]; nam
         {current && (
           <Image
             key={current}
-            src={`/images/products/${current}`}
+            src={productImageSrc(current)}
+            unoptimized={isUploadedImage(current)}
             alt={name}
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
@@ -36,7 +38,7 @@ export default function Gallery({ images, name, badge }: { images: string[]; nam
                 aria-current={i === active}
                 className="relative block aspect-[4/3] w-full overflow-hidden rounded border-2 border-transparent transition hover:border-gray-300 aria-[current=true]:border-brand-900"
               >
-                <Image src={`/images/products/${img}`} alt="" fill sizes="120px" className="object-cover" />
+                <Image src={productImageSrc(img)} unoptimized={isUploadedImage(img)} alt="" fill sizes="120px" className="object-cover" />
               </button>
             </li>
           ))}

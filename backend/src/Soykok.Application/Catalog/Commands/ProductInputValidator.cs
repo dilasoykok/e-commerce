@@ -22,6 +22,8 @@ public sealed class ProductInputValidator(ICategoryRepository categories)
         if (input.OldPrice is not null && input.OldPrice <= input.Price) Add("oldPrice", "Eski fiyat, fiyattan büyük olmalı.");
         if (!string.IsNullOrWhiteSpace(input.BadgeType) && !BadgeTypes.All.Contains(input.BadgeType.Trim()))
             Add("badgeType", "badgeType: sale, new veya info olmalı.");
+        if (input.Stock is { Track: true, Quantity: < 0 or > 1_000_000 }) Add("stock", "Stok 0 ile 1.000.000 arasında olmalı.");
+        if (input.Image is { Length: > 512 }) Add("image", "Görsel adresi çok uzun.");
         if (string.IsNullOrWhiteSpace(input.Category) || !await categories.ExistsAsync(input.Category, ct))
             Add("category", "Geçerli bir kategori seçin (GET /api/categories).");
 

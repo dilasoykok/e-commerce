@@ -21,6 +21,8 @@ export type Product = {
   addedAt: string; // YYYY-MM-DD
   sales: number;
   sortOrder?: number;
+  /** Stok adedi; null/yok → stok takibi yapılmıyor (sınırsız satılır) */
+  stock?: number | null;
 };
 
 export type ProductDetailExtra = {
@@ -63,6 +65,8 @@ export type ProductInput = {
   description: string | null;
   features: string[];
   specs: Record<string, string>;
+  /** Gönderilmezse stok değişmez. track:false → takip yok, track:true → quantity adede eşitlenir */
+  stock?: { track: boolean; quantity: number };
 };
 
 export type CreateProductInput = ProductInput & { id?: string | null };

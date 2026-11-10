@@ -46,6 +46,7 @@ server {
 
     # --- Backend API (ASP.NET Core) ---
     location /api/ {
+        client_max_body_size 10m;   # admin görsel yükleme (API tarafında sınır 5 MB)
         set $api http://api:8080;
         proxy_pass $api;
     }

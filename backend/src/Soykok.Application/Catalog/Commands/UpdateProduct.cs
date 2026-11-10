@@ -25,12 +25,31 @@ public sealed class UpdateProductHandler(
 
         var now = clock.GetUtcNow();
         product.Update(command.Input.ToInfo(), now);
+        var stock = await ApplyStockAsync(products, product.Id, command.Input.Stock, now, ct);
 
         await unitOfWork.SaveChangesAsync(ct);
         await catalog.InvalidateAsync(ct);
         await events.PublishAsync(CatalogEvents.ProductUpdated,
             new ProductChangedEvent(product.Id, product.Name, product.Price, "updated", now), ct);
 
-        return ProductDetail.From(product);
+        return ProductDetail.From(product, stock);
+    }
+
+    /// <summary>Stok ayarını uygular; dönen değer cevaptaki stok adedi.</summary>
+    internal static async Task<int?> ApplyStockAsync(
+        IProductRepository products, string productId, StockInput? input, DateTimeOffset now, CancellationToken ct)
+    {
+        var current = await products.GetStockAsync(productId, ct);
+        if (input is null) return current?.Quantity; // değiştirilmedi
+
+        if (!input.Track)
+        {
+            if (current is not null) products.RemoveStock(current);
+            return null;
+        }
+
+        if (current is null) products.AddStock(new Soykok.Domain.Inventory.StockItem(productId, input.Quantity, now));
+        else current.Set(input.Quantity, now);
+        return input.Quantity;
     }
 }

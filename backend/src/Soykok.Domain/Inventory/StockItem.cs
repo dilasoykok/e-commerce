@@ -28,6 +28,14 @@ public sealed class StockItem
         UpdatedAt = now;
     }
 
+    /// <summary>Admin sayımı: stoğu verilen adede eşitler.</summary>
+    public void Set(int quantity, DateTimeOffset now)
+    {
+        if (quantity < 0) throw new DomainException("Stok negatif olamaz.");
+        Quantity = quantity;
+        UpdatedAt = now;
+    }
+
     /// <summary>Sipariş verilince düşülür. Yetersizse DomainException.</summary>
     public void Decrease(int amount, DateTimeOffset now)
     {

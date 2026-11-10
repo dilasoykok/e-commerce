@@ -33,5 +33,7 @@ WORKDIR /app
 COPY --from=build /app/api .
 ENV ASPNETCORE_HTTP_PORTS=8080
 EXPOSE 8080
+# Yüklenen görseller (docker-compose'daki "uploads" volume'u buraya bağlanır; sahibi uygulama kullanıcısı)
+RUN mkdir -p /app/data/uploads && chown -R $APP_UID /app/data
 USER $APP_UID
 ENTRYPOINT ["dotnet", "Soykok.Api.dll"]

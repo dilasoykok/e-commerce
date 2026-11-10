@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Soykok.Application.Common.Abstractions;
 using Soykok.Domain.Catalog;
+using Soykok.Domain.Inventory;
 
 namespace Soykok.Infrastructure.Persistence.Repositories;
 
@@ -21,6 +22,12 @@ internal sealed class ProductRepository(AppDbContext db) : IProductRepository
     public void Add(Product product) => db.Products.Add(product);
 
     public void Remove(Product product) => db.Products.Remove(product);
+
+    public Task<StockItem?> GetStockAsync(string productId, CancellationToken ct) =>
+        db.StockItems.FirstOrDefaultAsync(s => s.ProductId == productId, ct);
+
+    public void AddStock(StockItem stock) => db.StockItems.Add(stock);
+    public void RemoveStock(StockItem stock) => db.StockItems.Remove(stock);
 }
 
 internal sealed class CategoryRepository(AppDbContext db) : ICategoryRepository
@@ -57,4 +64,10 @@ internal sealed class CatalogReadRepository(AppDbContext db) : ICatalogReadRepos
 
     public Task<Product?> FindProductAsync(string id, CancellationToken ct) =>
         db.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id, ct);
+
+    public Task<Dictionary<string, int>> ListStockAsync(CancellationToken ct) =>
+        db.StockItems.AsNoTracking().ToDictionaryAsync(s => s.ProductId, s => s.Quantity, ct);
+
+    public async Task<int?> FindStockAsync(string productId, CancellationToken ct) =>
+        await db.StockItems.AsNoTracking().Where(s => s.ProductId == productId).Select(s => (int?)s.Quantity).FirstOrDefaultAsync(ct);
 }

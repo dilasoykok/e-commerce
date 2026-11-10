@@ -13,6 +13,7 @@ import { formatTL } from '@/lib/format';
 import { productHref } from '@/lib/routes';
 import type { SearchOption, SearchSuggestion } from '@/lib/category-nav';
 import type { Product } from '@/lib/types';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
 const MIN_CHARS = 2;
@@ -285,7 +286,7 @@ export function SearchForm({ q = '', kategori = '', options, suggestions }: Prop
                 { type: 'product', key: `p:${p.id}`, href: productHref(p.id), data: p },
                 <>
                   <span className="relative size-10 shrink-0 overflow-hidden rounded bg-gray-100">
-                    {p.image && <Image src={`/images/products/${p.image}`} alt="" fill sizes="40px" className="object-cover" />}
+                    {p.image && <Image src={productImageSrc(p.image)} unoptimized={isUploadedImage(p.image)} alt="" fill sizes="40px" className="object-cover" />}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate">

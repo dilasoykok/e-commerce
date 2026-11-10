@@ -120,6 +120,8 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
 | `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
 | `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note }` (havale onayı, kargo, teslim, iptal). İptalde stok geri eklenir |
+| `POST /api/admin/uploads`      | admin   | Ürün görseli yükle (multipart, alan `file`; JPG/PNG/WEBP, en fazla 5 MB) → `{ url }` |
+| `GET /api/files/products/...`  | herkes  | Yüklenen görseller (`uploads` volume'u) |
 | `GET /api/admin/categories`    | admin   | Alt kategoriler (ürün sayısıyla) + üst kategoriler |
 | `POST /api/admin/categories`   | admin   | Alt kategori ekle `{ slug?, name, sortOrder?, groups: ["parke"] }` (kod boşsa addan üretilir) |
 | `PUT/DELETE /api/admin/categories/{slug}` | admin | Alt kategori güncelle / sil (içinde ürün varsa silinmez, 409) |
@@ -143,6 +145,16 @@ olmalı). Stok, sipariş kaydıyla aynı transaction'da koşullu `UPDATE` ile d�
 kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan eklenenler) stok takibine
 girmez. Her sipariş "Ödeme Bekleniyor" durumunda açılır: havalede admin parayı görünce, kartta iyzico
 onaylayınca "Sipariş Alındı" olur.
+
+### Ürün görselleri ve stok
+
+- **Görseller:** Admin ürün formunda "Bilgisayardan yükle" ile yüklenir; API dosyayı `uploads` docker
+  volume'una yazar ve `/api/files/products/<rastgele-ad>.jpg` adresini ürüne kaydeder. Eski ürünlerdeki
+  `laminat-1.jpg` gibi dosya adları `soykok-web/public/images/products` altından gelmeye devam eder
+  (`src/lib/product-image.ts`). Volume'u silmeyin (`docker compose down -v` görselleri de siler).
+- **Stok:** Formdaki "Stok adedi" boşsa ürün stok takibine girmez (sınırsız satılır). Sayı girilirse
+  siparişte düşer, iptalde geri eklenir; 0 olunca sitede "Tükendi" görünür ve sepete eklenemez.
+  Admin formu stoğu yalnızca alan değiştirildiyse gönderir (siparişlerle düşen stok ezilmez).
 
 ### Kategoriler
 

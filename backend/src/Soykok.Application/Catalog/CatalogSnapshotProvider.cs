@@ -18,9 +18,10 @@ public sealed class CatalogSnapshotProvider(ICatalogReadRepository repository, I
         var products = await repository.ListProductsAsync(ct);
         var categories = await repository.ListCategoriesAsync(ct);
         var groups = await repository.ListCategoryGroupsAsync(ct);
+        var stock = await repository.ListStockAsync(ct);
 
         var snapshot = new CatalogSnapshot(
-            products.Select(ProductListItem.From).ToList(),
+            products.Select(p => ProductListItem.From(p, stock.TryGetValue(p.Id, out var q) ? q : null)).ToList(),
             categories.Select(c => new CategoryItem(c.Slug, c.Name)).ToList(),
             groups.Select(g => new CategoryGroupItem(g.Slug, g.Label, g.CategorySlugs)).ToList());
 

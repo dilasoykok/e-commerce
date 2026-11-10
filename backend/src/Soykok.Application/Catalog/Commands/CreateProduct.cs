@@ -33,11 +33,14 @@ public sealed class CreateProductHandler(
         var product = Product.Create(id, command.Input.ToInfo(), sortOrder, now);
 
         products.Add(product);
+        // Yeni ürün: stok girilmediyse takip yok (eski davranış)
+        var stock = command.Input.Stock is { Track: true } st ? st.Quantity : (int?)null;
+        if (stock is { } qty) products.AddStock(new Soykok.Domain.Inventory.StockItem(id, qty, now));
         await unitOfWork.SaveChangesAsync(ct);
         await catalog.InvalidateAsync(ct);
         await events.PublishAsync(CatalogEvents.ProductCreated,
             new ProductChangedEvent(product.Id, product.Name, product.Price, "created", now), ct);
 
-        return ProductDetail.From(product);
+        return ProductDetail.From(product, stock);
     }
 }

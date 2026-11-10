@@ -76,3 +76,8 @@ export function useDeleteProduct() {
     onSuccess: invalidate,
   });
 }
+
+/** Ürün görseli yükle (yalnızca admin). Dönen adres ürünün image/images alanına yazılır. */
+export function useUploadImage() {
+  return useMutation({ mutationFn: (file: File) => api.admin.uploadImage(file) });
+}

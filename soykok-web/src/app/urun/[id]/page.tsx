@@ -12,6 +12,7 @@ import { formatTL } from '@/lib/format';
 import { FREE_SHIPPING_LIMIT } from '@/lib/shipping';
 import { parentGroup } from '@/lib/product-filters';
 import type { CatalogCategories, Product } from '@/lib/types';
+import { productImageSrc } from '@/lib/product-image';
 
 // Ürün bilgisi en fazla 60 sn önbellekte; admin değiştirince hemen yenilenir (catalog etiketi)
 export const revalidate = 60;
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.name,
     description,
-    openGraph: { title: product.name, description, images: [`/images/products/${product.image}`] },
+    openGraph: { title: product.name, description, images: [productImageSrc(product.image)] },
   };
 }
 
@@ -51,12 +52,12 @@ export default async function ProductPage({ params }: Props) {
     sku: product.id,
     name: product.name,
     brand: { '@type': 'Brand', name: product.brand },
-    image: images.map((i) => `/images/products/${i}`),
+    image: images.map((i) => productImageSrc(i)),
     description: product.description ?? undefined,
     aggregateRating: product.reviews
       ? { '@type': 'AggregateRating', ratingValue: product.rating, reviewCount: product.reviews }
       : undefined,
-    offers: { '@type': 'Offer', priceCurrency: 'TRY', price: product.price, availability: 'https://schema.org/InStock' },
+    offers: { '@type': 'Offer', priceCurrency: 'TRY', price: product.price, availability: product.stock === 0 ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock' },
   };
 
   return (
@@ -145,6 +146,7 @@ export default async function ProductPage({ params }: Props) {
           <PurchasePanel
             product={{ id: product.id, name: product.name, brand: product.brand, image: product.image, price: product.price, unit }}
             boxM2={product.boxM2}
+            stock={product.stock}
           />
 
           {/* Güven bandı */}

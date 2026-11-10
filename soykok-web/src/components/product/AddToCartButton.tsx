@@ -9,6 +9,8 @@ type Props = {
   qty?: number;
   className?: string;
   children?: React.ReactNode;
+  /** Stok 0: buton pasif, "Tükendi" yazar */
+  soldOut?: boolean;
 };
 
 /**
@@ -16,7 +18,7 @@ type Props = {
  * Ekledikten sonra 1,2 sn "Sepete Eklendi ✓" yazar ve mini sepeti açar.
  * Ürün kartında ve ürün detay sayfasında (qty ile) kullanılacak.
  */
-export default function AddToCartButton({ product, qty = 1, className, children = 'Sepete Ekle' }: Props) {
+export default function AddToCartButton({ product, qty = 1, className, children = 'Sepete Ekle', soldOut = false }: Props) {
   const add = useCart((s) => s.add);
   const openCart = useUi((s) => s.openCart);
   const [added, setAdded] = useState(false);
@@ -27,7 +29,7 @@ export default function AddToCartButton({ product, qty = 1, className, children 
   return (
     <button
       type="button"
-      disabled={added}
+      disabled={added || soldOut}
       onClick={() => {
         add(product, qty);
         setAdded(true);
@@ -39,7 +41,7 @@ export default function AddToCartButton({ product, qty = 1, className, children 
         'h-10 w-full rounded bg-brand-900 text-xs font-semibold text-white transition hover:bg-brand-700 disabled:opacity-80'
       }
     >
-      {added ? 'Sepete Eklendi ✓' : children}
+      {soldOut ? 'Tükendi' : added ? 'Sepete Eklendi ✓' : children}
     </button>
   );
 }

@@ -11,6 +11,7 @@ import { useCart, useCartSummary } from '@/store/cart';
 import { useCartSync } from '@/hooks/useCartSync';
 import { formatTL } from '@/lib/format';
 import { productHref } from '@/lib/routes';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
 
@@ -74,7 +75,7 @@ export default function CartPage() {
                 className="grid grid-cols-[80px_1fr_auto] gap-x-4 gap-y-3 py-5 md:grid-cols-[96px_1fr_110px_150px_110px_36px] md:items-center"
               >
                 <Link href={productHref(item.id)} className="relative row-span-2 h-16 w-20 overflow-hidden rounded bg-gray-100 md:row-span-1 md:h-[72px] md:w-24">
-                  {item.image && <Image src={`/images/products/${item.image}`} alt="" fill sizes="96px" className="object-cover" />}
+                  {item.image && <Image src={productImageSrc(item.image)} unoptimized={isUploadedImage(item.image)} alt="" fill sizes="96px" className="object-cover" />}
                 </Link>
 
                 <div className="min-w-0">

@@ -16,6 +16,6 @@ public sealed class GetProductByIdHandler(ICatalogReadRepository repository)
         if (product is null)
             return CatalogErrors.ProductNotFound(query.Id);
 
-        return ProductDetail.From(product);
+        return ProductDetail.From(product, await repository.FindStockAsync(product.Id, ct));
     }
 }

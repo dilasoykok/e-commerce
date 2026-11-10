@@ -95,6 +95,7 @@ services:
       Iyzico__SecretKey: ${IYZICO_SECRET_KEY:-}
       Iyzico__BaseUrl: ${IYZICO_BASE_URL:-https://sandbox-api.iyzipay.com}
       Iyzico__CallbackUrl: ${PUBLIC_URL:-http://localhost}/api/payments/iyzico/callback
+      Uploads__RootPath: /app/data/uploads
     depends_on:
       migrator:
         condition: service_completed_successfully
@@ -104,6 +105,8 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_started
+    volumes:
+      - uploads:/app/data/uploads
     expose:
       - "8080"
     networks:
@@ -218,6 +221,7 @@ services:
       - soykok-net
 
 volumes:
+  uploads:              # admin panelinden yüklenen ürün görselleri
   postgres-data:
   redis-data:
   rabbitmq-data:

@@ -11,6 +11,7 @@ import { useCart, useCartSummary } from '@/store/cart';
 import { useUi } from '@/store/ui';
 import { formatTL } from '@/lib/format';
 import { useBodyScrollLock, useEscape } from '@/lib/hooks';
+import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
 
@@ -98,7 +99,8 @@ export default function CartDrawer() {
                 <li key={item.id} className="flex gap-3 py-4">
                   {item.image ? (
                     <Image
-                      src={`/images/products/${item.image}`}
+                      src={productImageSrc(item.image)}
+                      unoptimized={isUploadedImage(item.image)}
                       alt=""
                       width={80}
                       height={56}

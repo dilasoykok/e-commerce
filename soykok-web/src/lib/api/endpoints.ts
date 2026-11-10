@@ -87,6 +87,13 @@ export const api = {
         json: { status, note: note || null },
       }),
 
+    /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } */
+    uploadImage: (file: File) => {
+      const form = new FormData();
+      form.append('file', file);
+      return apiFetch<{ url: string }>('/admin/uploads', { method: 'POST', form, timeoutMs: 60_000 });
+    },
+
     /** Kategori yönetimi — her işlem güncel listeyi döner */
     categories: (opts?: Opts) => apiFetch<AdminCategoryList>('/admin/categories', { cache: 'no-store', ...opts }),
     createCategory: (input: SaveCategoryInput) =>

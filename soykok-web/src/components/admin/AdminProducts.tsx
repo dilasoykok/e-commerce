@@ -7,6 +7,7 @@ import ProductForm from './ProductForm';
 import { useCategories, useDeleteProduct, useProducts } from '@/hooks/useCatalog';
 import { formatTL } from '@/lib/format';
 import type { Product } from '@/lib/types';
+import { productImageSrc } from '@/lib/product-image';
 
 const PAGE_SIZE = 20;
 const SW = 1.75;
@@ -125,6 +126,7 @@ export default function AdminProducts() {
                 <th className="px-4 py-2.5 font-medium">Ürün</th>
                 <th className="px-4 py-2.5 font-medium">Kategori</th>
                 <th className="px-4 py-2.5 text-right font-medium">Fiyat</th>
+                <th className="px-4 py-2.5 text-right font-medium">Stok</th>
                 <th className="px-4 py-2.5 text-right font-medium">Satış</th>
                 <th className="px-4 py-2.5" />
               </tr>
@@ -204,7 +206,7 @@ function ProductRow({
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`/images/products/${p.image}`} alt="" className="h-10 w-14 shrink-0 rounded bg-gray-100 object-cover" />
+          <img src={productImageSrc(p.image)} alt="" className="h-10 w-14 shrink-0 rounded bg-gray-100 object-cover" />
           <div className="min-w-0">
             <p className="font-medium">{p.name}</p>
             <p className="text-xs text-gray-500">
@@ -219,6 +221,15 @@ function ProductRow({
         {p.oldPrice && <del className="mr-2 text-xs text-gray-400">{formatTL(p.oldPrice)}</del>}
         <span className="font-semibold">{formatTL(p.price)}</span>
         <span className="text-xs text-gray-500">/{p.unit || 'm²'}</span>
+      </td>
+      <td className="px-4 py-3 text-right whitespace-nowrap">
+        {p.stock == null ? (
+          <span className="text-xs text-gray-400" title="Stok takibi yok">—</span>
+        ) : p.stock === 0 ? (
+          <span className="rounded bg-red-50 px-1.5 py-0.5 text-xs font-semibold text-sale">Tükendi</span>
+        ) : (
+          <span className={p.stock <= 10 ? 'font-semibold text-amber-600' : 'text-gray-700'}>{p.stock}</span>
+        )}
       </td>
       <td className="px-4 py-3 text-right text-gray-600">{p.sales}</td>
       <td className="px-4 py-3">

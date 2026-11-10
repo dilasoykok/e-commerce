@@ -5,6 +5,7 @@ import { Loader2, X } from 'lucide-react';
 import { ApiError } from '@/lib/api/client';
 import { useCategories, useCreateProduct, useProduct, useUpdateProduct } from '@/hooks/useCatalog';
 import type { BadgeType, ProductDetail, ProductInput } from '@/lib/types';
+import { GalleryField, MainImageField } from './ImageFields';
 
 /* ---------- Form durumu (inputlar hep metin tutar, gönderirken çevrilir) ---------- */
 
@@ -24,6 +25,8 @@ type FormState = {
   description: string;
   features: string;
   specs: string;
+  /** Boş → stok takibi yok */
+  stock: string;
 };
 
 const EMPTY: FormState = {
@@ -42,6 +45,7 @@ const EMPTY: FormState = {
   description: '',
   features: '',
   specs: '',
+  stock: '',
 };
 
 const toText = (n: number | null | undefined) => (n == null ? '' : String(n).replace('.', ','));
@@ -65,6 +69,7 @@ function fromProduct(p: ProductDetail): FormState {
     specs: Object.entries(p.specs)
       .map(([k, v]) => `${k}: ${v}`)
       .join('\n'),
+    stock: p.stock == null ? '' : String(p.stock),
   };
 }
 
@@ -82,6 +87,15 @@ const lines = (s: string) =>
     .split(/[\n,]/)
     .map((x) => x.trim())
     .filter(Boolean);
+
+/** Stok yalnızca değiştiyse gönderilir: bu arada siparişlerle düşen stok ezilmesin */
+function stockInput(f: FormState, initial: FormState): ProductInput['stock'] | 'invalid' {
+  const t = f.stock.trim();
+  if (t === initial.stock.trim()) return undefined;
+  if (!t) return { track: false, quantity: 0 };
+  const n = Number(t);
+  return Number.isInteger(n) && n >= 0 ? { track: true, quantity: n } : 'invalid';
+}
 
 function toInput(f: FormState): ProductInput {
   return {
@@ -185,6 +199,12 @@ function FormBody({ initial, productId, onClose, onSaved }: Props & { initial: F
     e.preventDefault();
     setClientError(null);
     const input = toInput(f);
+    const stock = stockInput(f, initial);
+    if (stock === 'invalid') {
+      setClientError('Stok adedine 0 veya daha büyük tam sayı girin (takip istemiyorsanız boş bırakın).');
+      return;
+    }
+    if (stock) input.stock = stock;
     if ([input.price, input.oldPrice, input.boxM2].some((n) => Number.isNaN(n))) {
       setClientError('Fiyat ve m² alanlarına yalnızca sayı girin (ör. 1062 veya 1062,50).');
       return;
@@ -243,16 +263,15 @@ function FormBody({ initial, productId, onClose, onSaved }: Props & { initial: F
           </Field>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
-          <Field label="Ana görsel *" hint="public/images/products altındaki dosya adı" error={err('image')}>
-            <input className="form-input" value={f.image} onChange={set('image')} placeholder="laminat-oak-naturel.jpg" aria-invalid={Boolean(err('image'))} />
-          </Field>
-          {f.image.trim() && (
-            // Admin dosya adını yazarken önizleme; next/image var olmayan dosyada hata verdiği için düz <img>
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={`/images/products/${f.image.trim()}`} alt="" className="mt-5 h-16 w-24 rounded border border-gray-200 object-cover" />
-          )}
-        </div>
+        <MainImageField value={f.image} onChange={(image) => setF((prev) => ({ ...prev, image }))} error={err('image')} />
+
+        <Field
+          label="Stok adedi"
+          hint='Boş bırakılırsa stok takibi yapılmaz (sınırsız satılır). 0 → sitede "Tükendi" görünür.'
+          error={err('stock')}
+        >
+          <input className="form-input w-40" inputMode="numeric" value={f.stock} onChange={set('stock')} placeholder="takip yok" />
+        </Field>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Etiket">
@@ -283,9 +302,10 @@ function FormBody({ initial, productId, onClose, onSaved }: Props & { initial: F
           <textarea className="form-input h-24 py-2" value={f.specs} onChange={set('specs')} />
         </Field>
 
-        <Field label="Galeri görselleri" hint="Dosya adları, her satıra bir tane">
-          <textarea className="form-input h-16 py-2" value={f.images} onChange={set('images')} />
-        </Field>
+        <GalleryField
+          values={lines(f.images)}
+          onChange={(images) => setF((prev) => ({ ...prev, images: images.join('\n') }))}
+        />
       </div>
 
       <div className="flex justify-end gap-2 border-t border-gray-200 px-5 py-4">

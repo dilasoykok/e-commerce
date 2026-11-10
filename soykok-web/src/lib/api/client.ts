@@ -67,6 +67,8 @@ const STATUS_MESSAGES: Record<number, string> = {
 export type ApiRequestInit = Omit<RequestInit, 'body'> & {
   /** JSON olarak gönderilecek gövde */
   json?: unknown;
+  /** Dosya yükleme (multipart/form-data; Content-Type tarayıcı tarafından yazılır) */
+  form?: FormData;
   /** Sunucudan istek atarken tarayıcının çerezlerini iletmek için */
   cookie?: string;
   timeoutMs?: number;
@@ -75,7 +77,7 @@ export type ApiRequestInit = Omit<RequestInit, 'body'> & {
 };
 
 export async function apiFetch<T>(path: string, init: ApiRequestInit = {}): Promise<T> {
-  const { json, cookie, timeoutMs = DEFAULT_TIMEOUT_MS, headers, ...rest } = init;
+  const { json, form, cookie, timeoutMs = DEFAULT_TIMEOUT_MS, headers, ...rest } = init;
 
   const h = new Headers(headers);
   h.set('Accept', 'application/json');
@@ -89,7 +91,7 @@ export async function apiFetch<T>(path: string, init: ApiRequestInit = {}): Prom
       signal: AbortSignal.timeout(timeoutMs),
       ...rest,
       headers: h,
-      body: json !== undefined ? JSON.stringify(json) : undefined,
+      body: json !== undefined ? JSON.stringify(json) : form,
     });
   } catch (err) {
     throw new ApiError(0, 'Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edin.', {}, (err as Error)?.name);

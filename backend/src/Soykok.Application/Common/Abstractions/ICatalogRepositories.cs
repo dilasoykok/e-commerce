@@ -1,4 +1,5 @@
 using Soykok.Domain.Catalog;
+using Soykok.Domain.Inventory;
 
 namespace Soykok.Application.Common.Abstractions;
 
@@ -12,6 +13,11 @@ public interface IProductRepository
     Task<int> GetMaxSortOrderAsync(CancellationToken ct);
     void Add(Product product);
     void Remove(Product product);
+
+    /* Stok (admin) */
+    Task<StockItem?> GetStockAsync(string productId, CancellationToken ct);
+    void AddStock(StockItem stock);
+    void RemoveStock(StockItem stock);
 }
 
 public interface ICategoryRepository
@@ -36,4 +42,7 @@ public interface ICatalogReadRepository
     Task<IReadOnlyList<Category>> ListCategoriesAsync(CancellationToken ct);
     Task<IReadOnlyList<CategoryGroup>> ListCategoryGroupsAsync(CancellationToken ct);
     Task<Product?> FindProductAsync(string id, CancellationToken ct);
+    /// <summary>Ürün kodu → stok adedi (stok kaydı olmayan ürün listede yoktur)</summary>
+    Task<Dictionary<string, int>> ListStockAsync(CancellationToken ct);
+    Task<int?> FindStockAsync(string productId, CancellationToken ct);
 }
