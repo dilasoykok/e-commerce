@@ -21,7 +21,7 @@ const QUESTIONS = [
   },
   {
     q: 'Fazla aldığım parkeyi iade edebilir miyim?',
-    a: 'Açılmamış ve hasar görmemiş paketler, faturasıyla birlikte [X] gün içinde iade edilebilir. Açılmış paketler ve özel siparişler iade kapsamı dışındadır.',
+    a: 'Kullanılmamış ürünleri teslimattan itibaren 14 gün içinde faturasıyla birlikte iade edebilirsiniz. Ölçüye göre kesilen ya da özel sipariş edilen ürünler iade kapsamı dışındadır. Ayrıntılar İade ve Değişim sayfasında.',
   },
 ];
 

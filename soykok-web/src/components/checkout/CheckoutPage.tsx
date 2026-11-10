@@ -370,11 +370,11 @@ export default function CheckoutPage() {
             <label className="flex cursor-pointer items-start gap-3">
               <input type="checkbox" id="terms" name="terms" className="mt-0.5 size-4 shrink-0 accent-brand-900" aria-invalid={invalid('terms')} />
               <span>
-                <a href="#" className="font-semibold underline hover:text-wood-600">
+                <a href="/on-bilgilendirme-formu" target="_blank" className="font-semibold underline hover:text-wood-600">
                   Ön Bilgilendirme Formu
                 </a>
                 &apos;nu ve{' '}
-                <a href="#" className="font-semibold underline hover:text-wood-600">
+                <a href="/mesafeli-satis-sozlesmesi" target="_blank" className="font-semibold underline hover:text-wood-600">
                   Mesafeli Satış Sözleşmesi
                 </a>
                 &apos;ni okudum, onaylıyorum. <span className="text-sale">*</span>
@@ -388,7 +388,7 @@ export default function CheckoutPage() {
           </label>
           <p className="text-[11px] text-gray-500">
             Kişisel verileriniz{' '}
-            <a href="#" className="underline hover:text-brand-900">
+            <a href="/kvkk-aydinlatma-metni" target="_blank" className="underline hover:text-brand-900">
               KVKK Aydınlatma Metni
             </a>{' '}
             kapsamında, siparişinizin yerine getirilmesi amacıyla işlenir.

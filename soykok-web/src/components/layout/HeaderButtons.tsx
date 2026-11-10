@@ -38,12 +38,12 @@ export function CartButton() {
   );
 }
 
-/** Header'daki "Favorilerim" (favoriler sayfası henüz yok) */
+/** Header'daki "Favorilerim" */
 export function FavoritesButton() {
   const count = useFavorites((s) => s.ids.length);
 
   return (
-    <Link href="#" className="group flex items-center gap-2 text-sm">
+    <Link href="/favorilerim" className="group flex items-center gap-2 text-sm">
       <span className="relative">
         <Heart className="size-6" strokeWidth={1.75} aria-hidden />
         <span className={badgeClass}>{count}</span>

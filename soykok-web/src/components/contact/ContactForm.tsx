@@ -171,7 +171,7 @@ export default function ContactForm({ initialSubject = '' }: { initialSubject?: 
         <label className="flex cursor-pointer items-start gap-3 text-xs">
           <input type="checkbox" name="kvkk" className="mt-0.5 size-4 shrink-0 accent-brand-900" aria-invalid={err('kvkk') ? true : undefined} />
           <span>
-            <a href="#" className="font-semibold underline hover:text-wood-600">
+            <a href="/kvkk-aydinlatma-metni" target="_blank" className="font-semibold underline hover:text-wood-600">
               KVKK Aydınlatma Metni
             </a>
             &apos;ni okudum; bana dönüş yapılabilmesi için bilgilerimin işlenmesini kabul ediyorum. <span className="text-sale">*</span>

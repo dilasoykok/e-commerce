@@ -33,11 +33,11 @@ const FOOTER_NAV = [
     title: 'Müşteri Hizmetleri',
     links: [
       { href: '/siparislerim', label: 'Sipariş Takibi' },
-      { href: '#', label: 'İade ve Değişim' },
-      { href: '#', label: 'Kargo ve Teslimat' },
-      { href: '#', label: 'Sıkça Sorulan Sorular' },
-      { href: '#', label: 'Mesafeli Satış Sözleşmesi' },
-      { href: '#', label: 'KVKK Aydınlatma Metni' },
+      { href: '/iade-ve-degisim', label: 'İade ve Değişim' },
+      { href: '/kargo-ve-teslimat', label: 'Kargo ve Teslimat' },
+      { href: '/sss', label: 'Sıkça Sorulan Sorular' },
+      { href: '/mesafeli-satis-sozlesmesi', label: 'Mesafeli Satış Sözleşmesi' },
+      { href: '/kvkk-aydinlatma-metni', label: 'KVKK Aydınlatma Metni' },
     ],
   },
 ];

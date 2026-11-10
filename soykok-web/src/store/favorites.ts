@@ -12,6 +12,7 @@ export const FAVORITES_STORAGE_KEY = 'soykok-favorites';
 type FavoritesState = {
   ids: string[];
   toggle: (id: string) => void;
+  remove: (ids: string[]) => void;
   has: (id: string) => boolean;
 };
 
@@ -23,6 +24,7 @@ export const useFavorites = create<FavoritesState>()(
         set((state) => ({
           ids: state.ids.includes(id) ? state.ids.filter((x) => x !== id) : [...state.ids, id],
         })),
+      remove: (ids) => set((state) => ({ ids: state.ids.filter((x) => !ids.includes(x)) })),
       has: (id) => get().ids.includes(id),
     }),
     {

@@ -90,8 +90,9 @@ export default function Hero() {
     <HeroSlider
       slides={slides}
       aside={
-        /* Sağdaki özellik kartı (xl ve üstü) */
-        <div className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
+        /* Sağdaki özellik kartı (xl ve üstü). key: sunucudan client bileşene prop olarak geçen
+           öğeyi React geliştirme modunda liste elemanı sayıp uyarı veriyor */
+        <div key="perks" className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
           <div className="container-site flex h-full items-end justify-end pb-4">
             <ul className="pointer-events-auto w-[220px] space-y-5 rounded-md bg-white/85 p-5 text-brand-900 shadow-lg backdrop-blur">
               {PERKS.map(({ icon: Icon, title, text }) => (
