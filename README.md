@@ -18,6 +18,40 @@ PostgreSQL, Redis ve RabbitMQ (AMQP) yalnızca `127.0.0.1`'e açılır; dışar�
 Bilgisayardaki portlar `.env`'den değiştirilebilir (bkz. [Sorun giderme](#sorun-giderme)); konteynerler
 birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 
+## Proje durumu
+
+### Yapılanlar
+
+**Mağaza (müşteri tarafı)**
+- Next.js 16 arayüz: ana sayfa, ürün listesi (filtre, sıralama, sayfalama), ürün detayı (galeri, m² hesaplayıcı), sepet, ödeme, sipariş onayı
+- Kategori menüsü (masaüstü, mobil, footer) ve arama kutusundaki kategoriler veritabanından gelir
+- Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (supurge → Süpürgelik)
+- Üyelik (Keycloak): giriş, kayıt, siparişlerim; misafir sipariş takibi (numara + e-posta)
+- Favoriler (tarayıcıda saklanır)
+- Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**
+- Stok: tükenen ürün "Tükendi" görünür, sepete eklenemez; az kalan stok uyarısı
+- Kargo takibi: kargo firması + takip numarası ve takip bağlantısı
+- Yasal ve yardım sayfaları: KVKK, ön bilgilendirme, mesafeli satış, iade, kargo, SSS (şablon metinler)
+
+**Yönetim paneli (`/admin`, admin rolü gerekir)**
+- Siparişler: liste, arama, durum değiştirme (havale onayı, hazırlanıyor, kargoya verildi + takip no, teslim, iptal → stok iadesi)
+- Ürünler: ekle / düzenle / sil, fiyat ve indirim, **görsel yükleme** (ana görsel + galeri), **stok adedi**
+- Kategoriler: üst ve alt kategori ekle / düzenle / sil
+
+**Altyapı**
+- .NET 10 API (Clean Architecture), PostgreSQL, Redis önbellek, RabbitMQ olayları, nginx, Docker Compose
+- Sunucu tarafında fiyat/kargo hesabı, stok için transaction içinde koşullu düşüm (fazla satış olmaz)
+- Sipariş e-postaları (SMTP): sipariş alındı, ödeme onayı, kargoda, teslim, iptal + admin'e yeni sipariş bildirimi
+
+### Eksikler / sıradaki işler
+
+1. **SMTP ayarı** — `.env`'deki `SMTP_*` satırları boş; doldurulana kadar e-posta gönderilmez (bkz. [Sipariş e-postaları](#sipariş-e-postaları)).
+2. **Yarım kalan kart ödemeleri** — müşteri iyzico sayfasında tarayıcıyı kapatırsa sipariş "Ödeme Bekleniyor"da kalır, stok ayrılı durur. Şimdilik admin elle kontrol eder.
+3. **İletişim formu** — mesaj sunucuya gitmiyor, kullanıcının e-posta programını açıyor.
+4. **Gerçek bilgiler** — footer'daki adres/telefon, firma unvanı, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`), Hakkımızda metni; yasal metinler hukukçuya okutulmalı.
+5. **Yayına alma** — alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifrelerinin değiştirilmesi, veritabanı ve `uploads` volume yedeği.
+6. Sonra: Projeler/Blog sayfaları (linkleri şu an `#`), ürün yorumları, üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme, e-Arşiv fatura, `sitemap.xml`, otomatik testler.
+
 ## Kurulum
 
 Gerekenler: Docker Desktop. Bilgisayarda .NET SDK ya da Node.js kurulu olması gerekmez; her şey

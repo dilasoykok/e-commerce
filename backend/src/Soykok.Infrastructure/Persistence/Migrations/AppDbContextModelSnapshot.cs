@@ -387,6 +387,11 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("placed_at");
 
+                    b.Property<string>("ShippingCarrier")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("shipping_carrier");
+
                     b.Property<decimal>("ShippingFee")
                         .HasPrecision(12, 2)
                         .HasColumnType("numeric(12,2)")
@@ -407,6 +412,11 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                         .HasPrecision(12, 2)
                         .HasColumnType("numeric(12,2)")
                         .HasColumnName("total");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("tracking_number");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
