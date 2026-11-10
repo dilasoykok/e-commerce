@@ -110,3 +110,102 @@ export type User = {
   lastName: string;
   roles: string[];
 };
+
+/* ---------- Siparişler (backend: Soykok.Application/Ordering/Contracts) ---------- */
+
+export type OrderStatus = 'awaitingPayment' | 'received' | 'preparing' | 'shipped' | 'delivered' | 'cancelled';
+export type DeliveryMethod = 'cargo' | 'store';
+export type PaymentMethod = 'card' | 'transfer';
+
+/** POST /api/orders gövdesi. Fiyat gönderilmez; sunucu katalogdan hesaplar. */
+export type PlaceOrderInput = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  delivery: DeliveryMethod;
+  city?: string;
+  district?: string;
+  address?: string;
+  postalCode?: string;
+  note?: string;
+  invoiceType: 'individual' | 'corporate';
+  companyName?: string;
+  taxOffice?: string;
+  taxNumber?: string;
+  payment: PaymentMethod;
+  marketing: boolean;
+  terms: boolean;
+  items: { productId: string; quantity: number }[];
+};
+
+export type OrderItem = {
+  productId: string;
+  productName: string;
+  brand: string;
+  image: string;
+  unit: string | null;
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+};
+
+export type OrderSummary = {
+  number: string;
+  status: OrderStatus;
+  placedAt: string;
+  deliveryMethod: DeliveryMethod;
+  paymentMethod: PaymentMethod;
+  itemCount: number;
+  total: number;
+  items: OrderItem[];
+};
+
+export type OrderDetail = {
+  number: string;
+  status: OrderStatus;
+  placedAt: string;
+  buyerFirstName: string;
+  buyerLastName: string;
+  buyerEmail: string;
+  buyerPhone: string | null;
+  deliveryMethod: DeliveryMethod;
+  shippingAddress: { city: string; district: string; line: string | null; postalCode: string | null } | null;
+  deliveryNote: string | null;
+  paymentMethod: PaymentMethod;
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+  items: OrderItem[];
+  statusHistory: { status: OrderStatus; changedAt: string; note: string | null }[];
+};
+
+/* ---------- Sipariş yönetimi (admin) ---------- */
+
+export type AdminOrderRow = {
+  number: string;
+  status: OrderStatus;
+  placedAt: string;
+  buyerName: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  isMember: boolean;
+  deliveryMethod: DeliveryMethod;
+  paymentMethod: PaymentMethod;
+  city: string | null;
+  itemCount: number;
+  total: number;
+};
+
+export type AdminOrderPage = { total: number; page: number; pageSize: number; items: AdminOrderRow[] };
+
+export type AdminOrderDetail = {
+  order: OrderDetail;
+  invoice: { type: 'individual' | 'corporate'; companyName: string | null; taxOffice: string | null; taxNumber: string | null };
+  isMember: boolean;
+  marketingConsent: boolean;
+  /** Bu durumdan geçilebilecek durumlar */
+  nextStatuses: OrderStatus[];
+};
+
+export type AdminOrderQuery = { durum?: OrderStatus | ''; q?: string; page?: number; pageSize?: number };

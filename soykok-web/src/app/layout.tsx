@@ -8,6 +8,8 @@ import ClientInit from '@/components/providers/ClientInit';
 import QueryProvider from '@/components/providers/QueryProvider';
 
 export const metadata: Metadata = {
+  // Paylaşım önizlemelerindeki (Open Graph) görsel adresleri bununla tamamlanır
+  metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost'),
   title: {
     default: 'Soykök Ticaret | Parke ve Yapı Malzemeleri',
     template: '%s | Soykök Ticaret',
@@ -22,7 +24,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr">
+    <html lang="tr" data-scroll-behavior="smooth">
       <body>
         {/* API verisi (oturum, admin listeleri) için TanStack Query önbelleği */}
         <QueryProvider>

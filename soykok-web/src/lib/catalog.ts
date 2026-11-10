@@ -15,7 +15,7 @@ import 'server-only';
 import * as fallback from '@/data/products';
 import { api } from './api/endpoints';
 import { ApiError } from './api/client';
-import type { CatalogCategories, Product, ProductDetail, ProductQuery } from './types';
+import type { CatalogCategories, Product, ProductDetail, ProductPage, ProductQuery } from './types';
 
 export const CATALOG_TAG = 'catalog';
 const cacheOpts = { next: { revalidate: 60, tags: [CATALOG_TAG] } };
@@ -81,6 +81,52 @@ export async function getProductsByIds(ids: string[]): Promise<Product[]> {
   const all = await getProducts({ limit: 100 });
   const byId = new Map(all.map((p) => [p.id, p]));
   return ids.map((id) => byId.get(id)).filter((p): p is Product => Boolean(p));
+}
+
+/* ---------- Ürün listesi sayfası (filtreli) ---------- */
+
+const normalize = (s: string) => s.toLocaleLowerCase('tr-TR').trim();
+
+/** GET /api/products — filtre, sıralama, sayfa. API yoksa aynı kurallarla statik veride arar. */
+export async function searchProducts(query: ProductQuery): Promise<ProductPage> {
+  try {
+    return await api.catalog.products(query, cacheOpts);
+  } catch (err) {
+    warn('ürün arama', err);
+    const groups = fallback.CATEGORY_GROUPS;
+    const cats = new Set((query.kategori ?? '').split(',').filter(Boolean).flatMap((c) => groups[c] ?? [c]));
+    const brands = new Set((query.marka ?? '').split(',').filter(Boolean));
+    const q = normalize(query.q ?? '');
+
+    const filtered = fallback.PRODUCTS.filter((p) => {
+      if (q && !normalize(`${p.name} ${p.brand} ${fallback.CATEGORIES[p.category] ?? ''}`).includes(q)) return false;
+      if (cats.size && !cats.has(p.category)) return false;
+      if (brands.size && !brands.has(p.brand)) return false;
+      if (query.min != null && p.price < query.min) return false;
+      if (query.max != null && p.price > query.max) return false;
+      if (query.indirim && !p.oldPrice) return false;
+      return true;
+    });
+    const sorted = sortStatic(filtered, query.sirala ?? 'onerilen');
+    const page = query.page ?? 1;
+    const size = query.pageSize ?? 24;
+    return { total: sorted.length, page, pageSize: size, items: sorted.slice((page - 1) * size, page * size) };
+  }
+}
+
+/** Filtre panelindeki kategori ve marka listeleri, yanlarındaki ürün sayılarıyla */
+export async function getFacets(): Promise<{ categoryCounts: Record<string, number>; brands: { name: string; count: number }[] }> {
+  const all = await getProducts({ limit: 100 });
+  const categoryCounts: Record<string, number> = {};
+  const brandCounts = new Map<string, number>();
+  for (const p of all) {
+    categoryCounts[p.category] = (categoryCounts[p.category] ?? 0) + 1;
+    brandCounts.set(p.brand, (brandCounts.get(p.brand) ?? 0) + 1);
+  }
+  const brands = [...brandCounts]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+  return { categoryCounts, brands };
 }
 
 /* ---------- Tek ürün ---------- */

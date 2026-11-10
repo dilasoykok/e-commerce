@@ -38,7 +38,8 @@ function BrandList({ hidden = false }: { hidden?: boolean }) {
             tabIndex={hidden ? -1 : undefined}
             className="flex h-[88px] w-[160px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-3 transition hover:border-gray-300 hover:bg-white sm:h-[96px] sm:w-[180px]"
           >
-            <Image src={`/images/brands/${b.logo}`} alt={b.name} width={156} height={72} className="h-auto max-h-full w-auto object-contain" />
+            <Image src={`/images/brands/${b.logo}`} alt={b.name} width={156} height={72} className="max-h-full object-contain"
+                      style={{ width: 'auto', height: 'auto' }} />
           </Link>
         </li>
       ))}

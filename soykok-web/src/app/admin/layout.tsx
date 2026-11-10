@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { ShieldAlert } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth-server';
 import { isAdmin, loginUrl } from '@/lib/auth';
+import AdminNav from '@/components/admin/AdminNav';
 
 export const metadata: Metadata = {
   title: 'Yönetim Paneli',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
  */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  if (!user) redirect(loginUrl('/admin/urunler'));
+  if (!user) redirect(loginUrl('/admin/siparisler'));
 
   if (!isAdmin(user)) {
     return (
@@ -35,5 +36,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     );
   }
 
-  return <div className="container-site py-8">{children}</div>;
+  return (
+    <div className="container-site py-8">
+      <AdminNav />
+      {children}
+    </div>
+  );
 }

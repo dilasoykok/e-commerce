@@ -1,0 +1,32 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
+import CartPage from '@/components/cart/CartPage';
+
+export const metadata: Metadata = { title: 'Sepetim', robots: { index: false } };
+
+/** Sepet (eski sepet.html). Sepet tarayıcıda (Zustand + localStorage) tutulur. */
+export default function Page() {
+  return (
+    <div className="container-site py-6 lg:py-8">
+      <nav aria-label="Sayfa yolu" className="text-xs text-gray-500">
+        <ol className="flex items-center gap-1.5">
+          <li>
+            <Link href="/" className="hover:text-brand-900">
+              Ana Sayfa
+            </Link>
+          </li>
+          <li aria-hidden>
+            <ChevronRight className="size-3.5" strokeWidth={1.75} />
+          </li>
+          <li aria-current="page" className="font-medium text-brand-900">
+            Sepetim
+          </li>
+        </ol>
+      </nav>
+
+      <h1 className="mt-3 text-2xl font-bold">Sepetim</h1>
+      <CartPage />
+    </div>
+  );
+}

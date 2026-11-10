@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, MessagesSquare, ShieldCheck, Truck } from 'lucide-react';
@@ -55,13 +54,14 @@ export default function Hero() {
   const slides = SLIDES.map((s, i) => {
     const Heading = i === 0 ? 'h1' : 'h2';
     return (
-      <Fragment key={s.image}>
+      // Fragment yerine div: sunucudan client bileşene geçerken Fragment diziye açılıp key uyarısı veriyor
+      <div key={s.image} className="absolute inset-0">
         <Image
           src={`/images/hero/${s.image}`}
           alt=""
           fill
           sizes="100vw"
-          priority={i === 0}
+          preload={i === 0}
           className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-brand-950/70 via-brand-950/45 to-transparent lg:from-brand-950/30 lg:via-brand-950/55" />
@@ -82,7 +82,7 @@ export default function Hero() {
             </Link>
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   });
 

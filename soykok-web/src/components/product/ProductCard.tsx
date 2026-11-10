@@ -4,10 +4,11 @@ import type { Product } from '@/lib/types';
 import { formatTL } from '@/lib/format';
 import AddToCartButton from './AddToCartButton';
 import FavoriteButton from './FavoriteButton';
+import { productHref } from '@/lib/routes';
 
 const BADGE_COLORS: Record<string, string> = { sale: 'bg-sale', new: 'bg-green-600', info: 'bg-brand-900' };
 
-export const productHref = (id: string) => `/urun/${encodeURIComponent(id)}`;
+export { productHref };
 
 /**
  * Ürün kartı (eski partials/components/product-card.html + product-list.js → productCard).
@@ -35,7 +36,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
           alt={p.name}
           fill
           sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-          priority={priority}
+          preload={priority}
           className="object-cover"
         />
       </Link>

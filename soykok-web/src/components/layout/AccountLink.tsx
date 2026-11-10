@@ -25,7 +25,7 @@ export default function AccountLink({ variant }: { variant: 'topbar' | 'drawer' 
         </Link>
         {isAdmin && (
           <Link
-            href="/admin/urunler"
+            href="/admin/siparisler"
             className="flex h-10 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-medium"
           >
             <LayoutDashboard className="size-4" strokeWidth={1.75} aria-hidden /> Yönetim Paneli
@@ -38,7 +38,7 @@ export default function AccountLink({ variant }: { variant: 'topbar' | 'drawer' 
   return (
     <>
       {isAdmin && (
-        <Link href="/admin/urunler" className="ml-4 hidden items-center gap-2 hover:text-wood-400 sm:flex">
+        <Link href="/admin/siparisler" className="ml-4 hidden items-center gap-2 hover:text-wood-400 sm:flex">
           <LayoutDashboard className="size-4" strokeWidth={1.75} aria-hidden />
           <span>Panel</span>
         </Link>

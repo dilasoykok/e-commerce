@@ -62,7 +62,8 @@ export default async function Picks() {
                       alt={b.name}
                       width={64}
                       height={32}
-                      className="h-auto max-h-full w-auto object-contain"
+                      className="max-h-full object-contain"
+                      style={{ width: 'auto', height: 'auto' }}
                     />
                   </Link>
                 </li>

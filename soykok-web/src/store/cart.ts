@@ -9,7 +9,7 @@
  * sırasında her zaman sunucuda yeniden hesaplanmalı.
  */
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -37,6 +37,8 @@ type CartState = {
   increment: (id: string, step?: number) => void;
   remove: (id: string) => void;
   clear: () => void;
+  /** Sepetteki ürünleri API'deki güncel bilgiyle eşitler; değişen ürünlerin adlarını döndürür */
+  syncProducts: (fresh: CartProduct[], missingIds: string[]) => { changed: string[]; removed: string[] };
 };
 
 function clampQty(qty: number | string): number {
@@ -88,6 +90,28 @@ export const useCart = create<CartState>()(
       remove: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
 
       clear: () => set({ items: [] }),
+
+      syncProducts: (fresh, missingIds) => {
+        const byId = new Map(fresh.map((p) => [p.id, p]));
+        const changed: string[] = [];
+        const removed: string[] = [];
+        const items: CartItem[] = [];
+        for (const item of get().items) {
+          if (missingIds.includes(item.id)) {
+            removed.push(item.name);
+            continue;
+          }
+          const p = byId.get(item.id);
+          if (p && p.price !== item.price) changed.push(item.name);
+          items.push(
+            p
+              ? { ...item, name: p.name, brand: p.brand ?? item.brand, image: p.image ?? item.image, price: p.price, unit: p.unit || item.unit }
+              : item,
+          );
+        }
+        if (changed.length || removed.length || items.some((x, i) => x !== get().items[i])) set({ items });
+        return { changed, removed };
+      },
     }),
     {
       name: CART_STORAGE_KEY,
@@ -131,6 +155,19 @@ export function getCartSummary(items: CartItem[]): CartSummary {
 export function useCartSummary(): CartSummary {
   const items = useCart((s) => s.items);
   return useMemo(() => getCartSummary(items), [items]);
+}
+
+/**
+ * Sepet localStorage'dan yüklendi mi? Yüklenmeden önce sepet boş görünür;
+ * sepet sayfası bu sırada "Sepetiniz boş" yerine yükleniyor gösterir.
+ */
+export function useCartHydrated(): boolean {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(useCart.persist.hasHydrated());
+    return useCart.persist.onFinishHydration(() => setHydrated(true));
+  }, []);
+  return hydrated;
 }
 
 /** Header rozeti için yalnızca sayı (gereksiz yeniden çizimi önler) */
