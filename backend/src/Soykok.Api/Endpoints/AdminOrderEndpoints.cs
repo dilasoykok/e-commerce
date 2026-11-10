@@ -49,7 +49,8 @@ public static class AdminOrderEndpoints
         CancellationToken ct)
     {
         var by = user.FindFirst("email")?.Value ?? user.Identity?.Name ?? "admin";
-        var result = await handler.HandleAsync(new ChangeOrderStatusCommand(number, request.Status, request.Note, by), ct);
+        var result = await handler.HandleAsync(new ChangeOrderStatusCommand(
+            number, request.Status, request.Note, by, request.Carrier, request.TrackingNumber), ct);
         return result.ToHttp(order => Results.Ok(order));
     }
 }

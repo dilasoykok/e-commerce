@@ -49,16 +49,47 @@ public sealed record StatusChangeDto(string Status, DateTimeOffset ChangedAt, st
 
 public sealed record ShippingAddressDto(string City, string District, string? Line, string? PostalCode);
 
+/// <summary>Kargo bilgisi; TrackingUrl firmanın sorgulama sayfası (biliniyorsa numarayla)</summary>
+public sealed record ShipmentDto(string Carrier, string CarrierName, string TrackingNumber, string? TrackingUrl)
+{
+    public static ShipmentDto? From(Order o) =>
+        o.TrackingNumber is { } no && o.ShippingCarrier is { } carrier
+            ? new(carrier, Carriers.Name(carrier), no, Carriers.TrackingUrl(carrier, no))
+            : null;
+}
+
+/// <summary>Kargo firmaları. Admin ekranındaki liste: soykok-web/src/lib/orders.ts → CARRIERS (aynı kodlar)</summary>
+public static class Carriers
+{
+    private static readonly Dictionary<string, (string Name, Func<string, string>? Url)> All = new()
+    {
+        ["yurtici"] = ("Yurtiçi Kargo", no => $"https://www.yurticikargo.com/Tracking/Detail/{Uri.EscapeDataString(no)}"),
+        ["aras"] = ("Aras Kargo", _ => "https://www.araskargo.com.tr"),
+        ["mng"] = ("MNG Kargo", _ => "https://www.mngkargo.com.tr"),
+        ["ptt"] = ("PTT Kargo", _ => "https://gonderitakip.ptt.gov.tr"),
+        ["surat"] = ("Sürat Kargo", _ => "https://www.suratkargo.com.tr"),
+        ["ups"] = ("UPS Kargo", _ => "https://www.ups.com.tr"),
+        ["hepsijet"] = ("HepsiJet", _ => "https://www.hepsijet.com"),
+        ["diger"] = ("Diğer", null),
+    };
+
+    public static bool IsKnown(string code) => All.ContainsKey(code);
+    public static string Name(string code) => All.TryGetValue(code, out var c) ? c.Name : code;
+    public static string? TrackingUrl(string code, string number) =>
+        All.TryGetValue(code, out var c) && c.Url is { } url ? url(number) : null;
+}
+
 /// <summary>Sipariş listesindeki satır (GET /api/me/orders).</summary>
 public sealed record OrderSummary(
     string Number, string Status, DateTimeOffset PlacedAt, string DeliveryMethod, string PaymentMethod,
-    int ItemCount, decimal Total, IReadOnlyList<OrderItemDto> Items)
+    int ItemCount, decimal Total, IReadOnlyList<OrderItemDto> Items, ShipmentDto? Shipment = null)
 {
     public static OrderSummary From(Order o) => new(
         o.Number, OrderingNames.Status(o.Status), o.PlacedAt,
         OrderingNames.Of(o.DeliveryMethod), OrderingNames.Of(o.PaymentMethod),
         o.Items.Count, o.Total,
-        o.Items.Select(OrderItemDto.From).ToList());
+        o.Items.Select(OrderItemDto.From).ToList(),
+        ShipmentDto.From(o));
 }
 
 /// <summary>
@@ -82,6 +113,7 @@ public sealed record OrderDetail(
     decimal Total,
     IReadOnlyList<OrderItemDto> Items,
     IReadOnlyList<StatusChangeDto> StatusHistory,
+    ShipmentDto? Shipment = null,
     // Yalnızca kartla verilen siparişin cevabında: müşterinin yönlendirileceği 3D Secure ödeme sayfası
     string? PaymentPageUrl = null)
 {
@@ -104,7 +136,8 @@ public sealed record OrderDetail(
         o.Total,
         o.Items.Select(OrderItemDto.From).ToList(),
         o.StatusHistory.OrderBy(h => h.ChangedAt)
-            .Select(h => new StatusChangeDto(OrderingNames.Status(h.Status), h.ChangedAt, h.Note)).ToList());
+            .Select(h => new StatusChangeDto(OrderingNames.Status(h.Status), h.ChangedAt, h.Note)).ToList(),
+        ShipmentDto.From(o));
 
     private static string Mask(string s) => s.Length <= 1 ? s : s[0] + new string('*', Math.Min(s.Length - 1, 5));
 

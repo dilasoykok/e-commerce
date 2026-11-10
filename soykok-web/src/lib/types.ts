@@ -163,6 +163,7 @@ export type OrderSummary = {
   itemCount: number;
   total: number;
   items: OrderItem[];
+  shipment?: Shipment | null;
 };
 
 export type OrderDetail = {
@@ -182,9 +183,13 @@ export type OrderDetail = {
   total: number;
   items: OrderItem[];
   statusHistory: { status: OrderStatus; changedAt: string; note: string | null }[];
+  /** Kargoya verilince: firma + takip numarası */
+  shipment?: Shipment | null;
   /** Yalnızca kartla verilen siparişin cevabında: iyzico 3D Secure ödeme sayfası */
   paymentPageUrl?: string | null;
 };
+
+export type Shipment = { carrier: string; carrierName: string; trackingNumber: string; trackingUrl: string | null };
 
 /* ---------- Sipariş yönetimi (admin) ---------- */
 

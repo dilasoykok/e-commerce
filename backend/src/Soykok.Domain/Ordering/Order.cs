@@ -56,6 +56,10 @@ public sealed class Order
     public InvoiceInfo Invoice { get; private set; } = null!;
 
     public PaymentMethod PaymentMethod { get; private set; }
+
+    /// <summary>Kargo firması kodu (yurtici, aras ...) — kargoya verilince dolar</summary>
+    public string? ShippingCarrier { get; private set; }
+    public string? TrackingNumber { get; private set; }
     public OrderStatus Status { get; private set; }
 
     /// <summary>Şu anki durumdan geçilebilecek durumlar (admin ekranındaki butonlar).</summary>
@@ -126,6 +130,18 @@ public sealed class Order
         if (!AllowedTransitions[Status].Contains(next))
             throw new DomainException($"Sipariş durumu {Status} → {next} olarak değiştirilemez.");
         SetStatus(next, note, now);
+    }
+
+    /// <summary>Kargoya ver: kargo ile teslimde firma ve takip numarası zorunlu.</summary>
+    public void Ship(string? carrier, string? trackingNumber, string? note, DateTimeOffset now)
+    {
+        if (DeliveryMethod == DeliveryMethod.Cargo &&
+            (string.IsNullOrWhiteSpace(carrier) || string.IsNullOrWhiteSpace(trackingNumber)))
+            throw new DomainException("Kargo ile teslimde kargo firması ve takip numarası gerekli.");
+
+        ChangeStatus(OrderStatus.Shipped, note, now);
+        ShippingCarrier = Guard.TrimToNull(carrier);
+        TrackingNumber = Guard.TrimToNull(trackingNumber);
     }
 
     private void SetStatus(OrderStatus status, string? note, DateTimeOffset now)

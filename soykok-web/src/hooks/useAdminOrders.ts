@@ -29,8 +29,17 @@ export function useAdminOrder(number: string | null) {
 export function useChangeOrderStatus() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ number, status, note }: { number: string; status: OrderStatus; note?: string }) =>
-      api.admin.changeOrderStatus(number, status, note),
+    mutationFn: ({
+      number,
+      status,
+      note,
+      shipment,
+    }: {
+      number: string;
+      status: OrderStatus;
+      note?: string;
+      shipment?: { carrier: string; trackingNumber: string };
+    }) => api.admin.changeOrderStatus(number, status, note, shipment),
     onSuccess: (detail, { status }) => {
       qc.setQueryData(queryKeys.adminOrder(detail.order.number), detail);
       qc.invalidateQueries({ queryKey: queryKeys.adminOrdersAll });

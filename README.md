@@ -119,7 +119,7 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `GET /api/me/orders/{number}`  | giriş   | Üyenin tek siparişi |
 | `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
 | `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
-| `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note }` (havale onayı, kargo, teslim, iptal). İptalde stok geri eklenir |
+| `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note, carrier?, trackingNumber? }` (havale onayı, kargo, teslim, iptal). Kargoya verirken firma + takip no zorunlu; iptalde stok geri eklenir |
 | `POST /api/admin/uploads`      | admin   | Ürün görseli yükle (multipart, alan `file`; JPG/PNG/WEBP, en fazla 5 MB) → `{ url }` |
 | `GET /api/files/products/...`  | herkes  | Yüklenen görseller (`uploads` volume'u) |
 | `GET /api/admin/categories`    | admin   | Alt kategoriler (ürün sayısıyla) + üst kategoriler |
@@ -155,6 +155,21 @@ onaylayınca "Sipariş Alındı" olur.
 - **Stok:** Formdaki "Stok adedi" boşsa ürün stok takibine girmez (sınırsız satılır). Sayı girilirse
   siparişte düşer, iptalde geri eklenir; 0 olunca sitede "Tükendi" görünür ve sepete eklenemez.
   Admin formu stoğu yalnızca alan değiştirildiyse gönderir (siparişlerle düşen stok ezilmez).
+
+### Sipariş e-postaları
+
+API içindeki `OrderEmailWorker` RabbitMQ'daki `soykok.order-emails` kuyruğunu dinler ve SMTP ile mail atar:
+
+| Olay | Müşteriye | Size (`ORDER_NOTIFY_EMAIL`) |
+|---|---|---|
+| Havale ile sipariş verildi | Siparişiniz alındı + IBAN | Yeni sipariş |
+| Kart ödemesi onaylandı | Siparişiniz alındı | Yeni sipariş |
+| Havale onaylandı (admin "Sipariş Alındı" yaptı) | Ödemeniz alındı | — |
+| Hazırlanıyor / Kargoya verildi (takip no ile) / Teslim edildi / İptal | Bilgilendirme | — |
+
+Ayarlar `.env`'deki `SMTP_*` satırları (port 587). Boşsa mail gönderilmez, site normal çalışır.
+Gmail için normal şifre değil, Google hesabında açılan **uygulama şifresi** gerekir. Gönderilemeyen
+mail bir kez yeniden denenir; hata `docker compose logs api` çıktısında görünür.
 
 ### Kategoriler
 

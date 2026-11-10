@@ -39,6 +39,8 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         e.Property(x => x.DeliveryMethod).HasConversion<string>().HasMaxLength(16);
         e.Property(x => x.DeliveryNote).HasMaxLength(500);
         e.Property(x => x.PaymentMethod).HasConversion<string>().HasMaxLength(16);
+        e.Property(x => x.ShippingCarrier).HasMaxLength(32);
+        e.Property(x => x.TrackingNumber).HasMaxLength(64);
         e.Property(x => x.Status).HasConversion<string>().HasMaxLength(32);
         e.HasIndex(x => x.Status);
         e.Ignore(x => x.NextStatuses); // hesaplanan değer, kolon değil

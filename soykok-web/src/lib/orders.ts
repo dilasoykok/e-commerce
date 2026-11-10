@@ -48,3 +48,15 @@ export const STATUS_COLORS: Record<OrderStatus, string> = {
   delivered: 'bg-green-100 text-green-700',
   cancelled: 'bg-red-100 text-sale',
 };
+
+/** Kargo firmaları — kodlar backend'deki Carriers listesiyle aynı (OrderingContracts.cs) */
+export const CARRIERS = [
+  { value: 'yurtici', label: 'Yurtiçi Kargo' },
+  { value: 'aras', label: 'Aras Kargo' },
+  { value: 'mng', label: 'MNG Kargo' },
+  { value: 'ptt', label: 'PTT Kargo' },
+  { value: 'surat', label: 'Sürat Kargo' },
+  { value: 'ups', label: 'UPS Kargo' },
+  { value: 'hepsijet', label: 'HepsiJet' },
+  { value: 'diger', label: 'Diğer' },
+] as const;

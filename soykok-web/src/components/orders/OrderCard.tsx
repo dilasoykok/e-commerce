@@ -62,6 +62,26 @@ export default function OrderCard({ order, open = false }: { order: OrderSummary
           </div>
         )}
 
+        {order.shipment && (
+          <div className="mt-5 flex flex-wrap items-center gap-3 rounded border border-blue-100 bg-blue-50 p-3 text-xs text-blue-900">
+            <Truck className="size-5 shrink-0" strokeWidth={SW} aria-hidden />
+            <p className="flex-1">
+              <span className="font-semibold">{order.shipment.carrierName}</span> · Takip no:{' '}
+              <strong className="font-mono tracking-wide">{order.shipment.trackingNumber}</strong>
+            </p>
+            {order.shipment.trackingUrl && (
+              <a
+                href={order.shipment.trackingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded bg-blue-900 px-3 py-1.5 font-semibold text-white hover:bg-blue-800"
+              >
+                Kargonu Takip Et
+              </a>
+            )}
+          </div>
+        )}
+
         <details open={open} className="group mt-5">
           <summary className="cursor-pointer list-none text-xs font-semibold text-brand-900 hover:text-wood-600 [&::-webkit-details-marker]:hidden">
             <span className="group-open:hidden">Sipariş detayını göster ({order.items.length} ürün)</span>

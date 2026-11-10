@@ -6,6 +6,7 @@ using Soykok.Infrastructure.Caching;
 using Soykok.Infrastructure.Health;
 using Soykok.Infrastructure.Identity;
 using Soykok.Infrastructure.Messaging;
+using Soykok.Infrastructure.Notifications;
 using Soykok.Infrastructure.Payments;
 using Soykok.Infrastructure.Persistence;
 using Soykok.Infrastructure.Persistence.Repositories;
@@ -46,6 +47,11 @@ public static class DependencyInjection
         services.Configure<RabbitMqOptions>(config.GetSection(RabbitMqOptions.Section));
         services.AddSingleton<RabbitMqPublisher>();
         services.AddSingleton<IEventPublisher>(sp => sp.GetRequiredService<RabbitMqPublisher>());
+
+        // Sipariş e-postaları (SMTP). Ayar yoksa gönderim kapalı; servis kuyruğu dinlemez.
+        services.Configure<EmailOptions>(config.GetSection(EmailOptions.Section));
+        services.AddSingleton<SmtpEmailSender>();
+        services.AddHostedService<OrderEmailWorker>();
 
         // iyzico (kartla ödeme). Anahtarlar yoksa kartla ödeme kapalı, havale çalışmaya devam eder.
         services.Configure<IyzicoOptions>(config.GetSection(IyzicoOptions.Section));

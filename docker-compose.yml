@@ -96,6 +96,18 @@ services:
       Iyzico__BaseUrl: ${IYZICO_BASE_URL:-https://sandbox-api.iyzipay.com}
       Iyzico__CallbackUrl: ${PUBLIC_URL:-http://localhost}/api/payments/iyzico/callback
       Uploads__RootPath: /app/data/uploads
+      # Sipariş e-postaları (SMTP). SMTP_HOST ya da SMTP_FROM boşsa mail gönderilmez.
+      Email__Host: ${SMTP_HOST:-}
+      Email__Port: ${SMTP_PORT:-587}
+      Email__Username: ${SMTP_USER:-}
+      Email__Password: ${SMTP_PASSWORD:-}
+      Email__From: ${SMTP_FROM:-}
+      Email__FromName: ${SMTP_FROM_NAME:-Soykök Ticaret}
+      Email__AdminAddress: ${ORDER_NOTIFY_EMAIL:-}
+      Email__SiteUrl: ${PUBLIC_URL:-http://localhost}
+      Email__BankName: ${BANK_NAME:-}
+      Email__AccountHolder: ${BANK_ACCOUNT_HOLDER:-}
+      Email__Iban: ${BANK_IBAN:-}
     depends_on:
       migrator:
         condition: service_completed_successfully

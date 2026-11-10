@@ -42,11 +42,13 @@ public sealed record AdminOrderDetail(
         o.NextStatuses.Select(OrderingNames.Status).ToList());
 }
 
-public sealed record ChangeOrderStatusRequest(string? Status, string? Note);
+/// <param name="Carrier">Yalnızca "shipped" için: kargo firması kodu (yurtici, aras ...)</param>
+public sealed record ChangeOrderStatusRequest(string? Status, string? Note, string? Carrier = null, string? TrackingNumber = null);
 
 /// <summary>RabbitMQ: order.status_changed (ör. müşteriye e-posta/SMS gönderecek servis dinler)</summary>
 public sealed record OrderStatusChangedEvent(
-    Guid OrderId, string Number, string Email, string From, string To, string? Note, DateTimeOffset ChangedAt);
+    Guid OrderId, string Number, string Email, string From, string To, string? Note, DateTimeOffset ChangedAt,
+    string? Carrier = null, string? TrackingNumber = null);
 
 public static class AdminOrderEvents
 {
@@ -88,7 +90,8 @@ public sealed class GetAdminOrderHandler(IOrderRepository orders) : IQueryHandle
 
 /* ======================= Durum değiştirme ======================= */
 
-public sealed record ChangeOrderStatusCommand(string Number, string? Status, string? Note, string ChangedBy);
+public sealed record ChangeOrderStatusCommand(
+    string Number, string? Status, string? Note, string ChangedBy, string? Carrier = null, string? TrackingNumber = null);
 
 /// <summary>
 /// Sipariş durumunu ilerletir (ör. havale geldi → received, kargoya verildi → shipped).
@@ -120,6 +123,18 @@ public sealed class ChangeOrderStatusHandler(
             return Error.Conflict("ordering.invalid_transition",
                 $"Sipariş \"{Label(previous)}\" durumundan \"{Label(next)}\" durumuna geçirilemez.");
 
+        // Kargoya verirken firma + takip numarası (kargo ile teslimde zorunlu)
+        var carrier = command.Carrier?.Trim().ToLowerInvariant();
+        var tracking = command.TrackingNumber?.Trim();
+        if (next == OrderStatus.Shipped && order.DeliveryMethod == DeliveryMethod.Cargo)
+        {
+            var errors = new Dictionary<string, string[]>();
+            if (string.IsNullOrEmpty(carrier) || !Carriers.IsKnown(carrier)) errors["carrier"] = ["Kargo firmasını seçin."];
+            if (string.IsNullOrEmpty(tracking)) errors["trackingNumber"] = ["Takip numarasını girin."];
+            else if (tracking.Length > 64) errors["trackingNumber"] = ["Takip numarası en fazla 64 karakter olabilir."];
+            if (errors.Count > 0) return Error.Validation(errors);
+        }
+
         var now = clock.GetUtcNow();
         await unitOfWork.ExecuteInTransactionAsync(async tct =>
         {
@@ -134,7 +149,8 @@ public sealed class ChangeOrderStatusHandler(
                     p.SetStatistics(p.Rating, p.Reviews, Math.Max(0, p.Sales - quantities[p.Id]));
             }
 
-            order.ChangeStatus(next, command.Note, now);
+            if (next == OrderStatus.Shipped) order.Ship(carrier, tracking, command.Note, now);
+            else order.ChangeStatus(next, command.Note, now);
             await unitOfWork.SaveChangesAsync(tct);
             return (true, true);
         }, ct);
@@ -144,7 +160,8 @@ public sealed class ChangeOrderStatusHandler(
         if (next == OrderStatus.Cancelled) await catalog.InvalidateAsync(ct);
         await events.PublishAsync(AdminOrderEvents.StatusChanged, new OrderStatusChangedEvent(
             order.Id, order.Number, order.Buyer.Email,
-            OrderingNames.Status(previous), OrderingNames.Status(next), command.Note, now), ct);
+            OrderingNames.Status(previous), OrderingNames.Status(next), command.Note, now,
+            order.ShippingCarrier, order.TrackingNumber), ct);
 
         return AdminOrderDetail.From(order);
     }

@@ -5,7 +5,8 @@ import { Loader2, X } from 'lucide-react';
 import { useAdminOrder, useChangeOrderStatus } from '@/hooks/useAdminOrders';
 import { useEscape } from '@/lib/hooks';
 import { formatTL } from '@/lib/format';
-import { STATUS_COLORS, deliveryLabel, formatDateTime, paymentLabel, statusLabel } from '@/lib/orders';
+import { CARRIERS, STATUS_COLORS, deliveryLabel, formatDateTime, paymentLabel, statusLabel } from '@/lib/orders';
+import { ApiError } from '@/lib/api/client';
 import type { AdminOrderDetail, OrderStatus } from '@/lib/types';
 
 const SW = 1.75;
@@ -100,6 +101,16 @@ function Body({ data }: { data: AdminOrderDetail }) {
           )}
           {o.deliveryNote && <p className="rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">Not: {o.deliveryNote}</p>}
           <p className="mt-1">{paymentLabel(o.paymentMethod)}</p>
+          {o.shipment && (
+            <p className="mt-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-900">
+              {o.shipment.carrierName} · takip no: <strong>{o.shipment.trackingNumber}</strong>
+              {o.shipment.trackingUrl && (
+                <a href={o.shipment.trackingUrl} target="_blank" rel="noopener noreferrer" className="ml-2 underline">
+                  Sorgula
+                </a>
+              )}
+            </p>
+          )}
         </Section>
 
         <Section title="Fatura">
@@ -167,13 +178,24 @@ function StatusActions({ data }: { data: AdminOrderDetail }) {
   const change = useChangeOrderStatus();
   const [note, setNote] = useState('');
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [carrier, setCarrier] = useState('');
+  const [trackingNumber, setTrackingNumber] = useState('');
   const o = data.order;
+  // Kargoya verirken firma + takip no istenir (mağazadan teslimde gerekmez)
+  const needsShipment = o.deliveryMethod === 'cargo' && data.nextStatuses.includes('shipped');
+  const fieldError = (f: string) => (change.error instanceof ApiError ? change.error.fieldError(f) : undefined);
 
   if (data.nextStatuses.length === 0) {
     return <p className="border-t border-gray-200 px-5 py-4 text-xs text-gray-500">Bu sipariş için başka işlem yok.</p>;
   }
 
-  const run = (status: OrderStatus) => change.mutate({ number: o.number, status, note: note.trim() || undefined });
+  const run = (status: OrderStatus) =>
+    change.mutate({
+      number: o.number,
+      status,
+      note: note.trim() || undefined,
+      shipment: status === 'shipped' && needsShipment ? { carrier, trackingNumber: trackingNumber.trim() } : undefined,
+    });
   const forward = data.nextStatuses.filter((s) => s !== 'cancelled');
   const canCancel = data.nextStatuses.includes('cancelled');
 
@@ -185,10 +207,39 @@ function StatusActions({ data }: { data: AdminOrderDetail }) {
           value={note}
           onChange={(e) => setNote(e.target.value)}
           maxLength={500}
-          placeholder="ör. Kargo takip no: 123456789"
+          placeholder="ör. Havale geldi"
           className="form-input"
         />
       </label>
+
+      {needsShipment && (
+        <div className="grid gap-3 rounded border border-blue-100 bg-blue-50/50 p-3 sm:grid-cols-2">
+          <p className="text-xs font-semibold text-blue-900 sm:col-span-2">Kargoya verirken doldurun</p>
+          <label className="block">
+            <span className="form-label">Kargo firması</span>
+            <select value={carrier} onChange={(e) => setCarrier(e.target.value)} className="form-input" aria-invalid={Boolean(fieldError('carrier'))}>
+              <option value="">Seçin</option>
+              {CARRIERS.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+            {fieldError('carrier') && <span className="form-error block">{fieldError('carrier')}</span>}
+          </label>
+          <label className="block">
+            <span className="form-label">Takip numarası</span>
+            <input
+              value={trackingNumber}
+              onChange={(e) => setTrackingNumber(e.target.value)}
+              maxLength={64}
+              className="form-input"
+              aria-invalid={Boolean(fieldError('trackingNumber'))}
+            />
+            {fieldError('trackingNumber') && <span className="form-error block">{fieldError('trackingNumber')}</span>}
+          </label>
+        </div>
+      )}
 
       {change.isError && (
         <p role="alert" className="rounded bg-red-50 px-3 py-2 text-xs text-sale">

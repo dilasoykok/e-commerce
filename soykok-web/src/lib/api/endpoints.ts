@@ -81,10 +81,15 @@ export const api = {
       apiFetch<AdminOrderPage>(`/admin/orders${toQueryString(query)}`, { cache: 'no-store', ...opts }),
     order: (number: string, opts?: Opts) =>
       apiFetch<AdminOrderDetail>(`/admin/orders/${encodeURIComponent(number)}`, { cache: 'no-store', ...opts }),
-    changeOrderStatus: (number: string, status: OrderStatus, note?: string) =>
+    changeOrderStatus: (
+      number: string,
+      status: OrderStatus,
+      note?: string,
+      shipment?: { carrier: string; trackingNumber: string },
+    ) =>
       apiFetch<AdminOrderDetail>(`/admin/orders/${encodeURIComponent(number)}/status`, {
         method: 'POST',
-        json: { status, note: note || null },
+        json: { status, note: note || null, carrier: shipment?.carrier ?? null, trackingNumber: shipment?.trackingNumber ?? null },
       }),
 
     /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } */
