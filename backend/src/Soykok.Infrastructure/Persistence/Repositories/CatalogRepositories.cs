@@ -9,6 +9,9 @@ internal sealed class ProductRepository(AppDbContext db) : IProductRepository
     public Task<Product?> GetByIdAsync(string id, CancellationToken ct) =>
         db.Products.FirstOrDefaultAsync(p => p.Id == id, ct);
 
+    public async Task<IReadOnlyList<Product>> GetByIdsAsync(IReadOnlyCollection<string> ids, CancellationToken ct) =>
+        await db.Products.Where(p => ids.Contains(p.Id)).ToListAsync(ct);
+
     public Task<bool> ExistsAsync(string id, CancellationToken ct) =>
         db.Products.AnyAsync(p => p.Id == id, ct);
 

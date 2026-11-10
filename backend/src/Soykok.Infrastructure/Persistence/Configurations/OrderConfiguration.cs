@@ -41,6 +41,7 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         e.Property(x => x.PaymentMethod).HasConversion<string>().HasMaxLength(16);
         e.Property(x => x.Status).HasConversion<string>().HasMaxLength(32);
         e.HasIndex(x => x.Status);
+        e.Ignore(x => x.NextStatuses); // hesaplanan değer, kolon değil
         e.HasIndex(x => x.PlacedAt);
 
         e.Property(x => x.Subtotal).HasPrecision(12, 2);

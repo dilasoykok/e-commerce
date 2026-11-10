@@ -6,6 +6,10 @@ using Soykok.Application.Catalog.Contracts;
 using Soykok.Application.Catalog.Queries;
 using Soykok.Application.Common.Messaging;
 using Soykok.Application.Common.Results;
+using Soykok.Application.Ordering.Admin;
+using Soykok.Application.Ordering.Commands;
+using Soykok.Application.Ordering.Contracts;
+using Soykok.Application.Ordering.Queries;
 
 namespace Soykok.Application;
 
@@ -26,6 +30,17 @@ public static class DependencyInjection
         services.AddScoped<ICommandHandler<CreateProductCommand, Result<ProductDetail>>, CreateProductHandler>();
         services.AddScoped<ICommandHandler<UpdateProductCommand, Result<ProductDetail>>, UpdateProductHandler>();
         services.AddScoped<ICommandHandler<DeleteProductCommand, Result>, DeleteProductHandler>();
+
+        // Siparişler
+        services.AddScoped<ICommandHandler<PlaceOrderCommand, Result<OrderDetail>>, PlaceOrderHandler>();
+        services.AddScoped<IQueryHandler<GetMyOrdersQuery, IReadOnlyList<OrderSummary>>, GetMyOrdersHandler>();
+        services.AddScoped<IQueryHandler<GetMyOrderQuery, Result<OrderDetail>>, GetMyOrderHandler>();
+        services.AddScoped<IQueryHandler<TrackOrderQuery, Result<OrderDetail>>, TrackOrderHandler>();
+
+        // Sipariş yönetimi (admin)
+        services.AddScoped<IQueryHandler<ListOrdersQuery, AdminOrderPage>, ListOrdersHandler>();
+        services.AddScoped<IQueryHandler<GetAdminOrderQuery, Result<AdminOrderDetail>>, GetAdminOrderHandler>();
+        services.AddScoped<ICommandHandler<ChangeOrderStatusCommand, Result<AdminOrderDetail>>, ChangeOrderStatusHandler>();
 
         return services;
     }

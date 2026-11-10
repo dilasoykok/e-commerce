@@ -6,6 +6,8 @@ namespace Soykok.Application.Common.Abstractions;
 public interface IProductRepository
 {
     Task<Product?> GetByIdAsync(string id, CancellationToken ct);
+    /// <summary>Birden fazla ürün (takip edilir; sipariş satış adedini günceller).</summary>
+    Task<IReadOnlyList<Product>> GetByIdsAsync(IReadOnlyCollection<string> ids, CancellationToken ct);
     Task<bool> ExistsAsync(string id, CancellationToken ct);
     Task<int> GetMaxSortOrderAsync(CancellationToken ct);
     void Add(Product product);

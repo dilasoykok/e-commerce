@@ -113,6 +113,13 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `POST /api/products`           | admin   | Ürün ekle |
 | `PUT /api/products/{id}`       | admin   | Ürün güncelle |
 | `DELETE /api/products/{id}`    | admin   | Ürün sil |
+| `POST /api/orders`             | herkes  | Sipariş ver (misafir ya da üye). Fiyat ve kargo sunucuda hesaplanır, stok düşülür |
+| `POST /api/orders/track`       | herkes  | Misafir sipariş takibi: `{ number, email }` (kişisel bilgiler maskeli) |
+| `GET /api/me/orders`           | giriş   | Üyenin siparişleri |
+| `GET /api/me/orders/{number}`  | giriş   | Üyenin tek siparişi |
+| `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
+| `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
+| `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note }` (havale onayı, kargo, teslim, iptal). İptalde stok geri eklenir |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
 | `GET /api/auth/login`          | herkes  | Keycloak girişine yönlendirir (`?returnUrl=/...`) |
@@ -122,6 +129,13 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 
 Ürün ekleme/güncelleme/silme `soykok.events` (topic) exchange'ine `product.created`,
 `product.updated`, `product.deleted` olaylarını yayınlar.
+Sipariş oluşunca `order.created`, durumu değişince `order.status_changed` yayınlanır.
+
+Sipariş kuralları: tarayıcıdan yalnızca ürün kodu ve adet gelir; fiyat katalogdan okunur.
+Kargo 1000 TL altı siparişte 149 TL (`ShippingPolicy`, arayüzde `src/lib/shipping.ts` — ikisi aynı
+olmalı). Stok, sipariş kaydıyla aynı transaction'da koşullu `UPDATE` ile düşülür; yetersizse sipariş
+kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan eklenenler) stok takibine
+girmez. Kartla ödemede gerçek tahsilat (iyzico/PayTR) henüz yok: sipariş "received" açılır.
 
 ### Arayüz bağlantısı (soykok-web)
 

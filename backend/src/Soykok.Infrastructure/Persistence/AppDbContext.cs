@@ -28,6 +28,20 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     // reviews
     public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
 
+    public async Task<T> ExecuteInTransactionAsync<T>(
+        Func<CancellationToken, Task<(T Result, bool Commit)>> action, CancellationToken ct = default)
+    {
+        await using var tx = await Database.BeginTransactionAsync(ct);
+        var (result, commit) = await action(ct);
+        if (commit) await tx.CommitAsync(ct);
+        else
+        {
+            await tx.RollbackAsync(ct);
+            ChangeTracker.Clear(); // kaydedilmeyen değişiklikler sonraki SaveChanges'e karışmasın
+        }
+        return result;
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

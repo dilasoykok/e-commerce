@@ -58,6 +58,9 @@ public sealed class Order
     public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
 
+    /// <summary>Şu anki durumdan geçilebilecek durumlar (admin ekranındaki butonlar).</summary>
+    public IReadOnlyCollection<OrderStatus> NextStatuses => AllowedTransitions[Status];
+
     public decimal Subtotal { get; private set; }
     public decimal ShippingFee { get; private set; }
     public decimal Total { get; private set; }
