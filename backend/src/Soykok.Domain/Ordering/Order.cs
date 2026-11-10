@@ -116,8 +116,8 @@ public sealed class Order
         order.ShippingFee = deliveryMethod == DeliveryMethod.Store ? 0 : shippingFee;
         order.Total = order.Subtotal + order.ShippingFee;
 
-        var initial = paymentMethod == PaymentMethod.Transfer ? OrderStatus.AwaitingPayment : OrderStatus.Received;
-        order.SetStatus(initial, null, now);
+        // Havalede para gelince, kartta ödeme kuruluşu onaylayınca "received" olur
+        order.SetStatus(OrderStatus.AwaitingPayment, null, now);
         return order;
     }
 

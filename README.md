@@ -120,6 +120,7 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
 | `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
 | `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note }` (havale onayı, kargo, teslim, iptal). İptalde stok geri eklenir |
+| `POST /api/payments/iyzico/callback` | iyzico | Kart ödemesi dönüşü (form: `token`, sorgu: `no`). Sonucu doğrular, sonuç sayfasına yönlendirir |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
 | `GET /api/auth/login`          | herkes  | Keycloak girişine yönlendirir (`?returnUrl=/...`) |
@@ -135,7 +136,30 @@ Sipariş kuralları: tarayıcıdan yalnızca ürün kodu ve adet gelir; fiyat ka
 Kargo 1000 TL altı siparişte 149 TL (`ShippingPolicy`, arayüzde `src/lib/shipping.ts` — ikisi aynı
 olmalı). Stok, sipariş kaydıyla aynı transaction'da koşullu `UPDATE` ile düşülür; yetersizse sipariş
 kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan eklenenler) stok takibine
-girmez. Kartla ödemede gerçek tahsilat (iyzico/PayTR) henüz yok: sipariş "received" açılır.
+girmez. Her sipariş "Ödeme Bekleniyor" durumunda açılır: havalede admin parayı görünce, kartta iyzico
+onaylayınca "Sipariş Alındı" olur.
+
+### Kartla ödeme (iyzico)
+
+Kart bilgisi sitemize hiç gelmez; müşteri iyzico'nun 3D Secure ödeme sayfasına yönlendirilir.
+
+1. `POST /api/orders` (`payment: "card"`) siparişi kaydeder, stoğu ayırır, iyzico'da ödeme sayfası açar
+   ve adresini cevapta `paymentPageUrl` olarak döner. Arayüz tarayıcıyı oraya gönderir (sepet henüz silinmez).
+2. Ödeme bitince iyzico tarayıcıyı `/api/payments/iyzico/callback?no=SYK-...` adresine POST eder.
+3. API sonucu token ile iyzico'dan sorar, imzayı ve tutarı kontrol eder:
+   - başarılı → sipariş "Sipariş Alındı", tarayıcı `/siparis-tamamlandi?odeme=basarili` (sepet burada boşalır)
+   - başarısız → sipariş iptal, stok geri, tarayıcı `/odeme?odeme=basarisiz&mesaj=...` (sepet duruyor)
+
+Kurulum: https://sandbox-merchant.iyzipay.com adresinden test hesabı açın, **Ayarlar > Firma Ayarları**
+sayfasındaki API ve güvenlik anahtarını `.env` dosyasındaki `IYZICO_API_KEY` / `IYZICO_SECRET_KEY`
+satırlarına yazın, sonra `docker compose up -d --build api`. Anahtarlar boşsa kartla ödeme seçilince
+"kullanılamıyor" hatası döner, havale çalışır. Test kartı: `5528 7900 0000 0008`, `12/30`, CVC `123`
+(3D ekranında test şifresi sayfada yazar). Canlıda `IYZICO_BASE_URL=https://api.iyzipay.com`, canlı anahtarlar ve
+HTTPS'li `PUBLIC_URL` gerekir.
+
+Eksik: ödeme sayfasında tarayıcı kapanırsa sipariş "Ödeme Bekleniyor"da kalır (stok ayrılı). Şimdilik
+admin iyzico panelinden kontrol edip durumu elle değiştirir; ileride token saklanıp zamanlanmış kontrol
+ya da iyzico bildirimi (webhook) eklenecek.
 
 ### Arayüz bağlantısı (soykok-web)
 

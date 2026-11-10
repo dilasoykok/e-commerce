@@ -178,6 +178,8 @@ export type OrderDetail = {
   total: number;
   items: OrderItem[];
   statusHistory: { status: OrderStatus; changedAt: string; note: string | null }[];
+  /** Yalnızca kartla verilen siparişin cevabında: iyzico 3D Secure ödeme sayfası */
+  paymentPageUrl?: string | null;
 };
 
 /* ---------- Sipariş yönetimi (admin) ---------- */

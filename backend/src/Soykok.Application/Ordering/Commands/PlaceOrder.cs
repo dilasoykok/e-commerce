@@ -6,6 +6,7 @@ using Soykok.Application.Catalog;
 using Soykok.Application.Common.Abstractions;
 using Soykok.Application.Common.Messaging;
 using Soykok.Application.Common.Results;
+using Soykok.Application.Ordering.Admin;
 using Soykok.Application.Ordering.Contracts;
 using Soykok.Domain.Common;
 using Soykok.Domain.Customers;
@@ -13,7 +14,8 @@ using Soykok.Domain.Ordering;
 
 namespace Soykok.Application.Ordering.Commands;
 
-public sealed record PlaceOrderCommand(PlaceOrderRequest Request, CurrentUser? User);
+/// <param name="ClientIp">Müşterinin IP adresi (ödeme kuruluşu dolandırıcılık kontrolü için ister)</param>
+public sealed record PlaceOrderCommand(PlaceOrderRequest Request, CurrentUser? User, string ClientIp = "127.0.0.1");
 
 /// <summary>
 /// Sipariş oluşturma:
@@ -23,7 +25,8 @@ public sealed record PlaceOrderCommand(PlaceOrderRequest Request, CurrentUser? U
 ///  4. Tek transaction içinde: stok düşülür (yetersizse hiçbir şey kaydedilmez) + sipariş kaydedilir
 ///  5. Giriş yapmış kullanıcı müşteri kaydına bağlanır (yoksa oluşturulur)
 ///  6. order.created olayı yayınlanır
-/// Kartla ödemede gerçek tahsilat (iyzico/PayTR) henüz yok; sipariş "received" durumunda açılır.
+/// Sipariş "Ödeme Bekleniyor" durumunda açılır. Kartla ödemede iyzico ödeme sayfası açılır ve
+/// adresi cevapta (paymentPageUrl) döner; ödeme sonucu CompleteCardPaymentHandler'da işlenir.
 /// </summary>
 public sealed partial class PlaceOrderHandler(
     IProductRepository products,
@@ -33,6 +36,8 @@ public sealed partial class PlaceOrderHandler(
     IUnitOfWork unitOfWork,
     CatalogSnapshotProvider catalog,
     IEventPublisher events,
+    IPaymentGateway payments,
+    ICommandHandler<ChangeOrderStatusCommand, Result<AdminOrderDetail>> changeStatus,
     TimeProvider clock,
     ILogger<PlaceOrderHandler> log) : ICommandHandler<PlaceOrderCommand, Result<OrderDetail>>
 {
@@ -53,6 +58,9 @@ public sealed partial class PlaceOrderHandler(
         else if (quantities.Count > MaxLines) errors["items"] = [$"Bir siparişte en fazla {MaxLines} farklı ürün olabilir."];
         else if (quantities.Values.Any(q => q is <= 0 or > OrderItem.MaxQuantity))
             errors["items"] = [$"Ürün adedi 1 ile {OrderItem.MaxQuantity} arasında olmalı."];
+
+        if (r.Payment == "card" && !payments.IsEnabled)
+            errors["payment"] = ["Kartla ödeme şu anda kullanılamıyor. Lütfen Havale / EFT seçin."];
 
         if (errors.Count > 0) return OrderingErrors.Validation(errors);
 
@@ -139,7 +147,28 @@ public sealed partial class PlaceOrderHandler(
             OrderingNames.Of(order.PaymentMethod), OrderingNames.Of(order.DeliveryMethod),
             order.Items.Select(OrderItemDto.From).ToList(), order.PlacedAt), ct);
 
-        return OrderDetail.From(order, includePersonal: true);
+        var detail = OrderDetail.From(order, includePersonal: true);
+        if (payment != PaymentMethod.Card) return detail;
+
+        // Kartla ödeme: iyzico ödeme sayfasını aç
+        PaymentSession session;
+        try
+        {
+            session = await payments.StartCheckoutAsync(order, command.ClientIp, ct);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            log.LogError(ex, "Ödeme sayfası açılamadı: {Number}", order.Number);
+            session = new PaymentSession(false, null, null);
+        }
+
+        if (session is { Success: true, PaymentPageUrl: { } url })
+            return detail with { PaymentPageUrl = url };
+
+        // Ödeme başlatılamadıysa sipariş iptal, stok geri: müşteri sepetinden tekrar deneyebilir
+        await changeStatus.HandleAsync(new ChangeOrderStatusCommand(
+            order.Number, "cancelled", $"Ödeme sayfası açılamadı: {session.ErrorMessage ?? "bağlantı hatası"}", "iyzico"), ct);
+        return OrderingErrors.PaymentUnavailable(session.ErrorMessage);
     }
 
     /* ---------- Doğrulama ---------- */

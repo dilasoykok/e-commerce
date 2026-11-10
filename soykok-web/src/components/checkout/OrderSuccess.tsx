@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CircleCheck, Landmark, Loader2, Truck } from 'lucide-react';
 
-import { readLastOrder } from '@/lib/last-order';
+import { readLastOrder, saveLastOrder } from '@/lib/last-order';
+import { useCart, useCartHydrated } from '@/store/cart';
 import { formatTL } from '@/lib/format';
 import { BANK_TRANSFER, deliveryLabel, paymentLabel } from '@/lib/orders';
 import type { OrderDetail } from '@/lib/types';
@@ -13,15 +14,52 @@ import type { OrderDetail } from '@/lib/types';
 const SW = 1.75;
 
 /** Sipariş onayı (eski siparis-tamamlandi.html + order-success.js) */
-export default function OrderSuccess() {
+export default function OrderSuccess({ paidNumber }: { paidNumber?: string | null }) {
   // undefined: henüz okunmadı, null: sipariş yok
   const [order, setOrder] = useState<OrderDetail | null | undefined>(undefined);
-  useEffect(() => setOrder(readLastOrder()), []);
+  const clearCart = useCart((s) => s.clear);
+  const cartHydrated = useCartHydrated();
+
+  useEffect(() => {
+    const last = readLastOrder();
+    if (last && paidNumber && last.number === paidNumber && last.status === 'awaitingPayment') {
+      // Kart ödemesi onaylandı (iyzico dönüşü)
+      const paid: OrderDetail = { ...last, status: 'received', paymentPageUrl: null };
+      saveLastOrder(paid);
+      setOrder(paid);
+    } else {
+      setOrder(last);
+    }
+  }, [paidNumber]);
+
+  // Kartla ödeme başarılı: sepet ancak şimdi boşaltılır (kaydedilmiş sepet yüklendikten sonra)
+  useEffect(() => {
+    if (paidNumber && cartHydrated) clearCart();
+  }, [paidNumber, cartHydrated, clearCart]);
 
   if (order === undefined) {
     return (
       <div className="grid h-60 place-items-center">
         <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+      </div>
+    );
+  }
+
+  if (order === null && paidNumber) {
+    return (
+      <div className="checkout-card mx-auto mt-6 max-w-lg text-center">
+        <span className="mx-auto grid size-16 place-items-center rounded-full bg-green-50 text-green-600">
+          <CircleCheck className="size-9" strokeWidth={SW} aria-hidden />
+        </span>
+        <h1 className="mt-4 text-xl font-bold">Ödemeniz alındı, teşekkürler!</h1>
+        <p className="mt-3 text-sm text-gray-600">Sipariş numaranız</p>
+        <p className="mt-1 text-2xl font-bold tracking-wide text-brand-900">{paidNumber}</p>
+        <Link
+          href={`/siparislerim?no=${encodeURIComponent(paidNumber)}`}
+          className="mt-6 inline-flex h-11 items-center gap-2 rounded bg-brand-900 px-5 text-sm font-semibold text-white hover:bg-brand-700"
+        >
+          <Truck className="size-4" strokeWidth={SW} aria-hidden /> Siparişimi Takip Et
+        </Link>
       </div>
     );
   }
@@ -44,6 +82,27 @@ export default function OrderSuccess() {
   }
 
   const awaitingTransfer = order.paymentMethod === 'transfer' && order.status === 'awaitingPayment';
+
+  // Kartla sipariş verilmiş ama iyzico dönüşü gelmemiş (ör. ödeme sayfasından geri dönüldü)
+  if (order.paymentMethod === 'card' && order.status === 'awaitingPayment') {
+    return (
+      <div className="checkout-card mx-auto mt-6 max-w-lg text-center">
+        <p className="text-lg font-semibold">Ödemeniz henüz tamamlanmadı</p>
+        <p className="mt-2 text-sm text-gray-600">
+          <strong>{order.number}</strong> numaralı siparişin kart ödemesi onaylanmadı. Ödeme sayfasını yarıda bıraktıysanız
+          sepetinize dönüp tekrar deneyebilirsiniz.
+        </p>
+        <div className="mt-6 flex justify-center gap-3">
+          <Link href="/sepet" className="inline-flex h-11 items-center rounded bg-brand-900 px-5 text-sm font-semibold text-white hover:bg-brand-700">
+            Sepete Dön
+          </Link>
+          <Link href={`/siparislerim?no=${encodeURIComponent(order.number)}`} className="inline-flex h-11 items-center rounded border border-brand-900 px-5 text-sm font-semibold text-brand-900">
+            Sipariş Durumu
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl">

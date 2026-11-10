@@ -28,6 +28,7 @@ api.MapAuthEndpoints();
 api.MapCatalogEndpoints();
 api.MapOrderEndpoints();
 api.MapAdminOrderEndpoints();
+api.MapPaymentEndpoints();
 
 // Veritabanı migration'ları ayrı "migrator" servisinde uygulanır (bkz. Soykok.Migrator)
 app.Run();

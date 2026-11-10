@@ -10,6 +10,7 @@ using Soykok.Application.Ordering.Admin;
 using Soykok.Application.Ordering.Commands;
 using Soykok.Application.Ordering.Contracts;
 using Soykok.Application.Ordering.Queries;
+using Soykok.Application.Payments;
 
 namespace Soykok.Application;
 
@@ -41,6 +42,9 @@ public static class DependencyInjection
         services.AddScoped<IQueryHandler<ListOrdersQuery, AdminOrderPage>, ListOrdersHandler>();
         services.AddScoped<IQueryHandler<GetAdminOrderQuery, Result<AdminOrderDetail>>, GetAdminOrderHandler>();
         services.AddScoped<ICommandHandler<ChangeOrderStatusCommand, Result<AdminOrderDetail>>, ChangeOrderStatusHandler>();
+
+        // Kartla ödeme geri dönüşü
+        services.AddScoped<ICommandHandler<CompleteCardPaymentCommand, CardPaymentResult>, CompleteCardPaymentHandler>();
 
         return services;
     }

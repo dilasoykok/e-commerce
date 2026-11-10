@@ -30,7 +30,7 @@ const FIELD_ORDER = [
  * Sipariş POST /api/orders ile verilir; fiyat ve kargo sunucuda hesaplanır, ekrandaki
  * tutarlar yalnızca bilgi içindir. Sunucunun alan hataları ilgili kutunun altında gösterilir.
  */
-export default function CheckoutPage() {
+export default function CheckoutPage({ paymentError }: { paymentError?: string | null }) {
   const router = useRouter();
   const summary = useCartSummary();
   const clearCart = useCart((s) => s.clear);
@@ -44,7 +44,9 @@ export default function CheckoutPage() {
   const [invoiceType, setInvoiceType] = useState<'individual' | 'corporate'>('individual');
   const [payment, setPayment] = useState<PaymentMethod>('card');
   const [errors, setErrors] = useState<Errors>({});
-  const [alert, setAlert] = useState<string | null>(null);
+  const [alert, setAlert] = useState<string | null>(paymentError ?? null);
+  const [redirecting, setRedirecting] = useState(false); // iyzico ödeme sayfasına gidiliyor
+  const busy = placeOrder.isPending || redirecting;
 
   const shipping = delivery === 'store' ? 0 : summary.shipping;
   const total = summary.subtotal + shipping;
@@ -123,6 +125,12 @@ export default function CheckoutPage() {
       onSuccess: (order) => {
         placed.current = true;
         saveLastOrder(order);
+        if (order.paymentPageUrl) {
+          // Kartla ödeme: iyzico'nun güvenli ödeme sayfasına. Sepet, ödeme başarılı olunca boşaltılır.
+          setRedirecting(true);
+          window.location.assign(order.paymentPageUrl);
+          return;
+        }
         clearCart();
         router.replace('/siparis-tamamlandi');
       },
@@ -454,12 +462,13 @@ export default function CheckoutPage() {
         <button
           type="submit"
           form="checkoutForm"
-          disabled={placeOrder.isPending}
+          disabled={busy}
           className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded bg-brand-900 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:cursor-wait disabled:opacity-70"
         >
-          {placeOrder.isPending ? (
+          {busy ? (
             <>
-              <Loader2 className="size-4 animate-spin" aria-hidden /> Sipariş oluşturuluyor…
+              <Loader2 className="size-4 animate-spin" aria-hidden />{' '}
+              {redirecting ? 'Güvenli ödeme sayfasına yönlendiriliyor…' : 'Sipariş oluşturuluyor…'}
             </>
           ) : (
             <>

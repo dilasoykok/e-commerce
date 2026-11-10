@@ -11,6 +11,11 @@ public static class OrderingErrors
         Error.Conflict("ordering.out_of_stock", "Yetersiz stok: " + string.Join("; ", lines) + ". Lütfen sepetinizi güncelleyin.");
 
     public static Error Validation(Dictionary<string, string[]> fields) => Error.Validation(fields);
+
+    public static Error PaymentUnavailable(string? detail) =>
+        Error.Conflict("ordering.payment_unavailable",
+            "Ödeme sayfası şu an açılamadı" + (string.IsNullOrWhiteSpace(detail) ? "" : $" ({detail})") +
+            ". Kartınızdan çekim yapılmadı; lütfen tekrar deneyin ya da Havale / EFT seçin.");
 }
 
 /// <summary>Kargo ücreti kuralı. Arayüzdeki (soykok-web/src/lib/shipping.ts) değerlerle aynı olmalı.</summary>

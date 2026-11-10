@@ -81,7 +81,9 @@ public sealed record OrderDetail(
     decimal ShippingFee,
     decimal Total,
     IReadOnlyList<OrderItemDto> Items,
-    IReadOnlyList<StatusChangeDto> StatusHistory)
+    IReadOnlyList<StatusChangeDto> StatusHistory,
+    // Yalnızca kartla verilen siparişin cevabında: müşterinin yönlendirileceği 3D Secure ödeme sayfası
+    string? PaymentPageUrl = null)
 {
     public static OrderDetail From(Order o, bool includePersonal) => new(
         o.Number,

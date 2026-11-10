@@ -6,6 +6,7 @@ using Soykok.Infrastructure.Caching;
 using Soykok.Infrastructure.Health;
 using Soykok.Infrastructure.Identity;
 using Soykok.Infrastructure.Messaging;
+using Soykok.Infrastructure.Payments;
 using Soykok.Infrastructure.Persistence;
 using Soykok.Infrastructure.Persistence.Repositories;
 
@@ -45,6 +46,10 @@ public static class DependencyInjection
         services.Configure<RabbitMqOptions>(config.GetSection(RabbitMqOptions.Section));
         services.AddSingleton<RabbitMqPublisher>();
         services.AddSingleton<IEventPublisher>(sp => sp.GetRequiredService<RabbitMqPublisher>());
+
+        // iyzico (kartla ödeme). Anahtarlar yoksa kartla ödeme kapalı, havale çalışmaya devam eder.
+        services.Configure<IyzicoOptions>(config.GetSection(IyzicoOptions.Section));
+        services.AddHttpClient<IPaymentGateway, IyzicoPaymentGateway>(c => c.Timeout = TimeSpan.FromSeconds(30));
 
         // Keycloak (site için oturum çerezi, araçlar için JWT)
         services.AddKeycloakAuthentication(config);

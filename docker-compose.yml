@@ -90,6 +90,11 @@ services:
       Keycloak__Audience: soykok-api
       Keycloak__ClientId: soykok-bff
       Keycloak__ClientSecret: ${KEYCLOAK_BFF_SECRET:-dev-bff-secret-change-me}
+      # Kartla ödeme (iyzico). Anahtarlar boşsa kart kapalı, havale çalışır.
+      Iyzico__ApiKey: ${IYZICO_API_KEY:-}
+      Iyzico__SecretKey: ${IYZICO_SECRET_KEY:-}
+      Iyzico__BaseUrl: ${IYZICO_BASE_URL:-https://sandbox-api.iyzipay.com}
+      Iyzico__CallbackUrl: ${PUBLIC_URL:-http://localhost}/api/payments/iyzico/callback
     depends_on:
       migrator:
         condition: service_completed_successfully
