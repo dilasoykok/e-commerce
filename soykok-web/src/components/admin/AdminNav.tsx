@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Package, ReceiptText } from 'lucide-react';
+import { FolderTree, Package, ReceiptText } from 'lucide-react';
 
 const TABS = [
   { href: '/admin/siparisler', label: 'Siparişler', icon: ReceiptText },
   { href: '/admin/urunler', label: 'Ürünler', icon: Package },
+  { href: '/admin/kategoriler', label: 'Kategoriler', icon: FolderTree },
 ];
 
 /** Yönetim paneli sekmeleri */

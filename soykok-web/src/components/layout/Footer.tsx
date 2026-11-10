@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Clock, Lock, Mail, MapPin, Phone } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
+import { getSiteNav } from '@/lib/catalog';
 
 const SW = 1.75;
 
@@ -42,8 +43,13 @@ const FOOTER_NAV = [
   },
 ];
 
-/** Footer (eski partials/footer.html). Tamamen statik, Server Component. */
-export default function Footer() {
+/** Footer (eski partials/footer.html). Server Component; kategori sütunu menüyle aynı veriden. */
+export default async function Footer() {
+  const nav = await getSiteNav();
+  const categoryLinks = nav.menu.filter((c) => c.href.startsWith('/urunler')).slice(0, 7);
+  const columns = FOOTER_NAV.map((g) =>
+    g.id === 'ftCategories' ? { ...g, links: categoryLinks.map(({ href, label }) => ({ href, label })) } : g,
+  );
   return (
     <footer className="mt-12 bg-brand-900 text-sm text-white/75">
       <div className="container-site grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
@@ -79,7 +85,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {FOOTER_NAV.map((group) => (
+        {columns.map((group) => (
           <nav key={group.id} aria-labelledby={group.id}>
             <h2 id={group.id} className="mb-4 font-semibold text-white">
               {group.title}

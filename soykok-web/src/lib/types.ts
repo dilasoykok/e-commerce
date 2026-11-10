@@ -211,3 +211,14 @@ export type AdminOrderDetail = {
 };
 
 export type AdminOrderQuery = { durum?: OrderStatus | ''; q?: string; page?: number; pageSize?: number };
+
+/* ---------- Kategori yönetimi (admin) ---------- */
+
+/** Alt kategori: ürünlerin bağlı olduğu kategori (laminat, masif ...) */
+export type AdminCategoryRow = { slug: string; name: string; sortOrder: number; productCount: number; groups: string[] };
+/** Üst kategori: menüdeki başlık (parke, aksesuar ...) */
+export type AdminCategoryGroupRow = { slug: string; label: string; sortOrder: number; categories: string[] };
+export type AdminCategoryList = { categories: AdminCategoryRow[]; groups: AdminCategoryGroupRow[] };
+
+export type SaveCategoryInput = { slug?: string | null; name: string; sortOrder?: number | null; groups: string[] };
+export type SaveCategoryGroupInput = { slug?: string | null; label: string; sortOrder?: number | null };

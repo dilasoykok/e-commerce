@@ -7,7 +7,9 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import AccountLink from './AccountLink';
 import { useUi } from '@/store/ui';
-import { CATEGORY_NAV, MAIN_NAV, ORDERS_HREF } from '@/lib/navigation';
+import CategoryIcon from './CategoryIcon';
+import { MAIN_NAV, ORDERS_HREF } from '@/lib/navigation';
+import type { CategoryNavItem } from '@/lib/category-nav';
 import { useBodyScrollLock, useEscape } from '@/lib/hooks';
 
 const SW = 1.75;
@@ -18,7 +20,7 @@ const MENU_LINKS = [MAIN_NAV[0], MAIN_NAV[1], { href: ORDERS_HREF, label: 'Sipar
  * Mobil menü butonu + soldan açılan çekmece (eski mobile-menu.html + menu.js → initMobileDrawer).
  * Çekmece fixed konumlu olduğu için butonla aynı bileşende durabilir.
  */
-export default function MobileMenu() {
+export default function MobileMenu({ items }: { items: CategoryNavItem[] }) {
   const open = useUi((s) => s.mobileMenuOpen);
   const setOpen = useUi((s) => s.setMobileMenu);
   const close = () => setOpen(false);
@@ -72,19 +74,18 @@ export default function MobileMenu() {
         <nav className="flex-1 overflow-y-auto text-sm">
           <p className="px-4 pt-4 pb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">Kategoriler</p>
 
-          {CATEGORY_NAV.map((c) => {
-            const Icon = c.icon;
+          {items.map((c) => {
             if (!c.children?.length) {
               return (
-                <Link key={c.label} href={c.href} className="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium">
-                  <Icon className="size-5 text-brand-700" strokeWidth={SW} aria-hidden /> {c.label}
+                <Link key={c.href} href={c.href} className="flex items-center gap-3 border-b border-gray-100 px-4 py-3 font-medium">
+                  <CategoryIcon name={c.icon} className="size-5 text-brand-700" /> {c.label}
                 </Link>
               );
             }
             return (
-              <details key={c.label} className="group border-b border-gray-100">
+              <details key={c.href} className="group border-b border-gray-100">
                 <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3 font-medium [&::-webkit-details-marker]:hidden">
-                  <Icon className="size-5 text-brand-700" strokeWidth={SW} aria-hidden /> {c.label}
+                  <CategoryIcon name={c.icon} className="size-5 text-brand-700" /> {c.label}
                   <ChevronDown className="ml-auto size-4 transition group-open:rotate-180" strokeWidth={SW} aria-hidden />
                 </summary>
                 <ul className="bg-gray-50 py-1 text-[13px] text-gray-600">

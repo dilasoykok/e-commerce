@@ -14,6 +14,7 @@ import 'server-only';
 
 import * as fallback from '@/data/products';
 import { api } from './api/endpoints';
+import { buildSiteNav, type SiteNav } from './category-nav';
 import { ApiError } from './api/client';
 import type { CatalogCategories, Product, ProductDetail, ProductPage, ProductQuery } from './types';
 
@@ -161,4 +162,12 @@ export async function getCategories(): Promise<CatalogCategories> {
       })),
     };
   }
+}
+
+/* ---------- Menü (header, mobil menü, footer, arama kutusu) ---------- */
+
+/** Kategori menüsü + arama önerileri. Admin kategori değiştirince "catalog" etiketiyle yenilenir. */
+export async function getSiteNav(): Promise<SiteNav> {
+  const [categories, products] = await Promise.all([getCategories(), getProducts({ limit: 100 })]);
+  return buildSiteNav(categories, products);
 }

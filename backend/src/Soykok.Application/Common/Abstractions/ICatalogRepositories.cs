@@ -17,6 +17,16 @@ public interface IProductRepository
 public interface ICategoryRepository
 {
     Task<bool> ExistsAsync(string slug, CancellationToken ct);
+
+    /* Kategori yönetimi (admin) — takip edilen varlıklar */
+    Task<List<Category>> ListForUpdateAsync(CancellationToken ct);
+    Task<List<CategoryGroup>> ListGroupsForUpdateAsync(CancellationToken ct);
+    /// <summary>Kategori kodu → o kategorideki ürün sayısı</summary>
+    Task<Dictionary<string, int>> CountProductsAsync(CancellationToken ct);
+    void Add(Category category);
+    void Remove(Category category);
+    void Add(CategoryGroup group);
+    void Remove(CategoryGroup group);
 }
 
 /// <summary>Katalog okuma tarafı (takip edilmeyen, sıralı listeler).</summary>

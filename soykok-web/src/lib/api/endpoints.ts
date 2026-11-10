@@ -9,11 +9,16 @@
  *   Sipariş  POST /api/orders · POST /api/orders/track · GET /api/me/orders · GET /api/me/orders/{number}
  *   Admin    POST /api/products · PUT /api/products/{id} · DELETE /api/products/{id}
  *            GET /api/admin/orders · GET /api/admin/orders/{number} · POST /api/admin/orders/{number}/status
+ *            GET|POST /api/admin/categories · PUT|DELETE /api/admin/categories/{slug}
+ *            POST /api/admin/category-groups · PUT|DELETE /api/admin/category-groups/{slug}
  *   Sistem   GET  /api/health · GET /api/me
  */
 
 import { apiFetch, toQueryString, type ApiRequestInit } from './client';
 import type {
+  AdminCategoryList,
+  SaveCategoryGroupInput,
+  SaveCategoryInput,
   AdminOrderDetail,
   AdminOrderPage,
   AdminOrderQuery,
@@ -81,6 +86,21 @@ export const api = {
         method: 'POST',
         json: { status, note: note || null },
       }),
+
+    /** Kategori yönetimi — her işlem güncel listeyi döner */
+    categories: (opts?: Opts) => apiFetch<AdminCategoryList>('/admin/categories', { cache: 'no-store', ...opts }),
+    createCategory: (input: SaveCategoryInput) =>
+      apiFetch<AdminCategoryList>('/admin/categories', { method: 'POST', json: input }),
+    updateCategory: (slug: string, input: SaveCategoryInput) =>
+      apiFetch<AdminCategoryList>(`/admin/categories/${encodeURIComponent(slug)}`, { method: 'PUT', json: input }),
+    deleteCategory: (slug: string) =>
+      apiFetch<AdminCategoryList>(`/admin/categories/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
+    createCategoryGroup: (input: SaveCategoryGroupInput) =>
+      apiFetch<AdminCategoryList>('/admin/category-groups', { method: 'POST', json: input }),
+    updateCategoryGroup: (slug: string, input: SaveCategoryGroupInput) =>
+      apiFetch<AdminCategoryList>(`/admin/category-groups/${encodeURIComponent(slug)}`, { method: 'PUT', json: input }),
+    deleteCategoryGroup: (slug: string) =>
+      apiFetch<AdminCategoryList>(`/admin/category-groups/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
   },
 
   system: {

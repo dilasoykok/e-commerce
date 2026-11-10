@@ -9,12 +9,14 @@ import AccountLink from './AccountLink';
 import HeaderSearch, { SearchForm } from './HeaderSearch';
 import { CartButton, FavoritesButton } from './HeaderButtons';
 import { MAIN_NAV, TOPBAR_NAV } from '@/lib/navigation';
+import { getSiteNav } from '@/lib/catalog';
 
 /**
  * Header (eski partials/header.html). Server Component: etkileşimli parçalar
  * (mega menü, mobil menü, sepet/favori rozetleri, hesap linki) ayrı client bileşenleri.
  */
-export default function Header() {
+export default async function Header() {
+  const nav = await getSiteNav();
   return (
     <header className="relative z-40">
       {/* Üst bar */}
@@ -52,7 +54,7 @@ export default function Header() {
       <div className="bg-white">
         <div className="container-site flex flex-wrap items-center gap-x-6 gap-y-3 py-3 lg:h-[74px] lg:flex-nowrap lg:py-0">
           {/* Mobil menü butonu + çekmece */}
-          <MobileMenu />
+          <MobileMenu items={nav.menu} />
 
           {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="Soykök Ticaret Ana Sayfa">
@@ -60,8 +62,8 @@ export default function Header() {
           </Link>
 
           {/* Arama (ürünler sayfasında mevcut aramayla dolu gelir) */}
-          <Suspense fallback={<SearchForm />}>
-            <HeaderSearch />
+          <Suspense fallback={<SearchForm options={nav.searchOptions} suggestions={nav.suggestions} />}>
+            <HeaderSearch options={nav.searchOptions} suggestions={nav.suggestions} />
           </Suspense>
 
           {/* Favoriler & Sepet */}
@@ -75,7 +77,7 @@ export default function Header() {
       {/* Kategori + navigasyon bar */}
       <div className="hidden border-y border-gray-200 bg-gray-50 lg:block">
         <div className="container-site flex h-[44px] items-stretch">
-          <MegaMenu />
+          <MegaMenu items={nav.menu} />
 
           <nav className="ml-8 flex items-center gap-10 text-sm font-medium">
             {MAIN_NAV.map((l) => (

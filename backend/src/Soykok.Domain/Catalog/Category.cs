@@ -17,4 +17,10 @@ public sealed class Category
     public string Slug { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public int SortOrder { get; private set; }
+
+    public void Update(string name, int sortOrder)
+    {
+        Name = Guard.NotEmpty(name, "Kategori adı");
+        SortOrder = sortOrder;
+    }
 }

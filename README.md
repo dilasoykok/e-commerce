@@ -120,6 +120,11 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
 | `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
 | `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note }` (havale onayı, kargo, teslim, iptal). İptalde stok geri eklenir |
+| `GET /api/admin/categories`    | admin   | Alt kategoriler (ürün sayısıyla) + üst kategoriler |
+| `POST /api/admin/categories`   | admin   | Alt kategori ekle `{ slug?, name, sortOrder?, groups: ["parke"] }` (kod boşsa addan üretilir) |
+| `PUT/DELETE /api/admin/categories/{slug}` | admin | Alt kategori güncelle / sil (içinde ürün varsa silinmez, 409) |
+| `POST /api/admin/category-groups` | admin | Üst kategori ekle `{ slug?, label, sortOrder? }` |
+| `PUT/DELETE /api/admin/category-groups/{slug}` | admin | Üst kategori güncelle / sil (alt kategoriler kalır) |
 | `POST /api/payments/iyzico/callback` | iyzico | Kart ödemesi dönüşü (form: `token`, sorgu: `no`). Sonucu doğrular, sonuç sayfasına yönlendirir |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
@@ -138,6 +143,14 @@ olmalı). Stok, sipariş kaydıyla aynı transaction'da koşullu `UPDATE` ile d�
 kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan eklenenler) stok takibine
 girmez. Her sipariş "Ödeme Bekleniyor" durumunda açılır: havalede admin parayı görünce, kartta iyzico
 onaylayınca "Sipariş Alındı" olur.
+
+### Kategoriler
+
+Üst kategori (menü başlığı: Parke, Aksesuarlar …) ve alt kategori (ürünün kategorisi: Laminat, Masif …)
+admin panelinde **/admin/kategoriler** sayfasından eklenir, düzenlenir, silinir. Sitenin mega menüsü, mobil
+menüsü, footer'daki kategori sütunu ve arama kutusu bu kayıtlardan üretilir (`soykok-web/src/lib/category-nav.ts`);
+değişiklik kaydedilince hemen yansır. Hiçbir üst kategoride olmayan alt kategori menüde tek başına başlık olur.
+Kodlar (`/urunler?kategori=...`) üst ve alt kategoriler arasında benzersizdir ve sonradan değişmez.
 
 ### Kartla ödeme (iyzico)
 

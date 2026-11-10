@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, ChevronRight, Menu } from 'lucide-react';
-import { CATEGORY_NAV } from '@/lib/navigation';
+import CategoryIcon from './CategoryIcon';
+import type { CategoryNavItem } from '@/lib/category-nav';
 
 const SW = 1.75;
 
@@ -14,7 +15,7 @@ const SW = 1.75;
  * sayfalarda butonla açılır, dışarı tıklayınca veya Esc ile kapanır.
  * Alt paneller eskisi gibi yalnızca CSS (hover / focus-within) ile açılır.
  */
-export default function MegaMenu() {
+export default function MegaMenu({ items }: { items: CategoryNavItem[] }) {
   const pinned = usePathname() === '/';
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -54,17 +55,16 @@ export default function MegaMenu() {
         className="absolute top-full left-0 w-[218px] rounded-b-md bg-white shadow-xl ring-1 ring-black/5"
       >
         <ul className="py-1.5 text-[13px] text-brand-800">
-          {CATEGORY_NAV.map((c) => {
-            const Icon = c.icon;
+          {items.map((c) => {
             const hasPanel = Boolean(c.children?.length);
             return (
-              <li key={c.label} className={hasPanel ? 'group/cat' : undefined}>
+              <li key={c.href} className={hasPanel ? 'group/cat' : undefined}>
                 <Link
                   href={c.href}
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-3 px-4 py-1.5 hover:bg-gray-50 group-hover/cat:bg-gray-100"
                 >
-                  <Icon className="size-5 text-brand-700" strokeWidth={SW} aria-hidden />
+                  <CategoryIcon name={c.icon} className="size-5 text-brand-700" />
                   <span>{c.label}</span>
                   <ChevronRight className="ml-auto size-4" strokeWidth={SW} aria-hidden />
                 </Link>
@@ -75,7 +75,7 @@ export default function MegaMenu() {
                       href={c.href}
                       className="mb-2 flex items-center border-b border-gray-100 pb-2 text-xs font-semibold hover:text-wood-600"
                     >
-                      {c.panelTitle ?? c.label}
+                      {c.label}
                       {c.brands && <ChevronRight className="ml-auto size-3.5" strokeWidth={SW} aria-hidden />}
                     </Link>
                     <SubList links={c.children!} withChevron={Boolean(c.brands)} />

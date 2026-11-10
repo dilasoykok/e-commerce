@@ -17,6 +17,7 @@ export const queryKeys = {
 
   catalog: ['catalog'] as const,
   categories: ['catalog', 'categories'] as const,
+  adminCategories: ['catalog', 'admin-categories'] as const,
   products: (query: ProductQuery = {}) => ['catalog', 'products', query] as const,
   product: (id: string) => ['catalog', 'product', id] as const,
 };

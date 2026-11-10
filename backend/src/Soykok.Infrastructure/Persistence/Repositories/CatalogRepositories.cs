@@ -27,6 +27,21 @@ internal sealed class CategoryRepository(AppDbContext db) : ICategoryRepository
 {
     public Task<bool> ExistsAsync(string slug, CancellationToken ct) =>
         db.Categories.AnyAsync(c => c.Slug == slug, ct);
+
+    public Task<List<Category>> ListForUpdateAsync(CancellationToken ct) =>
+        db.Categories.OrderBy(c => c.SortOrder).ThenBy(c => c.Name).ToListAsync(ct);
+
+    public Task<List<CategoryGroup>> ListGroupsForUpdateAsync(CancellationToken ct) =>
+        db.CategoryGroups.OrderBy(g => g.SortOrder).ThenBy(g => g.Label).ToListAsync(ct);
+
+    public Task<Dictionary<string, int>> CountProductsAsync(CancellationToken ct) =>
+        db.Products.GroupBy(p => p.CategorySlug).Select(g => new { g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Key, x => x.Count, ct);
+
+    public void Add(Category category) => db.Categories.Add(category);
+    public void Remove(Category category) => db.Categories.Remove(category);
+    public void Add(CategoryGroup group) => db.CategoryGroups.Add(group);
+    public void Remove(CategoryGroup group) => db.CategoryGroups.Remove(group);
 }
 
 internal sealed class CatalogReadRepository(AppDbContext db) : ICatalogReadRepository

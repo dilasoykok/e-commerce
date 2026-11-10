@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Soykok.Application.Catalog;
+using Soykok.Application.Catalog.Admin;
 using Soykok.Application.Catalog.Commands;
 using Soykok.Application.Catalog.Contracts;
 using Soykok.Application.Catalog.Queries;
@@ -31,6 +32,16 @@ public static class DependencyInjection
         services.AddScoped<ICommandHandler<CreateProductCommand, Result<ProductDetail>>, CreateProductHandler>();
         services.AddScoped<ICommandHandler<UpdateProductCommand, Result<ProductDetail>>, UpdateProductHandler>();
         services.AddScoped<ICommandHandler<DeleteProductCommand, Result>, DeleteProductHandler>();
+
+        // Kategori yönetimi (admin): tek sınıf, her işlem ayrı arayüzle
+        services.AddScoped<AdminCategoriesHandler>();
+        services.AddScoped<IQueryHandler<GetAdminCategoriesQuery, AdminCategoryList>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<CreateCategoryCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<UpdateCategoryCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<DeleteCategoryCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<CreateCategoryGroupCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<UpdateCategoryGroupCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
+        services.AddScoped<ICommandHandler<DeleteCategoryGroupCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
 
         // Siparişler
         services.AddScoped<ICommandHandler<PlaceOrderCommand, Result<OrderDetail>>, PlaceOrderHandler>();
