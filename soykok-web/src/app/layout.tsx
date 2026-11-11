@@ -11,10 +11,11 @@ export const metadata: Metadata = {
   // Paylaşım önizlemelerindeki (Open Graph) görsel adresleri bununla tamamlanır
   metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost'),
   title: {
-    default: 'Soykök Ticaret | Parke ve Yapı Malzemeleri',
+    default: 'Soykök Ticaret | Yapı Malzemeleri Mağazası – Safranbolu',
     template: '%s | Soykök Ticaret',
   },
-  description: 'Parke ve yapı malzemelerinde geniş ürün yelpazesi, uygun fiyatlar ve güvenli alışveriş.',
+  description:
+    'Safranbolu’da yapı malzemeleri mağazası: boya, hırdavat, tesisat, yapı kimyasalları, parke ve daha fazlası. Uygun fiyat, güvenli alışveriş.',
   icons: { icon: { url: '/favicon.svg', type: 'image/svg+xml' } },
 };
 

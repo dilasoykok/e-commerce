@@ -44,7 +44,7 @@ export default function Page() {
         },
         {
           id: 'fazla',
-          title: 'Fazla alınan parke',
+          title: 'Fazla alınan ürün',
           body: (
             <p>
               Kullanılmayan, hasarsız paketler cayma süresi içinde yukarıdaki koşullarla iade edilebilir. [Cayma süresi dışında

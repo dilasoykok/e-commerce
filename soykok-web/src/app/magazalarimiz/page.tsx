@@ -7,15 +7,15 @@ import { STORE } from '@/lib/store-info';
 
 export const metadata: Metadata = {
   title: 'Mağazamız',
-  description: 'Safranbolu showroomumuzda parke ve kaplama ürünlerini yerinde görün; adres, çalışma saatleri ve yol tarifi.',
+  description: 'Safranbolu’daki yapı malzemeleri mağazamız: adres, çalışma saatleri ve yol tarifi.',
 };
 
 const SW = 1.75;
 
 const SERVICES = [
-  { icon: Layers, title: 'Geniş Showroom', text: 'Laminat, masif, SPC ve vinil parkeleri gerçek ışıkta, yan yana karşılaştırın.' },
-  { icon: SwatchBook, title: 'Ücretsiz Numune', text: 'Beğendiğiniz ürünlerin numunesini alın, evinizde deneyin.' },
-  { icon: Ruler, title: 'Keşif ve Ölçü', text: 'Uzman ekibimiz mekânınızı ölçer, ihtiyaç duyulan malzemeyi hesaplar.' },
+  { icon: Layers, title: 'Geniş Ürün Yelpazesi', text: 'Boya, hırdavat, tesisat, yapı kimyasalları ve parke aynı mağazada.' },
+  { icon: SwatchBook, title: 'Numune ve Renk Kartelası', text: 'Parke, kaplama ve boya renklerini yerinde görün, numune isteyin.' },
+  { icon: Ruler, title: 'Malzeme Danışmanlığı', text: 'İşiniz için hangi malzemeden ne kadar gerektiğini birlikte hesaplayalım.' },
   { icon: Truck, title: 'Teslimat', text: 'Mağazadan aldığınız ürünleri adresinize kadar teslim ediyoruz.' },
 ];
 
@@ -44,9 +44,9 @@ export default function StoresPage() {
             </ol>
           </nav>
           <p className="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Mağazamız</p>
-          <h1 className="mt-2 text-3xl leading-tight font-bold sm:text-4xl">Sizi showroom&apos;umuzda ağırlayalım</h1>
+          <h1 className="mt-2 text-3xl leading-tight font-bold sm:text-4xl">Sizi mağazamızda ağırlayalım</h1>
           <p className="mt-3 max-w-xl text-sm text-white/85 sm:text-base">
-            Parke ve kaplama ürünlerimizi yerinde görün, dokunun, uzman ekibimizle birlikte mekânınıza en uygun seçimi yapın.
+            Ürünlerimizi yerinde görün, uzman ekibimizle birlikte işinize en uygun malzemeyi seçin.
           </p>
         </div>
       </section>
@@ -56,7 +56,7 @@ export default function StoresPage() {
         <div className="grid overflow-hidden rounded-lg border border-gray-200 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
           <article className="p-6 sm:p-8">
             <p className="flex items-center gap-1.5 text-xs font-medium text-wood-600">
-              <Store className="size-4" strokeWidth={SW} aria-hidden /> Merkez Mağaza &amp; Showroom
+              <Store className="size-4" strokeWidth={SW} aria-hidden /> Merkez Mağaza
             </p>
             <h2 id="storeName" className="mt-1 text-2xl font-bold">
               {STORE.name}

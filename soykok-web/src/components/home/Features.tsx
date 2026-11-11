@@ -5,9 +5,9 @@ import { formatTL } from '@/lib/format';
 const ITEMS = [
   { icon: Truck, title: 'Ücretsiz Kargo', text: `${formatTL(FREE_SHIPPING_LIMIT)} ve üzeri alışverişlerde` },
   { icon: ShieldCheck, title: 'Güvenli Ödeme', text: '256 Bit SSL ile koruma' },
-  { icon: Headset, title: '7/24 Destek', text: 'Her zaman yanınızda' },
+  { icon: Headset, title: 'Uzman Destek', text: 'Mağazada ve telefonla' },
   { icon: Package, title: 'Kolay İade', text: '14 gün içinde iade imkanı' },
-  { icon: Star, title: 'Müşteri Memnuniyeti', text: '4.8/5 (12.450+ değerlendirme)' },
+  { icon: Star, title: 'Safranbolu Mağazası', text: 'Ürünleri yerinde görün' },
 ];
 
 /** Özellik şeridi (eski partials/home/features.html) */

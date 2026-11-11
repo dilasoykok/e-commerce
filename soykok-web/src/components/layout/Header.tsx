@@ -33,7 +33,7 @@ export default async function Header() {
             </li>
             <li className="hidden items-center gap-2 md:flex">
               <Headset className="size-4" strokeWidth={1.75} aria-hidden />
-              <span>7/24 Destek</span>
+              <span>Uzman Destek</span>
             </li>
           </ul>
 

@@ -7,7 +7,7 @@ import { BRANDS } from '@/lib/brands';
 
 export const metadata: Metadata = {
   title: 'Hakkımızda',
-  description: 'Parke, zemin kaplama ve yapı malzemelerinde doğru ürünü, doğru fiyatla ve uzman desteğiyle sunuyoruz.',
+  description: 'Safranbolu’da yapı malzemeleri, boya, hırdavat ve tesisatta doğru ürünü, doğru fiyatla ve uzman desteğiyle sunuyoruz.',
 };
 
 const SW = 1.75;
@@ -60,13 +60,13 @@ export default function AboutPage() {
           </nav>
           <p className="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Hakkımızda</p>
           <h1 className="mt-2 max-w-2xl text-3xl leading-tight font-bold sm:text-4xl lg:text-[44px]">
-            Sağlam zeminler,
+            Sağlam yapılar,
             <br />
             güvenilir bir adres.
           </h1>
           <p className="mt-4 max-w-xl text-sm text-white/85 sm:text-base">
-            [Kuruluş yılı]&apos;den bu yana parke, zemin kaplama ve yapı malzemelerinde doğru ürünü, doğru fiyatla ve uzman
-            desteğiyle sunuyoruz.
+            [Kuruluş yılı]&apos;den bu yana Safranbolu&apos;da yapı malzemeleri, boya, hırdavat ve tesisatta doğru ürünü, doğru
+            fiyatla ve uzman desteğiyle sunuyoruz.
           </p>
         </div>
       </section>
@@ -76,7 +76,7 @@ export default function AboutPage() {
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-              <Image src="/images/categories/parke.jpg" alt="Mağazamızdaki parke örnekleri" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+              <Image src="/images/categories/parke.jpg" alt="Mağazamızdaki ürünlerden örnekler" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             </div>
             <div className="absolute -right-2 -bottom-6 hidden aspect-[4/3] w-2/5 overflow-hidden rounded-lg border-4 border-white shadow-xl sm:block lg:-right-6">
               <Image src="/images/categories/deck.jpg" alt="Dış mekan deck uygulaması" fill sizes="20vw" className="object-cover" />
@@ -102,12 +102,12 @@ export default function AboutPage() {
                 genişlendiği, online satışa ne zaman başlandığı.]
               </p>
               <p>
-                Amacımız değişmedi: her müşterimize, evine ya da projesine en uygun zemini seçerken güvenle danışabileceği bir
+                Amacımız değişmedi: her müşterimize, evi ya da projesi için doğru malzemeyi seçerken güvenle danışabileceği bir
                 adres olmak.
               </p>
             </div>
             <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-              {['Orijinal ve garantili ürünler', 'Ücretsiz numune hizmeti', 'Uzman ekipten keşif ve danışmanlık', 'Türkiye geneline hızlı teslimat'].map(
+              {['Orijinal ve garantili ürünler', 'Boya, hırdavat ve tesisat tek yerde', 'Uzman ekipten keşif ve danışmanlık', 'Türkiye geneline hızlı teslimat'].map(
                 (t) => (
                   <li key={t} className="flex items-center gap-2.5">
                     <CircleCheck className="size-5 shrink-0 text-wood-600" strokeWidth={SW} aria-hidden /> {t}
@@ -144,7 +144,7 @@ export default function AboutPage() {
             </span>
             <h2 className="mt-5 text-lg font-bold">Misyonumuz</h2>
             <p className="mt-2 text-sm leading-relaxed text-gray-600">
-              Parke ve yapı malzemelerinde kaliteli ürünleri adil fiyatlarla sunmak; satış öncesinde ve sonrasında
+              Yapı malzemelerinde kaliteli ürünleri adil fiyatlarla sunmak; satış öncesinde ve sonrasında
               müşterilerimizin yanında olarak her projeyi sorunsuz tamamlamalarına yardımcı olmak.
             </p>
           </article>
@@ -154,7 +154,7 @@ export default function AboutPage() {
             </span>
             <h2 className="mt-5 text-lg font-bold">Vizyonumuz</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/80">
-              Zemin ve yapı malzemeleri denince akla ilk gelen, güvenilirliği ve uzmanlığıyla Türkiye&apos;nin her yerinden
+              Yapı malzemeleri denince akla ilk gelen, güvenilirliği ve uzmanlığıyla Türkiye&apos;nin her yerinden
               ulaşılabilen bir marka olmak.
             </p>
           </article>

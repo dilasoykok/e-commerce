@@ -16,7 +16,7 @@ export async function CampaignProducts() {
       id="kampanyalar"
       titleId="campaignTitle"
       title="Kampanyalı Ürünler"
-      description="İndirimdeki parke ve yapı malzemeleri"
+      description="İndirimdeki yapı malzemeleri"
       allHref="/urunler?indirim=1"
       badge={
         <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-0.5 text-xs font-semibold text-sale">
@@ -39,7 +39,7 @@ export async function NewProducts() {
       id="yeni-urunler"
       titleId="newTitle"
       title="Yeni Ürünler"
-      description="Mağazamıza en son eklenen parke ve yapı malzemeleri"
+      description="Mağazamıza en son eklenen ürünler"
       allHref="/urunler?sirala=yeni"
       mobileAllLabel="Tüm Yeni Ürünler"
       autoplay={5000}

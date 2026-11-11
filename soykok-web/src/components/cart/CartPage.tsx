@@ -40,7 +40,7 @@ export default function CartPage() {
             <ShoppingCart className="size-9" strokeWidth={SW} aria-hidden />
           </span>
           <p className="mt-5 text-lg font-semibold">Sepetiniz boş</p>
-          <p className="mt-1 max-w-sm text-sm text-gray-500">Parke ve yapı malzemelerimize göz atın, beğendiklerinizi sepete ekleyin.</p>
+          <p className="mt-1 max-w-sm text-sm text-gray-500">Ürünlerimize göz atın, beğendiklerinizi sepete ekleyin.</p>
           <Link
             href="/urunler"
             className="mt-6 inline-flex h-11 items-center gap-2 rounded bg-brand-900 px-6 text-sm font-semibold text-white transition hover:bg-brand-700"
@@ -175,7 +175,7 @@ export default function CartPage() {
               <Package className="size-4 text-brand-700" strokeWidth={SW} aria-hidden /> 14 gün içinde kolay iade
             </li>
             <li className="flex items-center gap-2">
-              <Headset className="size-4 text-brand-700" strokeWidth={SW} aria-hidden /> 7/24 müşteri desteği
+              <Headset className="size-4 text-brand-700" strokeWidth={SW} aria-hidden /> Uzman müşteri desteği
             </li>
           </ul>
         </aside>

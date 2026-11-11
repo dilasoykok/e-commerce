@@ -6,7 +6,7 @@ const SERVICES = [
   {
     icon: SwatchBook,
     title: 'Ücretsiz Numune Talebi',
-    text: 'Parke ve kaplama ürünlerinde ücretsiz numune isteyin.',
+    text: 'Parke, kaplama ve boya renklerinde numune talep edin.',
     cta: 'Numune Talep Et',
     href: '/iletisim?konu=numune',
   },

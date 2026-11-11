@@ -1,11 +1,11 @@
 const QUESTIONS = [
   {
-    q: 'Kaç metrekare parke almam gerektiğini nasıl hesaplarım?',
+    q: 'Kaç metrekare parke ya da kaplama almam gerektiğini nasıl hesaplarım?',
     a: "Odanın eni ile boyunu çarparak alanı bulun, kesim ve fire payı için üzerine yaklaşık %5–10 ekleyin. Örneğin 4 m × 5 m bir oda 20 m²'dir; fire payıyla 21–22 m² parke almanız önerilir.",
   },
   {
     q: 'Montaj hizmetiniz var mı?',
-    a: 'Evet, Safranbolu ve Karabük genelinde uzman ekibimizle montaj yapıyoruz. Kampanya dönemlerinde belirli metrekarenin üzerindeki alışverişlerde montaj ücretsizdir.',
+    a: 'Montaj ve uygulama talepleriniz için mağazamızı arayın; ürüne ve bölgenize göre bilgi verelim.',
   },
   {
     q: 'Teslimat ne kadar sürer?',
@@ -13,14 +13,14 @@ const QUESTIONS = [
   },
   {
     q: 'Satın almadan önce numune görebilir miyim?',
-    a: 'Elbette. Mağazamızda tüm parke ve zemin kaplama ürünlerini yerinde inceleyebilir, renk ve dokuyu evinizin ışığında görmek için numune alabilirsiniz.',
+    a: 'Elbette. Safranbolu mağazamızda ürünleri yerinde inceleyebilir; parke, kaplama ve boya gibi renk ve dokusu önemli ürünlerde numune isteyebilirsiniz.',
   },
   {
     q: 'Hangi ödeme yöntemlerini kabul ediyorsunuz?',
     a: 'Nakit, kredi kartı, banka kartı ve havale/EFT ile ödeme yapabilirsiniz. Kredi kartına taksit seçenekleri için mağazamızla iletişime geçin.',
   },
   {
-    q: 'Fazla aldığım parkeyi iade edebilir miyim?',
+    q: 'Fazla aldığım ürünü iade edebilir miyim?',
     a: 'Kullanılmamış ürünleri teslimattan itibaren 14 gün içinde faturasıyla birlikte iade edebilirsiniz. Ölçüye göre kesilen ya da özel sipariş edilen ürünler iade kapsamı dışındadır. Ayrıntılar İade ve Değişim sayfasında.',
   },
 ];

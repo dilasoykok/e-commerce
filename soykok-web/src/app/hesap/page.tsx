@@ -38,9 +38,9 @@ export default async function AccountPage({ searchParams }: Props) {
             <div className="relative flex flex-1 flex-col">
               <Logo id="Auth" className="block h-11 w-auto text-white" />
               <h2 className="mt-auto text-2xl leading-snug font-bold">
-                Hayalinizdeki zemine
+                Yapınız için gereken her şey
                 <br />
-                bir adım daha yakınsınız.
+                bir tık uzağınızda.
               </h2>
               <ul className="mt-6 space-y-3 text-sm text-white/85">
                 <li className="flex items-center gap-3">

@@ -60,7 +60,7 @@ export default async function Footer() {
             <Logo id="Footer" className="block h-11 w-auto text-white" />
           </Link>
           <p className="mt-4 max-w-xs text-[13px] leading-relaxed">
-            Parke ve yapı malzemelerinde güvenilir markalar, uygun fiyatlar ve uzman destek.
+            Safranbolu’da yapı malzemeleri, boya, hırdavat ve tesisatta güvenilir markalar, uygun fiyatlar ve uzman destek.
           </p>
           <ul className="mt-5 space-y-2.5 text-[13px]">
             <li className="flex gap-3">

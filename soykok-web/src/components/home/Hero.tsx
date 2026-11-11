@@ -8,17 +8,17 @@ const SW = 1.75;
 const SLIDES = [
   {
     image: 'hero-1.jpg',
-    eyebrow: 'Doğal Güzellik, Sağlam Zeminler',
-    title: ['Hayalinizdeki', 'Zemin, Doğru Adreste'],
-    text: 'Parke ve yapı malzemelerinde geniş ürün yelpazesi, uygun fiyatlar ve güvenli alışveriş.',
+    eyebrow: 'Safranbolu’nun Yapı Malzemeleri Mağazası',
+    title: ['Yapınız İçin Gereken', 'Her Şey Tek Adreste'],
+    text: 'Boya, hırdavat, tesisat, yapı kimyasalları ve parkede geniş ürün yelpazesi, uygun fiyatlar ve güvenli alışveriş.',
     cta: 'Alışverişe Başla',
     href: '/urunler',
   },
   {
     image: 'hero-2.jpg',
-    eyebrow: 'Sezon Kampanyası',
-    title: ['Laminat Parkelerde', "%20'ye Varan İndirim"],
-    text: "Krono Original, Classen ve Egger'in seçili ürünlerinde stoklarla sınırlı fırsatlar.",
+    eyebrow: 'Kampanyalı Ürünler',
+    title: ['Seçili Ürünlerde', 'İndirim Fırsatları'],
+    text: 'İndirimdeki yapı malzemelerini kaçırmayın; fırsatlar stoklarla sınırlıdır.',
     cta: 'Kampanyaları Gör',
     href: '/#kampanyalar',
   },
