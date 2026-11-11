@@ -18,6 +18,12 @@ export const queryKeys = {
   adminMessagesAll: ['admin', 'messages'] as const,
   adminMessages: (query: { okunmamis?: boolean; page?: number }) => ['admin', 'messages', query] as const,
 
+  adminReviewsAll: ['admin', 'reviews'] as const,
+  adminReviews: (query: { durum?: string; page?: number }) => ['admin', 'reviews', query] as const,
+
+  reviews: (productId: string, page: number) => ['reviews', productId, page] as const,
+  reviewsOf: (productId: string) => ['reviews', productId] as const,
+
   catalog: ['catalog'] as const,
   categories: ['catalog', 'categories'] as const,
   adminCategories: ['catalog', 'admin-categories'] as const,

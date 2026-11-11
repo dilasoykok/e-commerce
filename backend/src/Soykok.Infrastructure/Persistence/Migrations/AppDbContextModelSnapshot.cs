@@ -587,6 +587,10 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_approved");
 
+                    b.Property<bool>("IsVerifiedPurchase")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_verified_purchase");
+
                     b.Property<string>("ProductId")
                         .IsRequired()
                         .HasMaxLength(64)

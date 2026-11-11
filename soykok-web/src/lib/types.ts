@@ -260,3 +260,45 @@ export type ContactMessage = {
 };
 
 export type ContactMessagePage = { total: number; unread: number; page: number; pageSize: number; items: ContactMessage[] };
+
+/* ---------- Ürün yorumları ---------- */
+
+export type Review = {
+  id: string;
+  authorName: string;
+  rating: number;
+  title: string | null;
+  comment: string;
+  verifiedPurchase: boolean;
+  createdAt: string;
+};
+
+export type MyReview = { rating: number; title: string | null; comment: string; isApproved: boolean; verifiedPurchase: boolean };
+
+export type ReviewSummary = { average: number; count: number; /** 1★..5★ adetleri */ distribution: number[] };
+
+export type ProductReviews = {
+  summary: ReviewSummary;
+  total: number;
+  page: number;
+  pageSize: number;
+  items: Review[];
+  myReview: MyReview | null;
+};
+
+export type WriteReviewInput = { rating: number; title?: string | null; comment: string };
+
+export type AdminReview = {
+  id: string;
+  productId: string;
+  productName: string;
+  authorName: string;
+  rating: number;
+  title: string | null;
+  comment: string;
+  verifiedPurchase: boolean;
+  isApproved: boolean;
+  createdAt: string;
+};
+
+export type AdminReviewPage = { total: number; pending: number; page: number; pageSize: number; items: AdminReview[] };

@@ -12,6 +12,7 @@ using Soykok.Application.Ordering.Commands;
 using Soykok.Application.Ordering.Contracts;
 using Soykok.Application.Ordering.Queries;
 using Soykok.Application.Payments;
+using Soykok.Application.Reviews;
 using Soykok.Application.Support;
 
 namespace Soykok.Application;
@@ -61,6 +62,15 @@ public static class DependencyInjection
         services.AddScoped<IQueryHandler<ListContactMessagesQuery, ContactMessagePage>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
         services.AddScoped<ICommandHandler<MarkContactMessageCommand, Result<ContactMessageDto>>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
         services.AddScoped<ICommandHandler<DeleteContactMessageCommand, Result>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
+
+        // Ürün yorumları (site + admin)
+        services.AddScoped<ProductReviewsHandler>();
+        services.AddScoped<IQueryHandler<GetProductReviewsQuery, Result<ProductReviewsResponse>>>(sp => sp.GetRequiredService<ProductReviewsHandler>());
+        services.AddScoped<ICommandHandler<WriteReviewCommand, Result<MyReviewDto>>>(sp => sp.GetRequiredService<ProductReviewsHandler>());
+        services.AddScoped<ReviewsAdminHandler>();
+        services.AddScoped<IQueryHandler<ListReviewsQuery, AdminReviewPage>>(sp => sp.GetRequiredService<ReviewsAdminHandler>());
+        services.AddScoped<ICommandHandler<ApproveReviewCommand, Result>>(sp => sp.GetRequiredService<ReviewsAdminHandler>());
+        services.AddScoped<ICommandHandler<DeleteReviewCommand, Result>>(sp => sp.GetRequiredService<ReviewsAdminHandler>());
 
         // Kartla ödeme geri dönüşü
         services.AddScoped<ICommandHandler<CompleteCardPaymentCommand, CardPaymentResult>, CompleteCardPaymentHandler>();

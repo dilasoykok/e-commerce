@@ -37,7 +37,7 @@ public static class OrderEndpoints
         HttpContext http,
         ICommandHandler<PlaceOrderCommand, Result<OrderDetail>> handler,
         CancellationToken ct) =>
-        (await handler.HandleAsync(new PlaceOrderCommand(request, CurrentUserFrom(user), ClientIp(http)), ct))
+        (await handler.HandleAsync(new PlaceOrderCommand(request, user.ToCurrentUser(), ClientIp(http)), ct))
             .ToHttp(order => Results.Created($"/api/me/orders/{order.Number}", order));
 
     // POST /api/orders/track
@@ -52,7 +52,7 @@ public static class OrderEndpoints
         ClaimsPrincipal user,
         IQueryHandler<GetMyOrdersQuery, IReadOnlyList<OrderSummary>> handler,
         CancellationToken ct) =>
-        CurrentUserFrom(user) is { } me
+        user.ToCurrentUser() is { } me
             ? Results.Ok(await handler.HandleAsync(new GetMyOrdersQuery(me.IdentityId), ct))
             : Results.Unauthorized();
 
@@ -62,7 +62,7 @@ public static class OrderEndpoints
         ClaimsPrincipal user,
         IQueryHandler<GetMyOrderQuery, Result<OrderDetail>> handler,
         CancellationToken ct) =>
-        CurrentUserFrom(user) is { } me
+        user.ToCurrentUser() is { } me
             ? (await handler.HandleAsync(new GetMyOrderQuery(me.IdentityId, number), ct)).ToHttp(order => Results.Ok(order))
             : Results.Unauthorized();
 
@@ -72,18 +72,5 @@ public static class OrderEndpoints
         var real = http.Request.Headers["X-Real-IP"].ToString();
         if (System.Net.IPAddress.TryParse(real, out var ip)) return ip.ToString();
         return http.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "127.0.0.1";
-    }
-
-    /// <summary>Oturum çerezinden ya da Bearer token'dan kullanıcı ("sub" yoksa null)</summary>
-    private static CurrentUser? CurrentUserFrom(ClaimsPrincipal user)
-    {
-        if (user.Identity?.IsAuthenticated != true) return null;
-        var sub = user.FindFirst("sub")?.Value;
-        if (string.IsNullOrEmpty(sub)) return null;
-        return new CurrentUser(
-            sub,
-            user.FindFirst("email")?.Value ?? "",
-            user.FindFirst("given_name")?.Value ?? user.FindFirst("name")?.Value ?? "",
-            user.FindFirst("family_name")?.Value ?? "");
     }
 }

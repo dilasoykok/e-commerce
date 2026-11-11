@@ -13,6 +13,8 @@ public interface IOrderRepository
 
     /// <summary>Durum değiştirmek için (takip edilir; kalemler ve geçmişle).</summary>
     Task<Order?> GetForUpdateAsync(string number, CancellationToken ct);
+    /// <summary>Müşterinin bu ürünü içeren, ödenmiş ve iptal edilmemiş siparişi var mı (doğrulanmış alıcı)</summary>
+    Task<bool> HasPurchasedAsync(Guid customerId, string productId, CancellationToken ct);
     /// <summary>Belirtilen andan önce verilmiş, hâlâ "Ödeme Bekleniyor" durumundaki kartlı siparişler</summary>
     Task<IReadOnlyList<(string Number, string? PaymentToken)>> ListPendingCardPaymentsAsync(
         DateTimeOffset placedBefore, int max, CancellationToken ct);

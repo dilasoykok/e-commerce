@@ -28,6 +28,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (supurge → Süpürgelik)
 - Üyelik (Keycloak): giriş, kayıt, siparişlerim; misafir sipariş takibi (numara + e-posta)
 - Favoriler (tarayıcıda saklanır)
+- Ürün yorumları: üyeler puan + yorum yazar, admin onayından sonra yayınlanır; ürünü satın almış üyede "Doğrulanmış alıcı" rozeti
 - Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**
 - Stok: tükenen ürün "Tükendi" görünür, sepete eklenemez; az kalan stok uyarısı
 - Kargo takibi: kargo firması + takip numarası ve takip bağlantısı
@@ -37,6 +38,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Siparişler: liste, arama, durum değiştirme (havale onayı, hazırlanıyor, kargoya verildi + takip no, teslim, iptal → stok iadesi)
 - Ürünler: ekle / düzenle / sil, fiyat ve indirim, **görsel yükleme** (ana görsel + galeri), **stok adedi**
 - Kategoriler: üst ve alt kategori ekle / düzenle / sil
+- Yorumlar: onay bekleyen yorumları onayla / reddet (onaylanınca ürünün puanı ve yorum sayısı güncellenir)
 - Mesajlar: iletişim formundan gelen mesajlar (okunmamış rozeti, okundu işaretleme, e-postayla yanıtla, sil)
 
 **Altyapı**
@@ -51,7 +53,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 1. **SMTP ayarı** — `.env`'deki `SMTP_*` satırları boş; doldurulana kadar e-posta gönderilmez (bkz. [Sipariş e-postaları](#sipariş-e-postaları)).
 2. **Gerçek bilgiler** — footer'daki adres/telefon, firma unvanı, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`), Hakkımızda metni; yasal metinler hukukçuya okutulmalı.
 3. **Yayına alma** — alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifrelerinin değiştirilmesi, veritabanı ve `uploads` volume yedeği.
-4. Sonra: Projeler/Blog sayfaları (linkleri şu an `#`), ürün yorumları, üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme, e-Arşiv fatura, `sitemap.xml`, otomatik testler.
+4. Sonra: üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme ve Excel içe/dışa aktarma, e-Arşiv fatura, otomatik testler.
 
 ## Kurulum
 
@@ -241,6 +243,18 @@ admin panelinde **/admin/kategoriler** sayfasından eklenir, düzenlenir, silini
 menüsü, footer'daki kategori sütunu ve arama kutusu bu kayıtlardan üretilir (`soykok-web/src/lib/category-nav.ts`);
 değişiklik kaydedilince hemen yansır. Hiçbir üst kategoride olmayan alt kategori menüde tek başına başlık olur.
 Kodlar (`/urunler?kategori=...`) üst ve alt kategoriler arasında benzersizdir ve sonradan değişmez.
+
+### Ürün yorumları
+
+- Ürün sayfasındaki **Değerlendirmeler** sekmesinde ortalama puan, 5★–1★ dağılımı ve onaylı yorumlar listelenir.
+- Yorumu yalnızca giriş yapmış üye yazar (1–5 puan, isteğe bağlı başlık, 10–2000 karakter yorum). Bir üye bir ürüne
+  bir yorum yazar; tekrar yazarsa mevcut yorumu düzenlenir ve **yeniden onaya düşer**.
+- Yorum sitede adın baş harfiyle görünür ("Ayşe K."). Üyenin ödemesi alınmış, iptal edilmemiş bir siparişinde ürün
+  varsa yorum **Doğrulanmış alıcı** rozetiyle gösterilir.
+- Admin **/admin/yorumlar** sayfasından onaylar ya da reddeder (sekmede onay bekleyen sayısı görünür). Onay/silme
+  sonrası ürünün ortalama puanı ve yorum sayısı onaylı yorumlardan yeniden hesaplanır; kartlardaki yıldızlar buna göre güncellenir.
+- API: `GET|POST /api/products/{id}/reviews`, `GET /api/admin/reviews?durum=bekleyen|onayli`,
+  `POST /api/admin/reviews/{id}/approve`, `DELETE /api/admin/reviews/{id}`.
 
 ### Kartla ödeme (iyzico)
 

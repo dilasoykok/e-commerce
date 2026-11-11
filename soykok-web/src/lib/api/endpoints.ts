@@ -11,11 +11,15 @@
  *            GET /api/admin/orders · GET /api/admin/orders/{number} · POST /api/admin/orders/{number}/status
  *            GET|POST /api/admin/categories · PUT|DELETE /api/admin/categories/{slug}
  *            POST /api/admin/category-groups · PUT|DELETE /api/admin/category-groups/{slug}
+ *   Yorum    GET|POST /api/products/{id}/reviews · GET /api/admin/reviews · POST /api/admin/reviews/{id}/approve · DELETE /api/admin/reviews/{id}
  *   Sistem   GET  /api/health · GET /api/me
  */
 
 import { apiFetch, toQueryString, type ApiRequestInit } from './client';
 import type {
+  AdminReviewPage,
+  ProductReviews,
+  WriteReviewInput,
   ContactInput,
   ContactMessage,
   ContactMessagePage,
@@ -53,6 +57,18 @@ export const api = {
       apiFetch<ProductPage>(`/products${toQueryString(query)}`, opts),
 
     product: (id: string, opts?: Opts) => apiFetch<ProductDetail>(`/products/${encodeURIComponent(id)}`, opts),
+  },
+
+  reviews: {
+    /** Onaylı yorumlar + özet; giriş yapmışsa kendi yorumu (onay bekliyor olabilir) */
+    list: (productId: string, page = 1, opts?: Opts) =>
+      apiFetch<ProductReviews>(`/products/${encodeURIComponent(productId)}/reviews${toQueryString({ page })}`, {
+        cache: 'no-store',
+        ...opts,
+      }),
+    /** Yorum yaz ya da kendi yorumunu düzenle (yeniden onaya düşer) */
+    write: (productId: string, input: WriteReviewInput) =>
+      apiFetch<ProductReviews['myReview']>(`/products/${encodeURIComponent(productId)}/reviews`, { method: 'POST', json: input }),
   },
 
   contact: {
@@ -109,6 +125,15 @@ export const api = {
     markMessage: (id: string, read: boolean) =>
       apiFetch<ContactMessage>(`/admin/messages/${id}/read`, { method: 'POST', json: { read } }),
     deleteMessage: (id: string) => apiFetch<void>(`/admin/messages/${id}`, { method: 'DELETE' }),
+
+    /** Ürün yorumları (onay) */
+    reviews: (query: { durum?: 'bekleyen' | 'onayli'; page?: number } = {}, opts?: Opts) =>
+      apiFetch<AdminReviewPage>(`/admin/reviews${toQueryString({ durum: query.durum, page: query.page })}`, {
+        cache: 'no-store',
+        ...opts,
+      }),
+    approveReview: (id: string) => apiFetch<void>(`/admin/reviews/${id}/approve`, { method: 'POST' }),
+    deleteReview: (id: string) => apiFetch<void>(`/admin/reviews/${id}`, { method: 'DELETE' }),
 
     /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } */
     uploadImage: (file: File) => {

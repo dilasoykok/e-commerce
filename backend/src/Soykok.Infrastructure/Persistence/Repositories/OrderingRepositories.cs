@@ -31,6 +31,11 @@ internal sealed class OrderRepository(AppDbContext db) : IOrderRepository
         return rows.Select(r => (r.Number, r.PaymentToken)).ToList();
     }
 
+    public Task<bool> HasPurchasedAsync(Guid customerId, string productId, CancellationToken ct) =>
+        db.Orders.AnyAsync(o => o.CustomerId == customerId
+            && o.Status != OrderStatus.AwaitingPayment && o.Status != OrderStatus.Cancelled
+            && o.Items.Any(i => i.ProductId == productId), ct);
+
     public Task<Order?> GetForUpdateAsync(string number, CancellationToken ct) =>
         db.Orders
             .Include(o => o.Items)

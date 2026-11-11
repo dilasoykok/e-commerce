@@ -6,6 +6,7 @@ import { ArrowRight, ChevronRight, Package, SwatchBook, Truck } from 'lucide-rea
 import Gallery from '@/components/product-detail/Gallery';
 import PurchasePanel from '@/components/product-detail/PurchasePanel';
 import ProductTabs from '@/components/product-detail/ProductTabs';
+import ProductReviews from '@/components/product-detail/ProductReviews';
 import ProductCard from '@/components/product/ProductCard';
 import { getCategories, getProduct, getProducts } from '@/lib/catalog';
 import { formatTL } from '@/lib/format';
@@ -222,19 +223,7 @@ export default async function ProductPage({ params }: Props) {
           {
             id: 'yorum',
             label: `Değerlendirmeler (${product.reviews})`,
-            content: (
-              product.reviews === 0 ? (
-                <p className="text-sm text-gray-500">Bu ürün için henüz değerlendirme yok.</p>
-              ) : (
-              <div className="max-w-sm rounded-lg border border-gray-200 p-5 text-center">
-                <p className="text-5xl font-bold">{product.rating.toLocaleString('tr-TR', { minimumFractionDigits: 1 })}</p>
-                <Stars rating={product.rating} className="mt-2 text-2xl" />
-                <p className="mt-1 text-xs text-gray-500">{product.reviews} değerlendirme</p>
-                {/* TODO: backend'e değerlendirme uç noktaları (GET/POST /api/products/{id}/reviews) eklenince liste ve form */}
-                <p className="mt-4 text-xs text-gray-500">Yazılı yorumlar ve değerlendirme formu yakında burada olacak.</p>
-              </div>
-              )
-            ),
+            content: <ProductReviews productId={product.id} />,
           },
         ]}
       />

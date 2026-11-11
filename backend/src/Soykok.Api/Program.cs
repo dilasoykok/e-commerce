@@ -56,6 +56,7 @@ api.MapAdminCategoryEndpoints();
 api.MapAdminUploadEndpoints();
 api.MapPaymentEndpoints();
 api.MapContactEndpoints();
+api.MapReviewEndpoints();
 
 // Veritabanı migration'ları ayrı "migrator" servisinde uygulanır (bkz. Soykok.Migrator)
 app.Run();
