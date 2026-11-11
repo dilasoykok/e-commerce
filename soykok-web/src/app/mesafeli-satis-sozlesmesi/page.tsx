@@ -83,7 +83,6 @@ export default function Page() {
             <p>
               Alıcı, siparişi onaylamadan önce Ön Bilgilendirme Formunu ve bu sözleşmeyi okuyup kabul ettiğini beyan eder.
               Sözleşme, siparişin onaylanmasıyla kurulur ve sipariş bilgileriyle birlikte Alıcının e-posta adresine gönderilir.
-              [Sipariş e-postası gönderimi henüz yapılmadı.]
             </p>
           ),
         },

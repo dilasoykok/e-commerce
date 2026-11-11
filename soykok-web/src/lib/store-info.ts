@@ -1,6 +1,7 @@
 /**
- * Mağaza bilgileri — tek yerde. TODO: [köşeli parantezli] alanları gerçek bilgilerle güncelleyin.
- * (Ana sayfadaki mağaza bölümü ve footer'daki adres/saatler de buradan beslenebilir.)
+ * Mağaza bilgileri — tek yerde (footer, ana sayfadaki mağaza bölümü, iletişim, mağazalarımız).
+ * Adres, telefon ve saatler Google işletme kaydından alındı (Kasım 2026).
+ * TODO: [köşeli parantezli] alanları (e-posta) gerçek bilgilerle güncelleyin.
  */
 
 /** Çalışma saatleri: 0 = Pazar, 1 = Pazartesi … 6 = Cumartesi. Kapalı gün: null */
@@ -9,27 +10,47 @@ export type WeeklyHours = Record<number, [open: string, close: string] | null>;
 export const STORE = {
   name: 'Safranbolu',
   city: 'Karabük',
-  addressLines: ['[Mahalle, Cadde/Sokak, No]', '[Posta kodu] Safranbolu / Karabük'],
-  phone: '[0 370 000 00 00]',
-  phoneHref: 'tel:+900000000000',
+  addressLines: ['Atatürk Mah., Karabük Cad. No:41', '78600 Safranbolu / Karabük'],
+  phone: '0370 725 16 40',
+  phoneHref: 'tel:+903707251640',
   email: '[info@alanadiniz.com]',
   emailHref: 'mailto:info@ornek.com',
-  whatsappHref: 'https://wa.me/900000000000',
-  directionsHref: 'https://www.google.com/maps/dir/?api=1&destination=Safranbolu%2C+Karab%C3%BCk',
-  mapEmbedSrc: 'https://www.google.com/maps?q=Safranbolu,+Karab%C3%BCk&z=14&output=embed',
+  /** Sabit hat WhatsApp kullanmıyor; cep numarası eklenirse ör. 'https://wa.me/905XXXXXXXXX' */
+  whatsappHref: null as string | null,
+  directionsHref:
+    'https://www.google.com/maps/dir/?api=1&destination=Soyk%C3%B6k+Ticaret+Safranbolu&destination_place_id=ChIJFTwMxtOqnEARPgeCprU4zpg',
+  mapEmbedSrc: 'https://www.google.com/maps?q=41.2499159,32.6849717&z=17&output=embed',
   hours: {
-    1: ['09:00', '19:00'],
-    2: ['09:00', '19:00'],
-    3: ['09:00', '19:00'],
-    4: ['09:00', '19:00'],
-    5: ['09:00', '19:00'],
-    6: ['09:00', '18:00'],
-    0: null,
+    1: ['08:00', '20:00'],
+    2: ['08:00', '20:00'],
+    3: ['08:00', '20:00'],
+    4: ['08:00', '20:00'],
+    5: ['08:00', '20:00'],
+    6: ['08:00', '20:00'],
+    0: ['11:00', '16:00'],
   } satisfies WeeklyHours as WeeklyHours,
 };
 
 export const DAY_NAMES = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 export const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0]; // Pazartesi'den başla
+
+/** Saatleri gruplar: ["Pazartesi – Cumartesi: 08:00 – 20:00", "Pazar: 11:00 – 16:00"] */
+export function hoursSummary(hours: WeeklyHours = STORE.hours): string[] {
+  const label = (d: number) => {
+    const h = hours[d];
+    return h ? `${h[0]} – ${h[1]}` : 'Kapalı';
+  };
+  const lines: string[] = [];
+  let start = 0;
+  for (let i = 1; i <= DISPLAY_ORDER.length; i++) {
+    if (i < DISPLAY_ORDER.length && label(DISPLAY_ORDER[i]) === label(DISPLAY_ORDER[start])) continue;
+    const from = DAY_NAMES[DISPLAY_ORDER[start]];
+    const to = DAY_NAMES[DISPLAY_ORDER[i - 1]];
+    lines.push(`${from === to ? from : `${from} – ${to}`}: ${label(DISPLAY_ORDER[start])}`);
+    start = i;
+  }
+  return lines;
+}
 
 /** İstanbul saatine göre { day: 0-6, minutes: günün dakikası } — ziyaretçi yurt dışında olsa da doğru */
 export function nowInIstanbul(date = new Date()) {

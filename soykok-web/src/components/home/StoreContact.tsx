@@ -1,9 +1,5 @@
 import { Clock, MapPin, Phone } from 'lucide-react';
-
-const WHATSAPP_URL =
-  'https://wa.me/90XXXXXXXXXX?text=Merhaba,%20kampanyalar%20hakkında%20bilgi%20almak%20istiyorum.';
-const DIRECTIONS_URL = 'https://www.google.com/maps/dir/?api=1&destination=Safranbolu+Karabük';
-const MAP_EMBED_URL = 'https://www.google.com/maps?q=Safranbolu,Karabük&output=embed';
+import { STORE, hoursSummary } from '@/lib/store-info';
 
 const INFO = [
   {
@@ -11,9 +7,9 @@ const INFO = [
     title: 'Adres',
     body: (
       <p className="mt-1 text-sm text-stone-600">
-        [Mahalle, Cadde, No]
+        {STORE.addressLines[0]}
         <br />
-        Safranbolu / Karabük
+        {STORE.addressLines[1]}
       </p>
     ),
   },
@@ -21,8 +17,8 @@ const INFO = [
     icon: Phone,
     title: 'Telefon',
     body: (
-      <a href="tel:+90XXXXXXXXXX" className="mt-1 block text-sm text-stone-600 hover:text-amber-700">
-        0 (XXX) XXX XX XX
+      <a href={STORE.phoneHref} className="mt-1 block text-sm text-stone-600 hover:text-amber-700">
+        {STORE.phone}
       </a>
     ),
   },
@@ -31,9 +27,11 @@ const INFO = [
     title: 'Çalışma Saatleri',
     body: (
       <p className="mt-1 text-sm text-stone-600">
-        Pazartesi – Cumartesi: 08:30 – 19:00
-        <br />
-        Pazar: Kapalı
+        {hoursSummary().map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
       </p>
     ),
   },
@@ -73,15 +71,14 @@ export default function StoreContact() {
 
             <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener"
+                href={STORE.whatsappHref ?? STORE.phoneHref}
+                {...(STORE.whatsappHref ? { target: '_blank', rel: 'noopener' } : {})}
                 className="flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700"
               >
-                WhatsApp&apos;tan Yaz
+                {STORE.whatsappHref ? <>WhatsApp&apos;tan Yaz</> : 'Hemen Ara'}
               </a>
               <a
-                href={DIRECTIONS_URL}
+                href={STORE.directionsHref}
                 target="_blank"
                 rel="noopener"
                 className="flex items-center justify-center gap-2 rounded-xl bg-amber-700 py-3 font-semibold text-white transition hover:bg-amber-800"
@@ -93,7 +90,7 @@ export default function StoreContact() {
 
           <div className="min-h-[350px] overflow-hidden rounded-2xl shadow-sm">
             <iframe
-              src={MAP_EMBED_URL}
+              src={STORE.mapEmbedSrc}
               className="h-full min-h-[350px] w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

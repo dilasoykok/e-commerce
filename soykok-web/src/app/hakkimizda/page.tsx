@@ -94,8 +94,8 @@ export default function AboutPage() {
             </h2>
             <div className="mt-5 space-y-4 text-sm leading-relaxed text-gray-600">
               <p>
-                [Şirketin nasıl kurulduğunu anlatan 2–3 cümle. Örneğin: kurucunun kim olduğu, ilk mağazanın nerede açıldığı ve
-                hangi ihtiyaçtan doğduğu.]
+                Soykök Ticaret, Harun Soykök&apos;ün yönetiminde Safranbolu&apos;da, Karabük Caddesi üzerindeki mağazasında
+                hizmet veriyor. [Kuruluş hikâyesini anlatan 1–2 cümle: hangi yıl, hangi ihtiyaçtan doğduğu.]
               </p>
               <p>
                 [Bugün gelinen noktayı anlatan 2–3 cümle. Örneğin: kaç şehirde hizmet verildiği, hangi ürün gruplarına

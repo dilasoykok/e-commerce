@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, ChevronDown, ChevronRight, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import ContactForm from '@/components/contact/ContactForm';
-import { STORE } from '@/lib/store-info';
+import { STORE, hoursSummary } from '@/lib/store-info';
 
 export const metadata: Metadata = {
   title: 'İletişim',
@@ -44,10 +44,10 @@ export default async function ContactPage({ searchParams }: Props) {
       hover: 'hover:border-brand-900',
       label: 'Telefon',
       value: STORE.phone,
-      hint: 'Hafta içi 09:00 – 19:00',
+      hint: hoursSummary()[0],
     },
     {
-      href: STORE.whatsappHref,
+      href: STORE.whatsappHref ?? '',
       external: true,
       icon: MessageCircle,
       iconClass: 'bg-green-600 text-white',
@@ -65,7 +65,7 @@ export default async function ContactPage({ searchParams }: Props) {
       value: STORE.email,
       hint: '1 iş günü içinde yanıt',
     },
-  ];
+  ].filter((c) => c.href); // WhatsApp numarası yoksa kart gösterilmez
 
   return (
     <>

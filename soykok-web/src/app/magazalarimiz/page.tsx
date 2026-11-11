@@ -110,14 +110,16 @@ export default function StoresPage() {
               >
                 <Phone className="size-4" strokeWidth={SW} aria-hidden /> Hemen Ara
               </a>
-              <a
-                href={STORE.whatsappHref}
-                target="_blank"
-                rel="noopener"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-green-600 hover:text-green-700 sm:col-span-2"
-              >
-                <MessageCircle className="size-4" strokeWidth={SW} aria-hidden /> WhatsApp&apos;tan Yazın
-              </a>
+              {STORE.whatsappHref && (
+                <a
+                  href={STORE.whatsappHref}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-green-600 hover:text-green-700 sm:col-span-2"
+                >
+                  <MessageCircle className="size-4" strokeWidth={SW} aria-hidden /> WhatsApp&apos;tan Yazın
+                </a>
+              )}
             </div>
           </article>
 

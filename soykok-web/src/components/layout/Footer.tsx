@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Clock, Lock, Mail, MapPin, Phone } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { getSiteNav } from '@/lib/catalog';
+import { STORE, hoursSummary } from '@/lib/store-info';
 
 const SW = 1.75;
 
@@ -64,23 +65,33 @@ export default async function Footer() {
           <ul className="mt-5 space-y-2.5 text-[13px]">
             <li className="flex gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-wood-400" strokeWidth={SW} aria-hidden />
-              <span>[Mağaza adresi]</span>
+              <span>
+                {STORE.addressLines[0]}
+                <br />
+                {STORE.addressLines[1]}
+              </span>
             </li>
             <li className="flex gap-3">
               <Phone className="mt-0.5 size-4 shrink-0 text-wood-400" strokeWidth={SW} aria-hidden />
-              <a href="tel:+900000000000" className="hover:text-white">
-                [Telefon]
+              <a href={STORE.phoneHref} className="hover:text-white">
+                {STORE.phone}
               </a>
             </li>
             <li className="flex gap-3">
               <Mail className="mt-0.5 size-4 shrink-0 text-wood-400" strokeWidth={SW} aria-hidden />
-              <a href="mailto:info@ornek.com" className="hover:text-white">
-                [E-posta]
+              <a href={STORE.emailHref} className="hover:text-white">
+                {STORE.email}
               </a>
             </li>
             <li className="flex gap-3">
               <Clock className="mt-0.5 size-4 shrink-0 text-wood-400" strokeWidth={SW} aria-hidden />
-              <span>Hafta içi 09:00 – 18:00</span>
+              <span>
+                {hoursSummary().map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </span>
             </li>
           </ul>
         </div>

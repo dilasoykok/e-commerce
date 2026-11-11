@@ -3,10 +3,12 @@ import { STORE } from './store-info';
 /**
  * Satıcı (şirket) bilgileri — sözleşmelerde, KVKK metninde ve footer'da kullanılır.
  * TODO: [köşeli parantezli] alanları gerçek bilgilerle doldurun. Mesafeli satışta
- * bu bilgilerin eksiksiz ve doğru olması yasal zorunluluktur.
+ * bu bilgilerin eksiksiz ve doğru olması yasal zorunluluktur. Unvan, vergi levhasındaki
+ * haliyle yazılmalı (şahıs firmasında genellikle "Ad Soyad – İşletme adı").
  */
 export const COMPANY = {
-  title: '[Şirket unvanı — ör. Soykök Ticaret Ltd. Şti.]',
+  title: 'Harun Soykök – Soykök Ticaret',
+  owner: 'Harun Soykök',
   brand: 'Soykök Ticaret',
   address: STORE.addressLines.join(', '),
   phone: STORE.phone,
