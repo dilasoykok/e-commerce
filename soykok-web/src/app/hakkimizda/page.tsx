@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Award, ChevronRight, CircleCheck, Eye, Handshake, Leaf, MapPin, Target, Users } from 'lucide-react';
-import CountUp from '@/components/ui/CountUp';
 import { BRANDS } from '@/lib/brands';
 
 export const metadata: Metadata = {
@@ -12,26 +11,11 @@ export const metadata: Metadata = {
 
 const SW = 1.75;
 
-// TODO: [köşeli parantezli] alanları ve sayıları gerçek bilgilerle güncelleyin
-const STATS = [
-  { to: 20, suffix: '+', label: 'Yıllık tecrübe' },
-  { to: 12450, suffix: '+', label: 'Mutlu müşteri' },
-  { to: 1500, suffix: '+', label: 'Ürün çeşidi' },
-  { to: 81, suffix: '', label: 'İle teslimat' },
-];
-
 const VALUES = [
   { icon: Award, title: 'Kalite', text: 'Yalnızca güvendiğimiz, belgeli ve garantili ürünleri satışa sunarız.' },
   { icon: Handshake, title: 'Güven', text: 'Şeffaf fiyat, açık iletişim ve verdiğimiz sözün arkasında durmak.' },
   { icon: Users, title: 'Uzmanlık', text: 'Ürün seçiminden uygulamaya kadar her adımda deneyimli ekibimizle yanınızdayız.' },
   { icon: Leaf, title: 'Sorumluluk', text: 'Çevreye duyarlı üretim yapan markaları ve sürdürülebilir ürünleri önceliklendiririz.' },
-];
-
-const TIMELINE = [
-  { year: '[Yıl]', title: 'İlk mağazamız açıldı', text: '[Kısa açıklama]' },
-  { year: '[Yıl]', title: 'Ürün yelpazemizi genişlettik', text: '[Kısa açıklama]' },
-  { year: '[Yıl]', title: 'Proje ve toplu satış birimi kuruldu', text: '[Kısa açıklama]' },
-  { year: '[Yıl]', title: 'Online mağazamız yayında', text: "Artık Türkiye'nin her yerinden sipariş verebilirsiniz." },
 ];
 
 /** Hakkımızda (eski hakkimizda.html) */
@@ -65,8 +49,8 @@ export default function AboutPage() {
             güvenilir bir adres.
           </h1>
           <p className="mt-4 max-w-xl text-sm text-white/85 sm:text-base">
-            [Kuruluş yılı]&apos;den bu yana Safranbolu&apos;da yapı malzemeleri, boya, hırdavat ve tesisatta doğru ürünü, doğru
-            fiyatla ve uzman desteğiyle sunuyoruz.
+            Safranbolu&apos;da yapı malzemeleri, boya, hırdavat ve tesisatta doğru ürünü, doğru fiyatla ve uzman desteğiyle
+            sunuyoruz.
           </p>
         </div>
       </section>
@@ -81,10 +65,6 @@ export default function AboutPage() {
             <div className="absolute -right-2 -bottom-6 hidden aspect-[4/3] w-2/5 overflow-hidden rounded-lg border-4 border-white shadow-xl sm:block lg:-right-6">
               <Image src="/images/categories/boya.jpg" alt="Boya ürünleri" fill sizes="20vw" className="object-cover" />
             </div>
-            <div className="absolute -top-4 -left-2 rounded-lg bg-wood-500 px-5 py-4 text-white shadow-lg lg:-left-6">
-              <p className="text-3xl leading-none font-bold">[XX]+</p>
-              <p className="mt-1 text-[11px] font-medium">yıllık tecrübe</p>
-            </div>
           </div>
 
           <div>
@@ -95,11 +75,12 @@ export default function AboutPage() {
             <div className="mt-5 space-y-4 text-sm leading-relaxed text-gray-600">
               <p>
                 Soykök Ticaret, Harun Soykök&apos;ün yönetiminde Safranbolu&apos;da, Karabük Caddesi üzerindeki mağazasında
-                hizmet veriyor. [Kuruluş hikâyesini anlatan 1–2 cümle: hangi yıl, hangi ihtiyaçtan doğduğu.]
+                hizmet veriyor. Eski çarşıya inen yol üzerindeki mağazamızda boya, hırdavat, tesisat ve inşaat malzemelerini
+                bir arada bulabilirsiniz.
               </p>
               <p>
-                [Bugün gelinen noktayı anlatan 2–3 cümle. Örneğin: kaç şehirde hizmet verildiği, hangi ürün gruplarına
-                genişlendiği, online satışa ne zaman başlandığı.]
+                Artık online mağazamızla Türkiye&apos;nin her yerine sipariş alıyoruz; dilerseniz siparişinizi mağazamızdan da
+                teslim alabilirsiniz.
               </p>
               <p>
                 Amacımız değişmedi: her müşterimize, evi ya da projesi için doğru malzemeyi seçerken güvenle danışabileceği bir
@@ -116,22 +97,6 @@ export default function AboutPage() {
               )}
             </ul>
           </div>
-        </div>
-      </section>
-
-      {/* Sayılarla Soykök */}
-      <section className="bg-gray-50 py-12 lg:py-16" aria-label="Sayılarla Soykök">
-        <div className="container-site">
-          <ul className="grid grid-cols-2 gap-6 text-center lg:grid-cols-4 lg:divide-x lg:divide-gray-200">
-            {STATS.map((s) => (
-              <li key={s.label}>
-                <p className="text-3xl font-bold text-brand-900 sm:text-4xl">
-                  <CountUp to={s.to} suffix={s.suffix} />
-                </p>
-                <p className="mt-1 text-xs text-gray-500">{s.label}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -183,37 +148,6 @@ export default function AboutPage() {
             ))}
           </ul>
         </div>
-      </section>
-
-      {/* Yolculuğumuz */}
-      <section className="container-site py-14 lg:py-20" aria-labelledby="timelineTitle">
-        <div className="mx-auto max-w-xl text-center">
-          <p className="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Yolculuğumuz</p>
-          <h2 id="timelineTitle" className="mt-2 text-2xl font-bold sm:text-3xl">
-            Yıllar içinde Soykök
-          </h2>
-        </div>
-        <ol className="relative mx-auto mt-10 max-w-3xl border-l-2 border-gray-200 pl-8 md:border-l-0 md:pl-0">
-          <span className="absolute inset-y-0 left-1/2 hidden w-0.5 -translate-x-1/2 bg-gray-200 md:block" aria-hidden />
-          {TIMELINE.map((t, i) => {
-            const last = i === TIMELINE.length - 1;
-            return (
-              <li key={t.title} className={`relative md:grid md:grid-cols-2 md:gap-12 ${last ? '' : 'mb-10'}`}>
-                <span
-                  className={`absolute top-1 -left-[41px] size-4 rounded-full border-4 border-white md:left-1/2 md:-translate-x-1/2 ${
-                    last ? 'bg-brand-900 ring-2 ring-brand-900' : 'bg-wood-500 ring-2 ring-wood-500'
-                  }`}
-                  aria-hidden
-                />
-                <div className={i % 2 === 0 ? 'md:text-right' : 'md:col-start-2'}>
-                  <p className="text-sm font-bold text-wood-600">{t.year}</p>
-                  <h3 className="mt-1 font-semibold">{t.title}</h3>
-                  <p className="mt-1 text-xs leading-relaxed text-gray-600">{t.text}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
       </section>
 
       {/* Markalar */}

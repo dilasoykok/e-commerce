@@ -14,7 +14,7 @@ import { useBodyScrollLock, useEscape } from '@/lib/hooks';
 
 const SW = 1.75;
 
-const MENU_LINKS = [MAIN_NAV[0], MAIN_NAV[1], { href: ORDERS_HREF, label: 'Sipariş Takibi' }, MAIN_NAV[2], MAIN_NAV[3]];
+const MENU_LINKS = [...MAIN_NAV, { href: ORDERS_HREF, label: 'Sipariş Takibi' }];
 
 /**
  * Mobil menü butonu + soldan açılan çekmece (eski mobile-menu.html + menu.js → initMobileDrawer).

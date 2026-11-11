@@ -26,7 +26,7 @@ const FAQ = [
   },
   {
     q: 'Uygulama (montaj) hizmeti veriyor musunuz?',
-    a: '[Montaj hizmeti verip vermediğinizi ve hangi bölgelerde verdiğinizi yazın.]',
+    a: 'Montaj ve uygulama talepleriniz için mağazamızı arayın; ürüne ve bölgenize göre bilgi verelim.',
   },
 ];
 

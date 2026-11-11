@@ -9,7 +9,7 @@ const QUESTIONS = [
   },
   {
     q: 'Teslimat ne kadar sürer?',
-    a: 'Stoktaki ürünler Safranbolu ve Karabük içinde genellikle [X] iş günü içinde teslim edilir. Şehir dışı gönderimlerde süre bölgeye göre değişir.',
+    a: 'Stoktaki ürünler sipariş onayından sonra genellikle 3–7 iş günü içinde kargoya verilir. Safranbolu ve Karabük içi teslimat için mağazamızı arayabilir ya da siparişinizi mağazadan teslim alabilirsiniz.',
   },
   {
     q: 'Ürünleri satın almadan önce görebilir miyim?',

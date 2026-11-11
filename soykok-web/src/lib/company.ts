@@ -21,7 +21,7 @@ export const COMPANY = {
 };
 
 /** Yasal metinlerin son güncellenme tarihi — metni değiştirince güncelleyin */
-export const LEGAL_UPDATED_AT = '[GG.AA.YYYY]';
+export const LEGAL_UPDATED_AT = '11.11.2026';
 
 export const LEGAL_PAGES = [
   { href: '/kvkk-aydinlatma-metni', label: 'KVKK Aydınlatma Metni' },

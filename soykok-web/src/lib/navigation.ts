@@ -10,8 +10,8 @@ export type NavLink = { href: string; label: string };
 export const MAIN_NAV: NavLink[] = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/urunler?sirala=populer', label: 'Çok Satanlar' },
-  { href: '#', label: 'Projeler' },
-  { href: '#', label: 'Blog' },
+  { href: '/urunler?indirim=1', label: 'Kampanyalar' },
+  { href: '/magazalarimiz', label: 'Mağazamız' },
 ];
 
 export const TOPBAR_NAV: NavLink[] = [

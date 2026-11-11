@@ -13,8 +13,7 @@ const FOOTER_NAV = [
     links: [
       { href: '/hakkimizda', label: 'Hakkımızda' },
       { href: '/magazalarimiz', label: 'Mağazalarımız' },
-      { href: '#', label: 'Projeler' },
-      { href: '#', label: 'Blog' },
+      { href: '/urunler?indirim=1', label: 'Kampanyalar' },
       { href: '/iletisim', label: 'İletişim' },
     ],
   },
