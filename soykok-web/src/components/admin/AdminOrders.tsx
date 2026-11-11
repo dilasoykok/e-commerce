@@ -79,7 +79,7 @@ export default function AdminOrders() {
 
       <label className="relative mt-3 block max-w-md">
         <span className="sr-only">Ara</span>
-        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400" strokeWidth={SW} aria-hidden />
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-500" strokeWidth={SW} aria-hidden />
         <input
           type="search"
           value={search}
@@ -94,7 +94,7 @@ export default function AdminOrders() {
           <p className="p-6 text-sm text-sale">{orders.error.message}</p>
         ) : orders.isPending ? (
           <div className="grid h-40 place-items-center">
-            <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+            <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
           </div>
         ) : orders.data.items.length === 0 ? (
           <p className="p-6 text-sm text-gray-500">Sipariş bulunamadı.</p>

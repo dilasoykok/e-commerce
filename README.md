@@ -184,6 +184,19 @@ kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan ekle
 girmez. Her sipariş "Ödeme Bekleniyor" durumunda açılır: havalede admin parayı görünce, kartta iyzico
 onaylayınca "Sipariş Alındı" olur.
 
+### Erişilebilirlik ve duyarlı tasarım (WCAG 2.2 AA)
+
+- **Akışkan yazı boyutu:** `html { font-size: clamp(100%, 0.875rem + 0.2vw, 112.5%) }`. Küçük ekranda 16px'in
+  altına inmez, geniş ekranda 18px'e kadar büyür. Tüm yazılar `rem`; tarayıcı yazı boyutu ayarı ve %200 yakınlaştırma çalışır.
+  Sitede 12px'ten küçük yazı yok. Kod yazarken `text-[11px]` gibi sabit piksel kullanmayın; `text-xs` ve üstünü kullanın.
+- **Yeniden akış:** 320px genişlikte (≈ %400 yakınlaştırma) hiçbir sayfada yatay kaydırma yok; çok dar ekranda kategori kartları tek sütun.
+- **Kontrast:** Metinler en az 4,5:1. `text-gray-400` metin rengi olarak kullanılmıyor (2,6:1); en açık metin `text-gray-500`.
+  İndirim rengi `#b42318`, beyaz yazılı butonlar `green-700` / `wood-600`.
+- **Klavye:** Her odaklanabilir öğede mavi odak çerçevesi (`:focus-visible`); sayfa başında "İçeriğe geç" linki.
+- **Hareket:** Ana slaytta Durdur/Oynat butonu; ürün slaytları kendiliğinden kaymaz; marka şeridi sabit;
+  "hareketi azalt" tercihinde animasyonlar kapalı.
+- **Dokunma alanı:** Slayt noktaları ve menü/footer linkleri en az 24×24px.
+
 ### Örnek katalog
 
 `backend/src/Soykok.Infrastructure/Persistence/Seed/` altındaki örnek katalog yapı malzemeleri mağazasına

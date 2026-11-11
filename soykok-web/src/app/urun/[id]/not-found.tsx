@@ -5,7 +5,7 @@ export default function ProductNotFound() {
   return (
     <div className="container-site py-10">
       <div className="flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-20 text-center">
-        <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+        <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-500">
           <SearchX className="size-7" strokeWidth={1.75} aria-hidden />
         </span>
         <h1 className="mt-4 text-lg font-semibold">Ürün bulunamadı</h1>

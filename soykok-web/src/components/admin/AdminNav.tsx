@@ -31,7 +31,7 @@ export default function AdminNav() {
           >
             <Icon className="size-4" strokeWidth={1.75} aria-hidden /> {label}
             {href === '/admin/mesajlar' && unread > 0 && (
-              <span className="rounded-full bg-sale px-1.5 text-[11px] leading-5 font-semibold text-white" aria-label={`${unread} okunmamış`}>
+              <span className="rounded-full bg-sale px-1.5 text-xs leading-5 font-semibold text-white" aria-label={`${unread} okunmamış`}>
                 {unread}
               </span>
             )}

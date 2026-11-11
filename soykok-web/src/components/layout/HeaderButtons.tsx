@@ -8,7 +8,7 @@ import { useFavorites } from '@/store/favorites';
 import { useUi } from '@/store/ui';
 
 const badgeClass =
-  'absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full bg-brand-900 text-[10px] font-semibold text-white';
+  'absolute -top-1.5 -right-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-900 px-1 text-xs font-semibold text-white';
 
 /** Header'daki "Sepetim": mini sepeti açar. Sepet sayfasındaysak normal link gibi davranır. */
 export function CartButton() {

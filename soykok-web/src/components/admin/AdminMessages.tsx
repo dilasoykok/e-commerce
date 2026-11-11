@@ -64,7 +64,7 @@ export default function AdminMessages() {
           >
             {t.label}
             {t.value && data && data.unread > 0 && (
-              <span className="ml-2 rounded-full bg-sale px-1.5 text-[11px] font-semibold text-white">{data.unread}</span>
+              <span className="ml-2 rounded-full bg-sale px-1.5 text-xs font-semibold text-white">{data.unread}</span>
             )}
           </button>
         ))}
@@ -75,7 +75,7 @@ export default function AdminMessages() {
           <p className="p-6 text-sm text-sale">{list.error.message}</p>
         ) : !data ? (
           <div className="grid h-40 place-items-center">
-            <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+            <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
           </div>
         ) : data.items.length === 0 ? (
           <p className="p-6 text-sm text-gray-500">{unreadOnly ? 'Okunmamış mesaj yok.' : 'Henüz mesaj yok.'}</p>
@@ -127,19 +127,19 @@ function MessageRow({ message: m, open, onToggle }: { message: ContactMessage; o
     <li className={m.isRead ? '' : 'bg-blue-50/40'}>
       <button type="button" onClick={onToggle} aria-expanded={open} className="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-gray-50">
         {m.isRead ? (
-          <MailOpen className="mt-0.5 size-4 shrink-0 text-gray-400" strokeWidth={SW} aria-label="Okundu" />
+          <MailOpen className="mt-0.5 size-4 shrink-0 text-gray-500" strokeWidth={SW} aria-label="Okundu" />
         ) : (
           <Mail className="mt-0.5 size-4 shrink-0 text-brand-900" strokeWidth={SW} aria-label="Okunmadı" />
         )}
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-baseline gap-x-3">
             <span className={`text-sm ${m.isRead ? '' : 'font-semibold'}`}>{m.name}</span>
-            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-600">{m.subjectLabel}</span>
-            {m.orderNumber && <span className="text-[11px] text-gray-500">{m.orderNumber}</span>}
+            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">{m.subjectLabel}</span>
+            {m.orderNumber && <span className="text-xs text-gray-500">{m.orderNumber}</span>}
           </span>
           {!open && <span className="mt-0.5 block truncate text-xs text-gray-500">{m.message}</span>}
         </span>
-        <span className="shrink-0 text-[11px] text-gray-400">{formatDateTime(m.createdAt)}</span>
+        <span className="shrink-0 text-xs text-gray-500">{formatDateTime(m.createdAt)}</span>
       </button>
 
       {open && (

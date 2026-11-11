@@ -41,7 +41,7 @@ export default function OrderSuccess({ paidNumber }: { paidNumber?: string | nul
   if (order === undefined) {
     return (
       <div className="grid h-60 place-items-center">
-        <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+        <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
       </div>
     );
   }
@@ -165,7 +165,7 @@ export default function OrderSuccess({ paidNumber }: { paidNumber?: string | nul
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold">{item.productName}</p>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-xs text-gray-500">
                   {item.quantity} {item.unit ?? 'm²'} × {formatTL(item.unitPrice)}
                 </p>
               </div>

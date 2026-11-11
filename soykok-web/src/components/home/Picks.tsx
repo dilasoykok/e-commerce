@@ -22,7 +22,7 @@ export default async function Picks() {
         <h2 id="picksTitle" className="text-lg font-bold">
           Sizin İçin Seçtiklerimiz
         </h2>
-        <Link href="/urunler" className="flex items-center gap-1.5 text-xs font-medium hover:text-wood-600">
+        <Link href="/urunler" className="flex min-h-6 items-center gap-1.5 text-xs font-medium hover:text-wood-600">
           Tümünü Gör <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
         </Link>
       </div>
@@ -30,7 +30,7 @@ export default async function Picks() {
       <div className="grid gap-4 lg:grid-cols-[238px_1fr]">
         {/* Sol sütun: Banner + Markalar */}
         <aside className="flex flex-col gap-5">
-          <Link href="/iletisim" className="group relative block h-[142px] overflow-hidden rounded-md bg-brand-800">
+          <Link href="/iletisim" className="group relative flex min-h-[142px] flex-col justify-end overflow-hidden rounded-md bg-brand-800">
             <Image
               src="/images/banners/toplu-alim-yapi.jpg"
               alt=""
@@ -39,10 +39,10 @@ export default async function Picks() {
               className="object-cover transition duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-linear-to-t from-brand-950/90 via-brand-950/50 to-brand-950/10" />
-            <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-              <p className="text-[11px] text-white/85">Profesyonellere Özel</p>
+            <div className="relative p-4 text-white">
+              <p className="text-xs text-white/85">Profesyonellere Özel</p>
               <h3 className="text-base font-bold">Toplu Alım Avantajları</h3>
-              <span className="mt-2.5 inline-flex h-7 items-center gap-2 rounded border border-white/70 px-3 text-[11px] font-medium transition group-hover:bg-white group-hover:text-brand-900">
+              <span className="mt-2.5 inline-flex h-7 items-center gap-2 rounded border border-white/70 px-3 text-xs font-medium transition group-hover:bg-white group-hover:text-brand-900">
                 Teklif Al <ArrowRight className="size-3.5" strokeWidth={1.75} aria-hidden />
               </span>
             </div>
@@ -55,7 +55,7 @@ export default async function Picks() {
                 <li key={b.name}>
                   <Link
                     href={brandHref(b.name)}
-                    className="grid h-9 place-items-center rounded border border-gray-200 bg-white px-1.5 text-center text-[11px] font-semibold text-brand-800 transition hover:border-brand-900"
+                    className="grid h-9 place-items-center rounded border border-gray-200 bg-white px-1.5 text-center text-xs font-semibold text-brand-800 transition hover:border-brand-900"
                   >
                     {b.name}
                   </Link>

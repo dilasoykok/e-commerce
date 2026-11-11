@@ -105,14 +105,14 @@ export function MainImageField({ value, onChange, error }: { value: string; onCh
               aria-invalid={Boolean(error)}
             />
           ) : (
-            <button type="button" onClick={() => setManual(true)} className="block text-[11px] text-gray-500 underline">
+            <button type="button" onClick={() => setManual(true)} className="block text-xs text-gray-500 underline">
               Hazır dosya adı yaz (public/images/products)
             </button>
           )}
         </div>
       </div>
       {(up.error || error) && <span className="form-error block">{up.error ?? error}</span>}
-      <span className="mt-1 block text-[11px] text-gray-500">JPG, PNG veya WEBP; en fazla {MAX_MB} MB. Kare ya da yatay görsel önerilir.</span>
+      <span className="mt-1 block text-xs text-gray-500">JPG, PNG veya WEBP; en fazla {MAX_MB} MB. Kare ya da yatay görsel önerilir.</span>
     </div>
   );
 }
@@ -174,7 +174,7 @@ export function GalleryField({ values, onChange }: { values: string[]; onChange:
         />
       </div>
       {up.error && <span className="form-error block">{up.error}</span>}
-      <span className="mt-1 block text-[11px] text-gray-500">Ürün sayfasında ana görselden sonra bu sırayla gösterilir.</span>
+      <span className="mt-1 block text-xs text-gray-500">Ürün sayfasında ana görselden sonra bu sırayla gösterilir.</span>
     </div>
   );
 }

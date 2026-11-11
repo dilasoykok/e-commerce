@@ -38,7 +38,7 @@ export default function OrderCard({ order, open = false }: { order: OrderSummary
             order.status === 'cancelled'
               ? 'bg-red-100 text-sale'
               : done
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-green-100 text-green-800'
                 : 'bg-brand-900/10 text-brand-900'
           }`}
         >
@@ -164,7 +164,7 @@ function Timeline({ order }: { order: OrderSummary | OrderDetail }) {
               <span className={`h-0.5 flex-1 ${i === 0 ? 'invisible' : reached ? 'bg-green-600' : 'bg-gray-200'}`} />
               <span
                 className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold ${
-                  reached ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-500'
+                  reached ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-700'
                 }`}
               >
                 {reached ? <Check className="size-4" strokeWidth={2.5} aria-hidden /> : i + 1}
@@ -173,7 +173,7 @@ function Timeline({ order }: { order: OrderSummary | OrderDetail }) {
                 className={`h-0.5 flex-1 ${i === STAGES.length - 1 ? 'invisible' : i < current ? 'bg-green-600' : 'bg-gray-200'}`}
               />
             </div>
-            <span className={`mt-1.5 text-[11px] leading-tight ${reached ? 'font-semibold text-brand-900' : 'text-gray-500'}`}>
+            <span className={`mt-1.5 text-xs leading-tight ${reached ? 'font-semibold text-brand-900' : 'text-gray-500'}`}>
               {label}
             </span>
           </li>
@@ -193,7 +193,7 @@ function ItemRow({ item }: { item: OrderItem }) {
         <Link href={productHref(item.productId)} className="text-xs font-semibold hover:text-wood-600">
           {item.productName}
         </Link>
-        <p className="text-[11px] text-gray-500">
+        <p className="text-xs text-gray-500">
           {item.brand} · {item.quantity} {item.unit ?? 'm²'} × {formatTL(item.unitPrice)}
         </p>
       </div>

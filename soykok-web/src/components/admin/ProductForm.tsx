@@ -330,7 +330,7 @@ function Field({ label, hint, error, children }: { label: string; hint?: string;
     <label className="block">
       <span className="form-label">{label}</span>
       {children}
-      {error ? <span className="form-error block">{error}</span> : hint && <span className="mt-1 block text-[11px] text-gray-500">{hint}</span>}
+      {error ? <span className="form-error block">{error}</span> : hint && <span className="mt-1 block text-xs text-gray-500">{hint}</span>}
     </label>
   );
 }

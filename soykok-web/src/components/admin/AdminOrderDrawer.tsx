@@ -46,7 +46,7 @@ export default function AdminOrderDrawer({ number, onClose }: { number: string; 
 
         {detail.isPending ? (
           <div className="grid flex-1 place-items-center">
-            <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+            <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
           </div>
         ) : detail.isError ? (
           <p className="p-5 text-sm text-sale">{detail.error.message}</p>

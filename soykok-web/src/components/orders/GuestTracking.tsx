@@ -72,7 +72,7 @@ export default function GuestTracking({ initialNumber = '' }: { initialNumber?: 
             {error ?? track.error?.message}
           </p>
         )}
-        <p className="text-[11px] text-gray-500 sm:col-span-3">
+        <p className="text-xs text-gray-500 sm:col-span-3">
           Sipariş numaranız, sipariş onay sayfasında yazar (ör. SYK-261110-1234).
         </p>
       </form>

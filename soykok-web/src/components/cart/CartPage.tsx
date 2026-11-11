@@ -26,7 +26,7 @@ export default function CartPage() {
   if (!hydrated) {
     return (
       <div className="mt-6 grid h-48 place-items-center">
-        <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Sepet yükleniyor" />
+        <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Sepet yükleniyor" />
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default function CartPage() {
       <>
         {notice && <Notice text={notice} onClose={dismiss} />}
         <div className="mt-6 flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-16 text-center">
-          <span className="grid size-20 place-items-center rounded-full bg-gray-100 text-gray-400">
+          <span className="grid size-20 place-items-center rounded-full bg-gray-100 text-gray-500">
             <ShoppingCart className="size-9" strokeWidth={SW} aria-hidden />
           </span>
           <p className="mt-5 text-lg font-semibold">Sepetiniz boş</p>
@@ -102,7 +102,7 @@ export default function CartPage() {
                   type="button"
                   onClick={() => remove(item.id)}
                   aria-label={`${item.name} ürününü sepetten çıkar`}
-                  className="col-start-3 row-start-1 grid size-8 place-items-center justify-self-end rounded text-gray-400 transition hover:bg-gray-100 hover:text-sale md:col-start-auto md:row-start-auto"
+                  className="col-start-3 row-start-1 grid size-8 place-items-center justify-self-end rounded text-gray-500 transition hover:bg-gray-100 hover:text-sale md:col-start-auto md:row-start-auto"
                 >
                   <Trash2 className="size-4" strokeWidth={SW} aria-hidden />
                 </button>
@@ -149,7 +149,7 @@ export default function CartPage() {
             </div>
             <div className="flex justify-between">
               <dt className="text-gray-600">Kargo</dt>
-              <dd className={`font-semibold ${summary.shipping === 0 ? 'text-green-700' : ''}`}>
+              <dd className={`font-semibold ${summary.shipping === 0 ? 'text-green-800' : ''}`}>
                 {summary.shipping === 0 ? 'Ücretsiz' : formatTL(summary.shipping)}
               </dd>
             </div>
@@ -158,7 +158,7 @@ export default function CartPage() {
               <dd className="font-bold">{formatTL(summary.total)}</dd>
             </div>
           </dl>
-          <p className="mt-1 text-right text-[11px] text-gray-500">KDV dahil</p>
+          <p className="mt-1 text-right text-xs text-gray-500">KDV dahil</p>
 
           <Link
             href="/odeme"
@@ -167,7 +167,7 @@ export default function CartPage() {
             Siparişi Tamamla <ArrowRight className="size-4" strokeWidth={SW} aria-hidden />
           </Link>
 
-          <ul className="mt-5 space-y-2 border-t border-gray-200 pt-4 text-[11px] text-gray-600">
+          <ul className="mt-5 space-y-2 border-t border-gray-200 pt-4 text-xs text-gray-600">
             <li className="flex items-center gap-2">
               <Lock className="size-4 text-brand-700" strokeWidth={SW} aria-hidden /> 256 Bit SSL ile güvenli ödeme
             </li>

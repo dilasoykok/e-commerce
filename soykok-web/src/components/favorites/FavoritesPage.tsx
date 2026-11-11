@@ -44,7 +44,7 @@ export default function FavoritesPage() {
   if (!hydrated || results.some((r) => r.isPending)) {
     return (
       <div className="grid h-48 place-items-center">
-        <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+        <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
       </div>
     );
   }
@@ -54,7 +54,7 @@ export default function FavoritesPage() {
   if (products.length === 0) {
     return (
       <div className="mt-6 flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-16 text-center">
-        <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+        <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-500">
           <Heart className="size-7" strokeWidth={1.75} aria-hidden />
         </span>
         <p className="mt-4 font-semibold">Henüz favori ürününüz yok</p>

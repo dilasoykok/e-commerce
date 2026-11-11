@@ -91,7 +91,7 @@ async function MemberView({
         </p>
       ) : orders.length === 0 ? (
         <div className="mt-6 flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-14 text-center">
-          <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+          <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-500">
             <Package className="size-7" strokeWidth={SW} aria-hidden />
           </span>
           <p className="mt-4 font-semibold">Henüz siparişiniz yok</p>

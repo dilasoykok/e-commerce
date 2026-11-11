@@ -75,7 +75,7 @@ export default function AdminProducts() {
       <div className="mt-5 flex flex-wrap gap-3">
         <label className="relative min-w-60 flex-1">
           <span className="sr-only">Ara</span>
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400" strokeWidth={SW} aria-hidden />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-500" strokeWidth={SW} aria-hidden />
           <input
             type="search"
             value={search}
@@ -115,7 +115,7 @@ export default function AdminProducts() {
           <p className="p-6 text-sm text-sale">{products.error.message}</p>
         ) : products.isPending ? (
           <div className="grid h-40 place-items-center">
-            <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+            <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
           </div>
         ) : products.data.items.length === 0 ? (
           <p className="p-6 text-sm text-gray-500">Ürün bulunamadı.</p>
@@ -211,20 +211,20 @@ function ProductRow({
             <p className="font-medium">{p.name}</p>
             <p className="text-xs text-gray-500">
               {p.id} · {p.brand}
-              {p.badge && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-[10px]">{p.badge}</span>}
+              {p.badge && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs">{p.badge}</span>}
             </p>
           </div>
         </div>
       </td>
       <td className="px-4 py-3 text-gray-600">{categoryName}</td>
       <td className="px-4 py-3 text-right whitespace-nowrap">
-        {p.oldPrice && <del className="mr-2 text-xs text-gray-400">{formatTL(p.oldPrice)}</del>}
+        {p.oldPrice && <del className="mr-2 text-xs text-gray-500">{formatTL(p.oldPrice)}</del>}
         <span className="font-semibold">{formatTL(p.price)}</span>
         <span className="text-xs text-gray-500">/{p.unit || 'm²'}</span>
       </td>
       <td className="px-4 py-3 text-right whitespace-nowrap">
         {p.stock == null ? (
-          <span className="text-xs text-gray-400" title="Stok takibi yok">—</span>
+          <span className="text-xs text-gray-500" title="Stok takibi yok">—</span>
         ) : p.stock === 0 ? (
           <span className="rounded bg-red-50 px-1.5 py-0.5 text-xs font-semibold text-sale">Tükendi</span>
         ) : (

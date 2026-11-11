@@ -73,7 +73,7 @@ export default function StoreContact() {
               <a
                 href={STORE.whatsappHref ?? STORE.phoneHref}
                 {...(STORE.whatsappHref ? { target: '_blank', rel: 'noopener' } : {})}
-                className="flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700"
+                className="flex items-center justify-center gap-2 rounded-xl bg-green-700 py-3 font-semibold text-white transition hover:bg-green-800"
               >
                 {STORE.whatsappHref ? <>WhatsApp&apos;tan Yaz</> : 'Hemen Ara'}
               </a>

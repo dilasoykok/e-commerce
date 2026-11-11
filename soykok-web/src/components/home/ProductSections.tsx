@@ -42,9 +42,8 @@ export async function NewProducts() {
       description="Mağazamıza en son eklenen ürünler"
       allHref="/urunler?sirala=yeni"
       mobileAllLabel="Tüm Yeni Ürünler"
-      autoplay={5000}
       badge={
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-0.5 text-xs font-semibold text-green-700">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-0.5 text-xs font-semibold text-green-800">
           <span className="size-1.5 rounded-full bg-green-600" /> Yeni Gelenler
         </span>
       }
@@ -67,7 +66,6 @@ export async function BestSellers() {
       description="Müşterilerimizin en çok tercih ettiği ürünler"
       allHref="/urunler?sirala=populer"
       mobileAllLabel="Tüm Çok Satanlar"
-      autoplay={4500}
       badge={
         <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-0.5 text-xs font-semibold text-amber-800">
           <Star className="size-3.5" strokeWidth={1.75} aria-hidden /> En Çok Tercih Edilenler

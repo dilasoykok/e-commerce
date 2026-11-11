@@ -121,7 +121,7 @@ export default async function ProductsPage({ searchParams }: Props) {
                 </>
               ) : (
                 <div className="flex flex-col items-center rounded-md border border-dashed border-gray-300 px-6 py-16 text-center">
-                  <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+                  <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-500">
                     <SearchX className="size-7" strokeWidth={1.75} aria-hidden />
                   </span>
                   <p className="mt-4 font-semibold">Aradığınız kriterlere uygun ürün bulunamadı</p>
@@ -173,7 +173,7 @@ function ActiveFilters({ state, label }: { state: ListState; label: (slug: strin
           className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white py-1 pr-2 pl-3 text-xs hover:border-brand-900"
         >
           {c.text}
-          <span aria-hidden className="text-gray-400">
+          <span aria-hidden className="text-gray-500">
             ✕
           </span>
           <span className="sr-only">filtresini kaldır</span>

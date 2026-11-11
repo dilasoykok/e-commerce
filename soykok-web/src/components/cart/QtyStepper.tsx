@@ -54,7 +54,7 @@ export default function QtyStepper({ item }: { item: CartItem }) {
           <Plus className="size-3.5" strokeWidth={1.75} aria-hidden />
         </button>
       </div>
-      <span className="ml-1.5 text-[10px] text-gray-500">{item.unit}</span>
+      <span className="ml-1.5 text-xs text-gray-500">{item.unit}</span>
     </div>
   );
 }

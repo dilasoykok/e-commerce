@@ -17,12 +17,12 @@ export default function CheckoutSteps({ current }: { current: number }) {
           <li key={s.label} className="flex items-center gap-2">
             {i > 0 && <span className={`h-px w-8 sm:w-16 ${i <= current ? 'bg-green-600' : 'bg-gray-300'}`} aria-hidden />}
             <span
-              className={`flex items-center gap-2 ${done ? 'text-green-700' : active ? 'text-brand-900' : 'text-gray-400'}`}
+              className={`flex items-center gap-2 ${done ? 'text-green-800' : active ? 'text-brand-900' : 'text-gray-500'}`}
               aria-current={active ? 'step' : undefined}
             >
               <span
                 className={`grid size-6 place-items-center rounded-full ${
-                  done ? 'bg-green-600 text-white' : active ? 'bg-brand-900 text-white' : 'border border-gray-300'
+                  done ? 'bg-green-700 text-white' : active ? 'bg-brand-900 text-white' : 'border border-gray-300'
                 }`}
                 aria-hidden
               >

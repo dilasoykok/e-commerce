@@ -25,7 +25,7 @@ export default function StoreHours({ hours }: { hours: WeeklyHours }) {
       <span
         aria-live="polite"
         className={`inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ${
-          !status ? 'invisible' : status.open ? 'bg-green-50 text-green-700' : 'bg-red-50 text-sale'
+          !status ? 'invisible' : status.open ? 'bg-green-50 text-green-800' : 'bg-red-50 text-sale'
         }`}
       >
         <span className="size-2 rounded-full bg-current" />
@@ -41,7 +41,7 @@ export default function StoreHours({ hours }: { hours: WeeklyHours }) {
               <tr key={d} className={isToday ? 'bg-wood-500/10 font-semibold' : ''}>
                 <td className={`rounded-l px-2 py-1.5 ${isToday ? 'text-brand-900' : 'text-gray-600'}`}>
                   {DAY_NAMES[d]}
-                  {isToday && <span className="ml-1 text-[10px] font-medium text-wood-600">(Bugün)</span>}
+                  {isToday && <span className="ml-1 text-xs font-medium text-wood-600">(Bugün)</span>}
                 </td>
                 <td className={`rounded-r px-2 py-1.5 text-right font-medium ${h ? '' : 'text-sale'}`}>
                   {h ? `${h[0]} – ${h[1]}` : 'Kapalı'}

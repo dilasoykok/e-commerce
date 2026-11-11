@@ -33,8 +33,8 @@ export default function Services() {
             <Icon className="size-7 shrink-0 text-brand-700" strokeWidth={1.75} aria-hidden />
             <div>
               <h3 className="text-xs font-semibold">{title}</h3>
-              <p className="mt-0.5 text-[11px] text-gray-500">{text}</p>
-              <span className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold group-hover:text-wood-600">
+              <p className="mt-0.5 text-xs text-gray-500">{text}</p>
+              <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold group-hover:text-wood-600">
                 {cta} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" strokeWidth={1.75} aria-hidden />
               </span>
             </div>
@@ -45,7 +45,7 @@ export default function Services() {
           <Mail className="size-7 shrink-0 text-brand-700" strokeWidth={1.75} aria-hidden />
           <div className="min-w-0 flex-1">
             <h3 className="text-xs font-semibold">E-Bültenimize Abone Olun</h3>
-            <p className="mt-0.5 text-[11px] text-gray-500">Kampanya ve yeniliklerden ilk siz haberdar olun.</p>
+            <p className="mt-0.5 text-xs text-gray-500">Kampanya ve yeniliklerden ilk siz haberdar olun.</p>
             <NewsletterForm />
           </div>
         </div>

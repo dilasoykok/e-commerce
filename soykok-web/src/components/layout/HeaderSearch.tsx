@@ -210,7 +210,7 @@ export function SearchForm({ q = '', kategori = '', options, suggestions }: Prop
           aria-autocomplete="list"
           aria-activedescendant={showList && active >= 0 ? optionId(active) : undefined}
           placeholder="Ürün, kategori veya marka arayın..."
-          className="min-w-0 flex-1 px-4 text-sm placeholder:text-gray-400 focus:outline-none"
+          className="min-w-0 flex-1 px-4 text-sm placeholder:text-gray-500 focus:outline-none"
         />
 
         <div className="relative hidden border-l border-gray-200 sm:block">
@@ -257,7 +257,7 @@ export function SearchForm({ q = '', kategori = '', options, suggestions }: Prop
                   <span className="min-w-0 flex-1 truncate">
                     <Highlight text={s.label} term={folded} />
                   </span>
-                  {s.hint && s.hint !== s.label && <span className="shrink-0 text-[11px] text-gray-400">{s.hint}</span>}
+                  {s.hint && s.hint !== s.label && <span className="shrink-0 text-xs text-gray-500">{s.hint}</span>}
                 </>,
               ),
             )}
@@ -292,7 +292,7 @@ export function SearchForm({ q = '', kategori = '', options, suggestions }: Prop
                     <span className="block truncate">
                       <Highlight text={p.name} term={folded} />
                     </span>
-                    <span className="block text-[11px] text-gray-500">{p.brand}</span>
+                    <span className="block text-xs text-gray-500">{p.brand}</span>
                   </span>
                   <span className="shrink-0 text-sm font-semibold">{formatTL(p.price)}</span>
                 </>,
@@ -322,7 +322,7 @@ export function SearchForm({ q = '', kategori = '', options, suggestions }: Prop
 
 function GroupTitle({ children }: { children: React.ReactNode }) {
   return (
-    <li role="presentation" className="px-4 pt-2 pb-1 text-[11px] font-semibold tracking-wide text-gray-400 uppercase">
+    <li role="presentation" className="px-4 pt-2 pb-1 text-xs font-semibold tracking-wide text-gray-500 uppercase">
       {children}
     </li>
   );

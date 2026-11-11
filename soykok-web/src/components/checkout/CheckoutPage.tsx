@@ -153,7 +153,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
   if (!hydrated || summary.items.length === 0) {
     return (
       <div className="grid h-60 place-items-center">
-        <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+        <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
       </div>
     );
   }
@@ -296,7 +296,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               </Field>
           </div>
 
-          <p className="mt-4 flex items-start gap-2 text-[11px] text-gray-500">
+          <p className="mt-4 flex items-start gap-2 text-xs text-gray-500">
             <Info className="mt-px size-3.5 shrink-0" strokeWidth={SW} aria-hidden />
             Faturanız e-posta adresinize gönderilir.
           </p>
@@ -316,7 +316,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               icon={<Truck className="size-4" strokeWidth={SW} aria-hidden />}
               title="Adrese Teslim"
               aside={
-                <span className={`text-xs font-semibold ${summary.shipping === 0 ? 'text-green-700' : ''}`}>
+                <span className={`text-xs font-semibold ${summary.shipping === 0 ? 'text-green-800' : ''}`}>
                   {summary.shipping === 0 ? 'Ücretsiz' : formatTL(summary.shipping)}
                 </span>
               }
@@ -328,7 +328,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               onChange={() => setDelivery('store')}
               icon={<Store className="size-4" strokeWidth={SW} aria-hidden />}
               title="Mağazadan Teslim Al"
-              aside={<span className="text-xs font-semibold text-green-700">Ücretsiz</span>}
+              aside={<span className="text-xs font-semibold text-green-800">Ücretsiz</span>}
               text="Safranbolu mağazamızdan; hazır olduğunda SMS ile bilgilendirilirsiniz."
             />
           </fieldset>
@@ -395,7 +395,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
             <input type="checkbox" name="marketing" className="mt-0.5 size-4 shrink-0 accent-brand-900" />
             <span>Kampanya ve fırsatlardan e-posta ve SMS ile haberdar olmak istiyorum.</span>
           </label>
-          <p className="text-[11px] text-gray-500">
+          <p className="text-xs text-gray-500">
             Kişisel verileriniz{' '}
             <a href="/kvkk-aydinlatma-metni" target="_blank" className="underline hover:text-brand-900">
               KVKK Aydınlatma Metni
@@ -416,20 +416,20 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
           </Link>
         </div>
 
-        {notice && <p className="mt-3 rounded bg-amber-50 px-3 py-2 text-[11px] text-amber-900">{notice}</p>}
+        {notice && <p className="mt-3 rounded bg-amber-50 px-3 py-2 text-xs text-amber-900">{notice}</p>}
 
         <ul className="mt-4 max-h-72 divide-y divide-gray-100 overflow-y-auto">
           {summary.items.map((item) => (
             <li key={item.id} className="flex gap-3 py-3">
               <span className="relative h-12 w-16 shrink-0 overflow-hidden rounded bg-gray-100">
                 {item.image && <Image src={productImageSrc(item.image)} unoptimized={isUploadedImage(item.image)} alt="" fill sizes="64px" className="object-cover" />}
-                <span className="absolute -top-0 -right-0 grid min-w-5 place-items-center rounded-bl bg-brand-900 px-1 text-[10px] font-semibold text-white">
+                <span className="absolute -top-0 -right-0 grid min-w-5 place-items-center rounded-bl bg-brand-900 px-1 text-xs font-semibold text-white">
                   {item.qty}
                 </span>
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-xs leading-snug font-semibold">{item.name}</p>
-                <p className="mt-0.5 text-[10px] text-gray-500">
+                <p className="mt-0.5 text-xs text-gray-500">
                   {item.qty} {item.unit} × {formatTL(item.price)}
                 </p>
               </div>
@@ -445,14 +445,14 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
           </div>
           <div className="flex justify-between">
             <dt className="text-gray-600">Kargo</dt>
-            <dd className={`font-semibold ${shipping === 0 ? 'text-green-700' : ''}`}>{shipping === 0 ? 'Ücretsiz' : formatTL(shipping)}</dd>
+            <dd className={`font-semibold ${shipping === 0 ? 'text-green-800' : ''}`}>{shipping === 0 ? 'Ücretsiz' : formatTL(shipping)}</dd>
           </div>
           <div className="flex justify-between border-t border-gray-200 pt-3 text-base">
             <dt className="font-bold">Toplam</dt>
             <dd className="font-bold">{formatTL(total)}</dd>
           </div>
         </dl>
-        <p className="mt-1 text-right text-[11px] text-gray-500">KDV dahil</p>
+        <p className="mt-1 text-right text-xs text-gray-500">KDV dahil</p>
 
         {alert && (
           <p role="alert" className="mt-4 rounded bg-red-50 px-3 py-2 text-xs text-sale">
@@ -478,7 +478,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
           )}
         </button>
 
-        <ul className="mt-5 space-y-2 border-t border-gray-200 pt-4 text-[11px] text-gray-600">
+        <ul className="mt-5 space-y-2 border-t border-gray-200 pt-4 text-xs text-gray-600">
           <li className="flex items-center gap-2">
             <ShieldCheck className="size-4 text-brand-700" strokeWidth={SW} aria-hidden /> 3D Secure ile güvenli ödeme
           </li>
@@ -519,7 +519,7 @@ function Field({
     <div>
       <label htmlFor={name} className="form-label">
         {label} {required && <span className="text-sale">*</span>}
-        {optional && <span className="font-normal text-gray-400">(isteğe bağlı)</span>}
+        {optional && <span className="font-normal text-gray-500">(isteğe bağlı)</span>}
       </label>
       {children}
       {error && <p className="form-error">{error}</p>}
@@ -554,7 +554,7 @@ function OptionCard({
           </span>
           {aside}
         </span>
-        <span className="mt-1 block text-[11px] text-gray-500">{text}</span>
+        <span className="mt-1 block text-xs text-gray-500">{text}</span>
       </span>
     </label>
   );

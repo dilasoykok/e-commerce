@@ -53,10 +53,10 @@ export default async function Footer() {
           <Link href="/" aria-label="Soykök Ticaret Ana Sayfa">
             <Logo id="Footer" className="block h-11 w-auto text-white" />
           </Link>
-          <p className="mt-4 max-w-xs text-[13px] leading-relaxed">
+          <p className="mt-4 max-w-xs text-sm leading-relaxed">
             Safranbolu’da yapı malzemeleri, boya, hırdavat ve tesisatta güvenilir markalar, uygun fiyatlar ve uzman destek.
           </p>
-          <ul className="mt-5 space-y-2.5 text-[13px]">
+          <ul className="mt-5 space-y-2.5 text-sm">
             <li className="flex gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-wood-400" strokeWidth={SW} aria-hidden />
               <span>
@@ -95,10 +95,10 @@ export default async function Footer() {
             <h2 id={group.id} className="mb-4 font-semibold text-white">
               {group.title}
             </h2>
-            <ul className="space-y-2.5 text-[13px]">
+            <ul className="space-y-1 text-sm">
               {group.links.map((l) => (
                 <li key={l.label}>
-                  <Link href={l.href} className="hover:text-white">
+                  <Link href={l.href} className="inline-block py-1 hover:text-white">
                     {l.label}
                   </Link>
                 </li>

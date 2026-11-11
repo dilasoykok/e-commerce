@@ -73,7 +73,7 @@ export default function CartDrawer() {
         {!hasItems ? (
           /* Boş sepet */
           <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-            <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-400">
+            <span className="grid size-16 place-items-center rounded-full bg-gray-100 text-gray-500">
               <ShoppingCart className="size-7" strokeWidth={SW} aria-hidden />
             </span>
             <p className="mt-4 text-sm font-semibold">Sepetiniz boş</p>
@@ -113,7 +113,7 @@ export default function CartDrawer() {
                     <div className="flex items-start gap-2">
                       <div className="min-w-0 flex-1">
                         <p className="text-xs leading-snug font-semibold">{item.name}</p>
-                        <p className="mt-0.5 text-[10px] text-gray-500">
+                        <p className="mt-0.5 text-xs text-gray-500">
                           {item.brand} · {formatTL(item.price)}/{item.unit}
                         </p>
                       </div>
@@ -121,7 +121,7 @@ export default function CartDrawer() {
                         type="button"
                         onClick={() => remove(item.id)}
                         aria-label={`${item.name} ürününü sepetten çıkar`}
-                        className="-mt-1 -mr-1 grid size-7 shrink-0 place-items-center rounded text-gray-400 transition hover:bg-gray-100 hover:text-sale"
+                        className="-mt-1 -mr-1 grid size-7 shrink-0 place-items-center rounded text-gray-500 transition hover:bg-gray-100 hover:text-sale"
                       >
                         <Trash2 className="size-4" strokeWidth={SW} aria-hidden />
                       </button>
@@ -144,7 +144,7 @@ export default function CartDrawer() {
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-gray-600">Kargo</dt>
-                  <dd className={`font-semibold ${summary.shipping === 0 ? 'text-green-700' : ''}`}>
+                  <dd className={`font-semibold ${summary.shipping === 0 ? 'text-green-800' : ''}`}>
                     {summary.shipping === 0 ? 'Ücretsiz' : formatTL(summary.shipping)}
                   </dd>
                 </div>

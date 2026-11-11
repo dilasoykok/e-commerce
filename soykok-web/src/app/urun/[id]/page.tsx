@@ -19,7 +19,7 @@ export const revalidate = 60;
 
 type Props = { params: Promise<{ id: string }> };
 
-const BADGE_COLORS: Record<string, string> = { sale: 'bg-sale', new: 'bg-green-600', info: 'bg-brand-900' };
+const BADGE_COLORS: Record<string, string> = { sale: 'bg-sale', new: 'bg-green-700', info: 'bg-brand-900' };
 const SW = 1.75;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -122,14 +122,14 @@ export default async function ProductPage({ params }: Props) {
             </span>
             {product.oldPrice && (
               <>
-                <del className="text-base text-gray-400">{formatTL(product.oldPrice)}</del>
+                <del className="text-base text-gray-500">{formatTL(product.oldPrice)}</del>
                 <span className="rounded bg-sale/10 px-2 py-0.5 text-xs font-semibold text-sale">
                   %{Math.round((1 - product.price / product.oldPrice) * 100)} indirim
                 </span>
               </>
             )}
           </div>
-          <p className="mt-1 text-[11px] text-gray-500">
+          <p className="mt-1 text-xs text-gray-500">
             KDV dahil
             {product.boxM2 && <span className="before:mx-1.5 before:content-['·']">1 paket = {product.boxM2.toLocaleString('tr-TR')} m²</span>}
           </p>

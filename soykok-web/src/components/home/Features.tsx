@@ -20,7 +20,7 @@ export default function Features() {
             <Icon className="size-7 shrink-0 text-brand-700" strokeWidth={1.75} aria-hidden />
             <div>
               <p className="text-xs font-semibold">{title}</p>
-              <p className="text-[11px] text-gray-500">{text}</p>
+              <p className="text-xs text-gray-500">{text}</p>
             </div>
           </li>
         ))}

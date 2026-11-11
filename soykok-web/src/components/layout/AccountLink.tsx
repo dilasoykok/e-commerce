@@ -43,7 +43,7 @@ export default function AccountLink({ variant }: { variant: 'topbar' | 'drawer' 
           <span>Panel</span>
         </Link>
       )}
-      <Link href={href} className="ml-4 flex items-center gap-2 hover:text-wood-400">
+      <Link href={href} className="ml-4 flex shrink-0 items-center gap-2 whitespace-nowrap hover:text-wood-400">
         <User className="size-4" strokeWidth={1.75} aria-hidden />
         <span>{user ? user.firstName : 'Hesabım'}</span>
       </Link>

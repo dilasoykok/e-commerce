@@ -1,13 +1,9 @@
 import Link from 'next/link';
 import { BRANDS, brandHref } from '@/lib/brands';
 
-// Bant genişliği dolsun diye marka listesi iki kez tekrarlanır
-const BAND = [...BRANDS, ...BRANDS];
-
 /**
- * Popüler markalar — kayan bant (eski partials/home/brands.html).
- * Tamamen CSS ile kayar (animate-marquee); fare üstündeyken durur.
- * İkinci liste kesintisiz döngü için kopyadır, ekran okuyuculardan gizlenir.
+ * Popüler markalar. Eskiden sürekli kayan bir banttı; durdurulamayan hareket WCAG 2.2.2'ye
+ * aykırı olduğu ve küçük ekranda okunması zor olduğu için sabit, satır sonunda sarılan liste.
  */
 export default function Brands() {
   return (
@@ -15,32 +11,18 @@ export default function Brands() {
       <h2 id="brandsTitle" className="mb-5 text-center text-xl font-bold tracking-wide uppercase md:text-2xl">
         Popüler Markalar
       </h2>
-
-      <div className="group/marquee flex overflow-hidden">
-        <div className="flex animate-marquee group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none">
-          <BrandList />
-          <BrandList hidden />
-        </div>
-      </div>
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,10rem),1fr))] gap-3">
+        {BRANDS.map((b) => (
+          <li key={b.name}>
+            <Link
+              href={brandHref(b.name)}
+              className="flex min-h-16 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-3 text-center text-base font-bold tracking-wide text-brand-800 transition hover:border-brand-900 hover:bg-white"
+            >
+              {b.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
-  );
-}
-
-function BrandList({ hidden = false }: { hidden?: boolean }) {
-  return (
-    <ul className="flex shrink-0 gap-6 pr-6" aria-hidden={hidden || undefined}>
-      {BAND.map((b, i) => (
-        <li key={`${b.name}-${i}`}>
-          <Link
-            href={brandHref(b.name)}
-            title={b.name}
-            tabIndex={hidden ? -1 : undefined}
-            className="flex h-[72px] w-[160px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-3 text-center text-base font-bold tracking-wide text-brand-800 transition hover:border-brand-900 hover:bg-white sm:h-[80px] sm:w-[180px]"
-          >
-            {b.name}
-          </Link>
-        </li>
-      ))}
-    </ul>
   );
 }

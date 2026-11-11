@@ -42,8 +42,8 @@ export default function AboutPage() {
               </li>
             </ol>
           </nav>
-          <p className="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Hakkımızda</p>
-          <h1 className="mt-2 max-w-2xl text-3xl leading-tight font-bold sm:text-4xl lg:text-[44px]">
+          <p className="mt-6 text-xs font-semibold tracking-[0.2em] text-wood-400 uppercase">Hakkımızda</p>
+          <h1 className="mt-2 max-w-2xl text-3xl leading-tight font-bold sm:text-4xl lg:text-[2.75rem]">
             Sağlam yapılar,
             <br />
             güvenilir bir adres.
@@ -68,7 +68,7 @@ export default function AboutPage() {
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Hikâyemiz</p>
+            <p className="text-xs font-semibold tracking-[0.2em] text-wood-600 uppercase">Hikâyemiz</p>
             <h2 id="storyTitle" className="mt-2 text-2xl font-bold sm:text-3xl">
               Küçük bir mağazadan Türkiye&apos;nin her yerine
             </h2>
@@ -130,7 +130,7 @@ export default function AboutPage() {
       <section className="bg-gray-50 py-14 lg:py-20" aria-labelledby="valuesTitle">
         <div className="container-site">
           <div className="mx-auto max-w-xl text-center">
-            <p className="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Değerlerimiz</p>
+            <p className="text-xs font-semibold tracking-[0.2em] text-wood-600 uppercase">Değerlerimiz</p>
             <h2 id="valuesTitle" className="mt-2 text-2xl font-bold sm:text-3xl">
               Bizi biz yapan ilkeler
             </h2>
@@ -159,7 +159,7 @@ export default function AboutPage() {
           <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             {BRANDS.map((b) => (
               <li key={b.name}>
-                <span className="text-lg font-bold tracking-wide text-gray-400 transition hover:text-brand-900">{b.name}</span>
+                <span className="text-lg font-bold tracking-wide text-gray-500 transition hover:text-brand-900">{b.name}</span>
               </li>
             ))}
           </ul>
@@ -178,7 +178,7 @@ export default function AboutPage() {
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
                 href="/iletisim?konu=proje"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded bg-wood-500 px-6 text-sm font-semibold transition hover:bg-wood-600"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded bg-wood-600 px-6 text-sm font-semibold transition hover:bg-wood-700"
               >
                 Proje Teklifi Al <ArrowRight className="size-4" strokeWidth={SW} aria-hidden />
               </Link>

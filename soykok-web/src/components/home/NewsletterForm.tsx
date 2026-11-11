@@ -42,7 +42,7 @@ export default function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           aria-invalid={status ? !status.ok : undefined}
-          className="h-9 min-w-0 flex-1 rounded border border-gray-300 bg-white px-3 text-xs placeholder:text-gray-400 focus:border-brand-700 focus:outline-none aria-[invalid=true]:border-sale"
+          className="h-9 min-w-0 flex-1 rounded border border-gray-300 bg-white px-3 text-xs placeholder:text-gray-500 focus:border-brand-700 focus:outline-none aria-[invalid=true]:border-sale"
         />
         <button
           type="submit"
@@ -51,7 +51,7 @@ export default function NewsletterForm() {
           Abone Ol
         </button>
       </form>
-      <p aria-live="polite" className={`mt-1.5 text-[11px] ${status?.ok ? 'text-green-700' : 'text-sale'}`}>
+      <p aria-live="polite" className={`mt-1.5 text-xs ${status?.ok ? 'text-green-800' : 'text-sale'}`}>
         {status?.message}
       </p>
     </>

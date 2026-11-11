@@ -54,7 +54,7 @@ export default function MegaMenu({ items }: { items: CategoryNavItem[] }) {
         hidden={!visible}
         className="absolute top-full left-0 w-[218px] rounded-b-md bg-white shadow-xl ring-1 ring-black/5"
       >
-        <ul className="py-1.5 text-[13px] text-brand-800">
+        <ul className="py-1.5 text-sm text-brand-800">
           {items.map((c) => {
             const hasPanel = Boolean(c.children?.length);
             return (

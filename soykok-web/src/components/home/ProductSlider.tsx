@@ -151,7 +151,7 @@ export default function ProductSlider({
         </ul>
 
         {pageCount > 1 && (
-          <div className="mt-4 flex justify-center gap-2">
+          <div className="mt-4 flex justify-center gap-1">
             {Array.from({ length: pageCount }, (_, i) => (
               <button
                 key={i}
@@ -159,8 +159,10 @@ export default function ProductSlider({
                 onClick={() => goToPage(i)}
                 aria-current={i === activePage}
                 aria-label={`${i + 1}. sayfa`}
-                className="h-2 w-2 rounded-full bg-gray-300 transition-all aria-[current=true]:w-6 aria-[current=true]:bg-brand-900"
-              />
+                className="group/dot grid h-6 min-w-6 place-items-center"
+              >
+                <span className="h-2 w-2 rounded-full bg-gray-400 transition-all group-aria-[current=true]/dot:w-6 group-aria-[current=true]/dot:bg-brand-900" />
+              </button>
             ))}
           </div>
         )}

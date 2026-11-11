@@ -7,7 +7,7 @@ import FavoriteButton from './FavoriteButton';
 import { productHref } from '@/lib/routes';
 import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
-const BADGE_COLORS: Record<string, string> = { sale: 'bg-sale', new: 'bg-green-600', info: 'bg-brand-900' };
+const BADGE_COLORS: Record<string, string> = { sale: 'bg-sale', new: 'bg-green-700', info: 'bg-brand-900' };
 
 export { productHref };
 
@@ -23,7 +23,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
     <li className="relative flex flex-col rounded-md border border-gray-200 bg-white p-3 transition hover:shadow-lg">
       {p.badge && (
         <span
-          className={`absolute top-2 left-2 z-10 rounded-sm px-2 py-0.5 text-[10px] font-semibold text-white ${
+          className={`absolute top-2 left-2 z-10 rounded-sm px-2 py-0.5 text-xs font-semibold text-white ${
             BADGE_COLORS[p.badgeType ?? ''] ?? 'bg-brand-900'
           }`}
         >
@@ -42,7 +42,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
           className={`object-cover ${p.stock === 0 ? 'opacity-60 grayscale' : ''}`}
         />
         {p.stock === 0 && (
-          <span className="absolute right-2 bottom-2 rounded-sm bg-gray-900/80 px-2 py-0.5 text-[10px] font-semibold text-white">
+          <span className="absolute right-2 bottom-2 rounded-sm bg-gray-900/80 px-2 py-0.5 text-xs font-semibold text-white">
             Tükendi
           </span>
         )}
@@ -53,10 +53,10 @@ export default function ProductCard({ product: p, priority = false }: { product:
           {p.name}
         </Link>
       </h3>
-      <p className="mt-0.5 text-[10px] text-gray-500">{p.brand}</p>
+      <p className="mt-0.5 text-xs text-gray-500">{p.brand}</p>
 
       {p.reviews > 0 && (
-      <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-gray-500">
+      <div className="mt-1.5 flex items-center gap-1.5 text-xs text-gray-500">
         <span className="relative inline-block leading-none" role="img" aria-label={`5 üzerinden ${p.rating} puan`}>
           <span className="text-gray-300">★★★★★</span>
           <span className="absolute inset-0 overflow-hidden text-amber-400" style={{ width: `${(p.rating / 5) * 100}%` }}>
@@ -70,7 +70,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
       <p className="mt-1.5 flex items-baseline gap-2">
         {p.oldPrice ? (
           <>
-            <del className="text-[11px] text-gray-400">{formatTL(p.oldPrice)}</del>
+            <del className="text-xs text-gray-500">{formatTL(p.oldPrice)}</del>
             <ins className="text-sm font-bold text-sale no-underline">
               {formatTL(p.price)}/{unit}
             </ins>

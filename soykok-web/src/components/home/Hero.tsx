@@ -67,8 +67,8 @@ export default function Hero() {
         <div className="absolute inset-0 bg-linear-to-r from-brand-950/70 via-brand-950/45 to-transparent lg:from-brand-950/30 lg:via-brand-950/55" />
         <div className="container-site relative flex h-full items-center">
           <div className="hero-copy max-w-xl text-white lg:ml-[400px]">
-            <p className="mb-3 text-[11px] font-semibold tracking-[0.2em] uppercase">{s.eyebrow}</p>
-            <Heading className="text-3xl leading-tight font-bold sm:text-4xl lg:text-[40px]">
+            <p className="mb-3 text-xs font-semibold tracking-[0.2em] uppercase">{s.eyebrow}</p>
+            <Heading className="text-3xl leading-tight font-bold sm:text-4xl lg:text-[2.5rem]">
               {s.title[0]}
               <br />
               {s.title[1]}
@@ -94,13 +94,13 @@ export default function Hero() {
            öğeyi React geliştirme modunda liste elemanı sayıp uyarı veriyor */
         <div key="perks" className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
           <div className="container-site flex h-full items-end justify-end pb-4">
-            <ul className="pointer-events-auto w-[220px] space-y-5 rounded-md bg-white/85 p-5 text-brand-900 shadow-lg backdrop-blur">
+            <ul className="pointer-events-auto w-[220px] space-y-5 rounded-md bg-white/95 p-5 text-brand-900 shadow-lg backdrop-blur">
               {PERKS.map(({ icon: Icon, title, text }) => (
                 <li key={title} className="flex items-center gap-4">
                   <Icon className="size-7 shrink-0 text-brand-700" strokeWidth={SW} aria-hidden />
                   <div>
                     <p className="text-xs font-semibold">{title}</p>
-                    <p className="text-[11px] text-gray-600">{text}</p>
+                    <p className="text-xs text-gray-600">{text}</p>
                   </div>
                 </li>
               ))}

@@ -27,6 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="tr" data-scroll-behavior="smooth">
       <body>
+        <a href="#icerik" className="skip-link">
+          İçeriğe geç
+        </a>
         {/* API verisi (oturum, admin listeleri) için TanStack Query önbelleği */}
         <QueryProvider>
           {/* Sepet ve favorileri tarayıcıda bir kez yükler (görünür bir şey çizmez) */}
@@ -35,7 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <CartDrawer />
 
-          <main>{children}</main>
+          <main id="icerik" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
 
           <Footer />
         </QueryProvider>

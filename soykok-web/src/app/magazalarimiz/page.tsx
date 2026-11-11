@@ -43,7 +43,7 @@ export default function StoresPage() {
               </li>
             </ol>
           </nav>
-          <p className="mt-6 text-[11px] font-semibold tracking-[0.2em] text-wood-400 uppercase">Mağazamız</p>
+          <p className="mt-6 text-xs font-semibold tracking-[0.2em] text-wood-400 uppercase">Mağazamız</p>
           <h1 className="mt-2 text-3xl leading-tight font-bold sm:text-4xl">Sizi mağazamızda ağırlayalım</h1>
           <p className="mt-3 max-w-xl text-sm text-white/85 sm:text-base">
             Ürünlerimizi yerinde görün, uzman ekibimizle birlikte işinize en uygun malzemeyi seçin.
@@ -115,7 +115,7 @@ export default function StoresPage() {
                   href={STORE.whatsappHref}
                   target="_blank"
                   rel="noopener"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-green-600 hover:text-green-700 sm:col-span-2"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded border border-gray-300 text-sm font-semibold transition hover:border-green-600 hover:text-green-800 sm:col-span-2"
                 >
                   <MessageCircle className="size-4" strokeWidth={SW} aria-hidden /> WhatsApp&apos;tan Yazın
                 </a>
@@ -140,7 +140,7 @@ export default function StoresPage() {
       <section className="bg-gray-50 py-14 lg:py-16" aria-labelledby="servicesTitle">
         <div className="container-site">
           <div className="mx-auto max-w-xl text-center">
-            <p className="text-[11px] font-semibold tracking-[0.2em] text-wood-600 uppercase">Mağaza Hizmetleri</p>
+            <p className="text-xs font-semibold tracking-[0.2em] text-wood-600 uppercase">Mağaza Hizmetleri</p>
             <h2 id="servicesTitle" className="mt-2 text-2xl font-bold sm:text-3xl">
               Mağazamızda sizi neler bekliyor?
             </h2>
@@ -168,7 +168,7 @@ export default function StoresPage() {
           </div>
           <Link
             href="/urunler"
-            className="inline-flex h-11 shrink-0 items-center gap-2 rounded bg-wood-500 px-6 text-sm font-semibold text-white transition hover:bg-wood-600"
+            className="inline-flex h-11 shrink-0 items-center gap-2 rounded bg-wood-600 px-6 text-sm font-semibold text-white transition hover:bg-wood-700"
           >
             Online Alışverişe Başla <ArrowRight className="size-4" strokeWidth={SW} aria-hidden />
           </Link>

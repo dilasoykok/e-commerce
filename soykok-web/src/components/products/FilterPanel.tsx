@@ -82,7 +82,7 @@ export default function FilterPanel({ categories, brands, checkedCategories }: P
             onBlur={applyPrice}
             className="form-input h-9"
           />
-          <span className="text-gray-400" aria-hidden>
+          <span className="text-gray-500" aria-hidden>
             –
           </span>
           <label htmlFor="maxPrice" className="sr-only">
@@ -185,7 +185,7 @@ function CheckboxList({ options, checked, onToggle }: { options: Option[]; check
               className="size-4 accent-brand-900"
             />
             <span className="flex-1">{o.label}</span>
-            <span className="text-[11px] text-gray-400">{o.count}</span>
+            <span className="text-xs text-gray-500">{o.count}</span>
           </label>
         </li>
       ))}

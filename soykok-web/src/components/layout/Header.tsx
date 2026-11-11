@@ -21,8 +21,8 @@ export default async function Header() {
     <header className="relative z-40">
       {/* Üst bar */}
       <div className="bg-brand-900 text-white">
-        <div className="container-site flex h-10 items-center justify-between text-xs">
-          <ul className="flex items-center gap-6">
+        <div className="container-site flex min-h-10 items-center justify-between gap-3 py-1.5 text-xs">
+          <ul className="flex min-w-0 items-center gap-6">
             <li className="flex items-center gap-2">
               <Truck className="size-4" strokeWidth={1.75} aria-hidden />
               <span>Türkiye&apos;nin Her Yerine Hızlı Teslimat</span>
@@ -40,7 +40,7 @@ export default async function Header() {
           <div className="flex items-center">
             <nav className="hidden items-center divide-x divide-white/30 lg:flex">
               {TOPBAR_NAV.map((l) => (
-                <Link key={l.href} href={l.href} className="px-4 hover:text-wood-400">
+                <Link key={l.href} href={l.href} className="px-4 py-1 hover:text-wood-400">
                   {l.label}
                 </Link>
               ))}
@@ -81,7 +81,7 @@ export default async function Header() {
 
           <nav className="ml-8 flex items-center gap-10 text-sm font-medium">
             {MAIN_NAV.map((l) => (
-              <Link key={l.label} href={l.href} className="hover:text-wood-600">
+              <Link key={l.label} href={l.href} className="py-2.5 hover:text-wood-600">
                 {l.label}
               </Link>
             ))}

@@ -50,7 +50,7 @@ export default async function ContactPage({ searchParams }: Props) {
       href: STORE.whatsappHref ?? '',
       external: true,
       icon: MessageCircle,
-      iconClass: 'bg-green-600 text-white',
+      iconClass: 'bg-green-700 text-white',
       hover: 'hover:border-green-600',
       label: 'WhatsApp',
       value: 'Mesaj gönderin',
@@ -59,7 +59,7 @@ export default async function ContactPage({ searchParams }: Props) {
     {
       href: STORE.emailHref,
       icon: Mail,
-      iconClass: 'bg-wood-500 text-white',
+      iconClass: 'bg-wood-600 text-white',
       hover: 'hover:border-brand-900',
       label: 'E-posta',
       value: STORE.email,
@@ -110,7 +110,7 @@ export default async function ContactPage({ searchParams }: Props) {
                 <span className="min-w-0">
                   <span className="block text-xs text-gray-500">{label}</span>
                   <span className="block truncate font-semibold group-hover:text-wood-600">{value}</span>
-                  <span className="mt-0.5 block text-[11px] text-gray-500">{hint}</span>
+                  <span className="mt-0.5 block text-xs text-gray-500">{hint}</span>
                 </span>
               </a>
             </li>
@@ -128,7 +128,7 @@ export default async function ContactPage({ searchParams }: Props) {
                 <span className="block font-semibold group-hover:text-wood-600">
                   {STORE.name} / {STORE.city}
                 </span>
-                <span className="mt-0.5 block text-[11px] text-gray-500">Adres ve yol tarifi →</span>
+                <span className="mt-0.5 block text-xs text-gray-500">Adres ve yol tarifi →</span>
               </span>
             </Link>
           </li>

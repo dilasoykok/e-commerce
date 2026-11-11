@@ -8,7 +8,7 @@ export default function ShippingProgress({ summary }: { summary: CartSummary }) 
 
   return (
     <>
-      <p className={`text-[11px] ${reached ? 'font-semibold text-green-700' : 'text-gray-600'}`}>
+      <p className={`text-xs ${reached ? 'font-semibold text-green-800' : 'text-gray-600'}`}>
         {reached ? (
           'Kargonuz ücretsiz!'
         ) : (

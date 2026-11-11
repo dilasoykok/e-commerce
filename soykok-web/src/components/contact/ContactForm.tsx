@@ -158,7 +158,7 @@ export default function ContactForm({ initialSubject = '' }: { initialSubject?: 
             className="form-input uppercase placeholder:normal-case"
             aria-invalid={err('orderNumber') ? true : undefined}
           />
-          <p className="mt-1 text-[11px] text-gray-500">Sipariş onay sayfasında ve Siparişlerim&apos;de yazar.</p>
+          <p className="mt-1 text-xs text-gray-500">Sipariş onay sayfasında ve Siparişlerim&apos;de yazar.</p>
         </Field>
       )}
 
@@ -167,7 +167,7 @@ export default function ContactForm({ initialSubject = '' }: { initialSubject?: 
           <label htmlFor="cMessage" className="form-label mb-0">
             Mesajınız <span className="text-sale">*</span>
           </label>
-          <span className="text-[11px] text-gray-400" aria-live="polite">
+          <span className="text-xs text-gray-500" aria-live="polite">
             {message.length} / {MAX}
           </span>
         </div>
@@ -251,7 +251,7 @@ function Field({
     <div>
       <label htmlFor={id} className="form-label">
         {label} {required && <span className="text-sale">*</span>}
-        {optional && <span className="font-normal text-gray-400">(isteğe bağlı)</span>}
+        {optional && <span className="font-normal text-gray-500">(isteğe bağlı)</span>}
       </label>
       {children}
       {error && <p className="form-error">{error}</p>}

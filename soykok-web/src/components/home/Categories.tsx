@@ -14,10 +14,11 @@ const CATEGORIES = [
 export default function Categories() {
   return (
     <section className="container-site mt-4" aria-label="Öne çıkan kategoriler">
-      <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 lg:gap-3.5">
+      {/* Çok dar ekranda (<420px) tek sütun: başlıklar bölünmeden okunur */}
+      <ul className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-3.5">
         {CATEGORIES.map((c, i) => (
-          // Mobilde 5. kart tam genişlik
-          <li key={c.href} className={i === 4 ? 'col-span-2 md:col-span-1' : undefined}>
+          // İki sütunlu düzende 5. kart tam genişlik
+          <li key={c.href} className={i === 4 ? 'min-[420px]:col-span-2 md:col-span-1' : undefined}>
             <CategoryCard {...c} />
           </li>
         ))}
@@ -28,7 +29,7 @@ export default function Categories() {
 
 function CategoryCard({ href, image, title, text }: (typeof CATEGORIES)[number]) {
   return (
-    <Link href={href} className="group relative block h-36 overflow-hidden rounded-md bg-brand-800 sm:h-40 lg:h-[140px]">
+    <Link href={href} className="group relative flex min-h-36 flex-col justify-end overflow-hidden rounded-md bg-brand-800 sm:min-h-40 lg:min-h-[140px]">
       <Image
         src={`/images/categories/${image}`}
         alt=""
@@ -37,10 +38,10 @@ function CategoryCard({ href, image, title, text }: (typeof CATEGORIES)[number])
         className="object-cover transition duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-linear-to-t from-brand-950/85 via-brand-950/30 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 flex items-end gap-3 p-4 text-white">
+      <div className="relative flex items-end gap-3 p-4 text-white">
         <div className="min-w-0">
           <h3 className="text-base font-bold">{title}</h3>
-          <p className="truncate text-[11px] text-white/85">{text}</p>
+          <p className="truncate text-xs text-white/85">{text}</p>
         </div>
         <ArrowRight className="ml-auto size-4 shrink-0 transition group-hover:translate-x-1" strokeWidth={1.75} aria-hidden />
       </div>

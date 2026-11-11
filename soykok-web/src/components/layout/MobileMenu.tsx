@@ -72,7 +72,7 @@ export default function MobileMenu({ items }: { items: CategoryNavItem[] }) {
         </div>
 
         <nav className="flex-1 overflow-y-auto text-sm">
-          <p className="px-4 pt-4 pb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">Kategoriler</p>
+          <p className="px-4 pt-4 pb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">Kategoriler</p>
 
           {items.map((c) => {
             if (!c.children?.length) {
@@ -88,7 +88,7 @@ export default function MobileMenu({ items }: { items: CategoryNavItem[] }) {
                   <CategoryIcon name={c.icon} className="size-5 text-brand-700" /> {c.label}
                   <ChevronDown className="ml-auto size-4 transition group-open:rotate-180" strokeWidth={SW} aria-hidden />
                 </summary>
-                <ul className="bg-gray-50 py-1 text-[13px] text-gray-600">
+                <ul className="bg-gray-50 py-1 text-sm text-gray-600">
                   {c.children.map((l) => (
                     <li key={l.href}>
                       <Link href={l.href} className="block py-2 pl-12">
@@ -101,7 +101,7 @@ export default function MobileMenu({ items }: { items: CategoryNavItem[] }) {
             );
           })}
 
-          <p className="px-4 pt-5 pb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">Menü</p>
+          <p className="px-4 pt-5 pb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">Menü</p>
           <ul className="pb-4">
             {MENU_LINKS.map((l) => (
               <li key={l.label}>

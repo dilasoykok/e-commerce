@@ -77,7 +77,7 @@ export default function AdminCategories() {
         <p className="mt-6 text-sm text-sale">{list.error.message}</p>
       ) : !data ? (
         <div className="grid h-40 place-items-center">
-          <Loader2 className="size-6 animate-spin text-gray-400" aria-label="Yükleniyor" />
+          <Loader2 className="size-6 animate-spin text-gray-500" aria-label="Yükleniyor" />
         </div>
       ) : (
         <div className="mt-6 space-y-4">
@@ -172,7 +172,7 @@ function GroupCard({
       <header className="flex flex-wrap items-center gap-3 border-b border-gray-200 bg-gray-50 px-4 py-3">
         <div className="min-w-0 flex-1">
           <h2 className="text-sm font-bold">{group.label}</h2>
-          <p className="text-[11px] text-gray-500">
+          <p className="text-xs text-gray-500">
             Kod: {group.slug} · Sıra: {group.sortOrder} · {categories.length} alt kategori
           </p>
         </div>
@@ -227,7 +227,7 @@ function CategoryRow({ category: c, onEdit, onNotice }: { category: AdminCategor
     <li className="flex flex-wrap items-center gap-3 px-4 py-2.5 text-sm">
       <div className="min-w-0 flex-1">
         <p className="font-medium">{c.name}</p>
-        <p className="text-[11px] text-gray-500">
+        <p className="text-xs text-gray-500">
           Kod: {c.slug} · Sıra: {c.sortOrder}
         </p>
       </div>
@@ -361,7 +361,7 @@ function CategoryForm({
           </div>
         )}
         {err.groups && <span className="form-error block">{err.groups}</span>}
-        <p className="mt-1 text-[11px] text-gray-500">Hiçbiri seçilmezse menüde tek başına başlık olarak görünür.</p>
+        <p className="mt-1 text-xs text-gray-500">Hiçbiri seçilmezse menüde tek başına başlık olarak görünür.</p>
       </fieldset>
     </FormShell>
   );
@@ -436,7 +436,7 @@ function Field({ label, hint, error, children }: { label: string; hint?: string;
     <label className="block">
       <span className="form-label">{label}</span>
       {children}
-      {error ? <span className="form-error block">{error}</span> : hint && <span className="mt-1 block text-[11px] text-gray-500">{hint}</span>}
+      {error ? <span className="form-error block">{error}</span> : hint && <span className="mt-1 block text-xs text-gray-500">{hint}</span>}
     </label>
   );
 }
