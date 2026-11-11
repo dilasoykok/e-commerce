@@ -60,6 +60,9 @@ public sealed class Order
     /// <summary>Kargo firması kodu (yurtici, aras ...) — kargoya verilince dolar</summary>
     public string? ShippingCarrier { get; private set; }
     public string? TrackingNumber { get; private set; }
+
+    /// <summary>Kartla ödemede iyzico ödeme oturumu; yarım kalan ödemeyi sonradan sorgulamak için</summary>
+    public string? PaymentToken { get; private set; }
     public OrderStatus Status { get; private set; }
 
     /// <summary>Şu anki durumdan geçilebilecek durumlar (admin ekranındaki butonlar).</summary>
@@ -130,6 +133,11 @@ public sealed class Order
         if (!AllowedTransitions[Status].Contains(next))
             throw new DomainException($"Sipariş durumu {Status} → {next} olarak değiştirilemez.");
         SetStatus(next, note, now);
+    }
+
+    public void SetPaymentToken(string token)
+    {
+        PaymentToken = Guard.NotEmpty(token, "Ödeme token'ı");
     }
 
     /// <summary>Kargoya ver: kargo ile teslimde firma ve takip numarası zorunlu.</summary>

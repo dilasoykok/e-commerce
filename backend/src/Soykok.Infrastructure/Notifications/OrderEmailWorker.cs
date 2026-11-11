@@ -8,6 +8,7 @@ using RabbitMQ.Client.Events;
 using Soykok.Application.Common.Abstractions;
 using Soykok.Application.Ordering.Admin;
 using Soykok.Application.Ordering.Contracts;
+using Soykok.Application.Support;
 using Soykok.Domain.Ordering;
 using Soykok.Infrastructure.Messaging;
 
@@ -84,6 +85,7 @@ internal sealed class OrderEmailWorker(
         await channel.QueueDeclareAsync(Queue, durable: true, exclusive: false, autoDelete: false, cancellationToken: ct);
         await channel.QueueBindAsync(Queue, RabbitMqPublisher.Exchange, OrderingEvents.OrderCreated, cancellationToken: ct);
         await channel.QueueBindAsync(Queue, RabbitMqPublisher.Exchange, AdminOrderEvents.StatusChanged, cancellationToken: ct);
+        await channel.QueueBindAsync(Queue, RabbitMqPublisher.Exchange, SupportEvents.ContactReceived, cancellationToken: ct);
         await channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false, cancellationToken: ct);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
@@ -122,6 +124,14 @@ internal sealed class OrderEmailWorker(
         var settings = emailOptions.Value;
         await using var scope = scopes.CreateAsyncScope();
         var orders = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+
+        if (routingKey == SupportEvents.ContactReceived)
+        {
+            var m = JsonSerializer.Deserialize<ContactReceivedEvent>(body.Span, JsonSerializerOptions.Web);
+            if (m is not null && !string.IsNullOrWhiteSpace(settings.AdminAddress))
+                await SendAsync(OrderEmailTemplates.ContactForAdmin(m, settings, settings.AdminAddress), ct);
+            return;
+        }
 
         if (routingKey == OrderingEvents.OrderCreated)
         {

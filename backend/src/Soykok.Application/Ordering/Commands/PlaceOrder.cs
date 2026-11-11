@@ -163,7 +163,15 @@ public sealed partial class PlaceOrderHandler(
         }
 
         if (session is { Success: true, PaymentPageUrl: { } url })
+        {
+            // Müşteri ödeme sayfasını yarıda bırakırsa PendingCardPaymentsHandler bu token'la sonucu sorar
+            if (session.Token is { Length: > 0 } token)
+            {
+                order.SetPaymentToken(token);
+                await unitOfWork.SaveChangesAsync(ct);
+            }
             return detail with { PaymentPageUrl = url };
+        }
 
         // Ödeme başlatılamadıysa sipariş iptal, stok geri: müşteri sepetinden tekrar deneyebilir
         await changeStatus.HandleAsync(new ChangeOrderStatusCommand(

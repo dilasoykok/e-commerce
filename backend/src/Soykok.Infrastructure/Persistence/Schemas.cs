@@ -8,4 +8,5 @@ internal static class Schemas
     public const string Ordering = "ordering";
     public const string Inventory = "inventory";
     public const string Reviews = "reviews";
+    public const string Support = "support";
 }

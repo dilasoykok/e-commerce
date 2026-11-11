@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using Soykok.Application.Ordering.Contracts;
+using Soykok.Application.Support;
 using Soykok.Domain.Ordering;
 
 namespace Soykok.Infrastructure.Notifications;
@@ -103,6 +104,20 @@ internal static class OrderEmailTemplates
         return new EmailMessage(to, $"Yeni sipariş: {o.Number} — {Money(o.Total)}", Layout("Yeni sipariş", o.Number, body));
     }
 
+    public static EmailMessage ContactForAdmin(ContactReceivedEvent m, EmailOptions s, string to)
+    {
+        var order = string.IsNullOrWhiteSpace(m.OrderNumber) ? "" : "<br>Sipariş no: <strong>" + E(m.OrderNumber) + "</strong>";
+        var phone = string.IsNullOrWhiteSpace(m.Phone) ? "" : " · " + E(m.Phone);
+        var text = E(m.Message).Replace("\n", "<br>");
+        var body = $"""
+            <p><strong>{E(m.Name)}</strong> · {E(m.Email)}{phone}{order}</p>
+            <div style="margin:16px 0;padding:14px 16px;background:#f9fafb;border-radius:6px;font-size:14px;line-height:1.6">{text}</div>
+            <p style="font-size:12px;color:#6b7280">Bu e-postayı yanıtladığınızda cevabınız doğrudan müşteriye gider.</p>
+            {Button($"{Site(s)}/admin/mesajlar", "Admin panelinde aç")}
+            """;
+        return new EmailMessage(to, $"[İletişim] {m.SubjectLabel} — {m.Name}", Layout("Yeni iletişim mesajı", m.SubjectLabel, body, "Konu"), m.Email);
+    }
+
     /* ---------- Ortak parçalar ---------- */
 
     private static EmailMessage Customer(Order o, EmailOptions s, string subject, string title, string intro)
@@ -157,7 +172,7 @@ internal static class OrderEmailTemplates
             """;
     }
 
-    private static string Layout(string title, string number, string body) => $"""
+    private static string Layout(string title, string number, string body, string label = "Sipariş no") => $"""
         <!DOCTYPE html>
         <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>{E(title)}</title></head>
         <body style="margin:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#111827">
@@ -167,7 +182,7 @@ internal static class OrderEmailTemplates
                 <tr><td style="background:{Brand};padding:18px 24px;color:#ffffff;font-size:18px;font-weight:bold;letter-spacing:1px">SOYKÖK TİCARET</td></tr>
                 <tr><td style="padding:24px">
                   <h1 style="margin:0 0 4px;font-size:20px;color:{Brand}">{E(title)}</h1>
-                  <p style="margin:0 0 16px;font-size:13px;color:#6b7280">Sipariş no: <strong style="color:{Accent}">{E(number)}</strong></p>
+                  <p style="margin:0 0 16px;font-size:13px;color:#6b7280">{E(label)}: <strong style="color:{Accent}">{E(number)}</strong></p>
                   <div style="font-size:14px;line-height:1.6">{body}</div>
                 </td></tr>
                 <tr><td style="padding:16px 24px;background:#f9fafb;font-size:11px;color:#9ca3af">

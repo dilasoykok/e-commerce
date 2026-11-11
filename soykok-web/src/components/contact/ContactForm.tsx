@@ -1,8 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Send } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { CircleCheck, Loader2, Send } from 'lucide-react';
+import { api } from '@/lib/api/endpoints';
+import { ApiError } from '@/lib/api/client';
 import { STORE } from '@/lib/store-info';
+import type { ContactInput } from '@/lib/types';
 
 export const SUBJECTS = [
   { value: 'urun', label: 'Ürün bilgisi' },
@@ -26,21 +30,23 @@ const normalizePhone = (v: string) => {
 
 /**
  * İletişim formu (eski contact.js). Doğrulama, konuya göre sipariş no alanı, karakter sayacı.
- *
- * Backend'de henüz iletişim uç noktası yok: form doğrulandıktan sonra mesaj,
- * ziyaretçinin e-posta uygulamasında hazır bir e-posta olarak açılır (mesaj kaybolmaz).
- * TODO: POST /api/contact eklenince burada api çağrısına geçilecek.
+ * Mesaj POST /api/contact ile kaydedilir; admin panelinde "Mesajlar" sekmesinde görünür
+ * (SMTP ayarlıysa ayrıca e-posta ile bildirilir). Asıl doğrulama sunucuda da yapılır.
  */
 export default function ContactForm({ initialSubject = '' }: { initialSubject?: string }) {
   const [subject, setSubject] = useState(SUBJECTS.some((s) => s.value === initialSubject) ? initialSubject : '');
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
+  const [alert, setAlert] = useState<string | null>(null);
+  const send = useMutation({ mutationFn: (input: ContactInput) => api.contact.send(input) });
   const needsOrder = ORDER_SUBJECTS.includes(subject);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    setAlert(null);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const str = (k: string) => String(data.get(k) ?? '').trim();
     if (str('website')) return; // honeypot: bot
 
@@ -57,21 +63,39 @@ export default function ContactForm({ initialSubject = '' }: { initialSubject?: 
     setErrors(errs);
     if (Object.keys(errs).length) {
       const first = Object.keys(errs)[0];
-      (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
+      (form.elements.namedItem(first) as HTMLElement | null)?.focus();
       return;
     }
 
-    const subjectLabel = SUBJECTS.find((s) => s.value === subject)?.label ?? subject;
-    const header = [
-      `Ad Soyad: ${str('name')}`,
-      `E-posta: ${str('email')}`,
-      str('phone') ? `Telefon: ${str('phone')}` : null,
-      needsOrder ? `Sipariş No: ${str('orderNumber').toUpperCase()}` : null,
-    ].filter(Boolean);
-    const body = `${header.join('\n')}\n\n${message.trim()}`;
-    const to = STORE.emailHref.replace(/^mailto:/, '');
-    window.location.href = `mailto:${to}?subject=${encodeURIComponent(`[Web] ${subjectLabel}`)}&body=${encodeURIComponent(body)}`;
-    setDone(true);
+    send.mutate(
+      {
+        name: str('name'),
+        email: str('email'),
+        phone: str('phone') || null,
+        subject,
+        orderNumber: needsOrder ? str('orderNumber').toUpperCase() : null,
+        message: message.trim(),
+        kvkk: true,
+        website: str('website'),
+      },
+      {
+        onSuccess: () => {
+          setDone(true);
+          setMessage('');
+          form.reset();
+        },
+        onError: (err) => {
+          if (err instanceof ApiError && Object.keys(err.fields).length) {
+            const fieldErrors = Object.fromEntries(Object.entries(err.fields).map(([k, v]) => [k, v[0]])) as Errors;
+            setErrors(fieldErrors);
+            const first = Object.keys(fieldErrors)[0];
+            (form.elements.namedItem(first) as HTMLElement | null)?.focus();
+          } else {
+            setAlert(err.message);
+          }
+        },
+      },
+    );
   };
 
   const err = (k: keyof Errors) => errors[k];
@@ -181,17 +205,28 @@ export default function ContactForm({ initialSubject = '' }: { initialSubject?: 
       </div>
 
       {done && (
-        <p role="status" className="rounded bg-green-50 px-3 py-2.5 text-xs text-green-800">
-          Mesajınız e-posta uygulamanızda hazırlandı; göndermek için oradan &quot;Gönder&quot;e basın. E-posta uygulamanız açılmadıysa
-          bize {STORE.phone} numarasından ya da WhatsApp&apos;tan ulaşabilirsiniz.
+        <p role="status" className="flex items-start gap-2 rounded bg-green-50 px-3 py-2.5 text-xs text-green-800">
+          <CircleCheck className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
+          Mesajınız bize ulaştı, teşekkürler! En kısa sürede e-posta ya da telefonla dönüş yapacağız.
+        </p>
+      )}
+      {alert && (
+        <p role="alert" className="rounded bg-red-50 px-3 py-2.5 text-xs text-sale">
+          {alert} Acil durumlarda bize {STORE.phone} numarasından ulaşabilirsiniz.
         </p>
       )}
 
       <button
         type="submit"
-        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded bg-brand-900 px-8 text-sm font-semibold text-white transition hover:bg-brand-700 sm:w-auto"
+        disabled={send.isPending}
+        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded bg-brand-900 px-8 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-70 sm:w-auto"
       >
-        <Send className="size-4" strokeWidth={1.75} aria-hidden /> Mesajı Gönder
+        {send.isPending ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden />
+        ) : (
+          <Send className="size-4" strokeWidth={1.75} aria-hidden />
+        )}
+        {send.isPending ? 'Gönderiliyor…' : 'Mesajı Gönder'}
       </button>
     </form>
   );

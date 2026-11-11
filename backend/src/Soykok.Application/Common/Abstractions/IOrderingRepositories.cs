@@ -13,6 +13,9 @@ public interface IOrderRepository
 
     /// <summary>Durum değiştirmek için (takip edilir; kalemler ve geçmişle).</summary>
     Task<Order?> GetForUpdateAsync(string number, CancellationToken ct);
+    /// <summary>Belirtilen andan önce verilmiş, hâlâ "Ödeme Bekleniyor" durumundaki kartlı siparişler</summary>
+    Task<IReadOnlyList<(string Number, string? PaymentToken)>> ListPendingCardPaymentsAsync(
+        DateTimeOffset placedBefore, int max, CancellationToken ct);
 
     /// <summary>Admin listesi: durum ve metin (numara, ad, e-posta, telefon) filtresi, yeniden eskiye.</summary>
     Task<(int Total, IReadOnlyList<Order> Items)> SearchAsync(

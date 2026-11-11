@@ -383,6 +383,11 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(16)")
                         .HasColumnName("payment_method");
 
+                    b.Property<string>("PaymentToken")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("payment_token");
+
                     b.Property<DateTimeOffset>("PlacedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("placed_at");
@@ -614,6 +619,75 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_product_reviews_rating", "rating BETWEEN 1 AND 5");
                         });
+                });
+
+            modelBuilder.Entity("Soykok.Domain.Support.ContactMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("ip_address");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_read");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("message");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("OrderNumber")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("order_number");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone");
+
+                    b.Property<DateTimeOffset?>("ReadAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("read_at");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("subject");
+
+                    b.HasKey("Id")
+                        .HasName("pk_contact_messages");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_contact_messages_created_at");
+
+                    b.HasIndex("IsRead")
+                        .HasDatabaseName("ix_contact_messages_is_read");
+
+                    b.ToTable("contact_messages", "support");
                 });
 
             modelBuilder.Entity("Soykok.Domain.Catalog.Product", b =>

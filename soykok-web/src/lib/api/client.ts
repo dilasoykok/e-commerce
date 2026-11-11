@@ -60,6 +60,7 @@ const STATUS_MESSAGES: Record<number, string> = {
   403: 'Bu işlem için yetkiniz yok.',
   404: 'Aradığınız kayıt bulunamadı.',
   409: 'Bu kayıt zaten var.',
+  429: 'Çok fazla deneme yaptınız. Lütfen birkaç dakika sonra tekrar deneyin.',
   500: 'Sunucuda bir hata oluştu. Lütfen tekrar deneyin.',
   503: 'Servis şu an kullanılamıyor. Lütfen biraz sonra tekrar deneyin.',
 };

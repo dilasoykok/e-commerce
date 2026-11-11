@@ -37,20 +37,21 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Siparişler: liste, arama, durum değiştirme (havale onayı, hazırlanıyor, kargoya verildi + takip no, teslim, iptal → stok iadesi)
 - Ürünler: ekle / düzenle / sil, fiyat ve indirim, **görsel yükleme** (ana görsel + galeri), **stok adedi**
 - Kategoriler: üst ve alt kategori ekle / düzenle / sil
+- Mesajlar: iletişim formundan gelen mesajlar (okunmamış rozeti, okundu işaretleme, e-postayla yanıtla, sil)
 
 **Altyapı**
 - .NET 10 API (Clean Architecture), PostgreSQL, Redis önbellek, RabbitMQ olayları, nginx, Docker Compose
 - Sunucu tarafında fiyat/kargo hesabı, stok için transaction içinde koşullu düşüm (fazla satış olmaz)
-- Sipariş e-postaları (SMTP): sipariş alındı, ödeme onayı, kargoda, teslim, iptal + admin'e yeni sipariş bildirimi
+- Sipariş e-postaları (SMTP): sipariş alındı, ödeme onayı, kargoda, teslim, iptal + admin'e yeni sipariş / yeni mesaj bildirimi
+- Yarım kalan kart ödemeleri 5 dakikada bir iyzico'ya sorulur: ödenmişse onaylanır, ödenmemişse iptal edilip stok iade edilir
+- İletişim formu veritabanına kaydedilir; IP başına 10 dakikada 5 mesaj sınırı ve spam tuzağı
 
 ### Eksikler / sıradaki işler
 
 1. **SMTP ayarı** — `.env`'deki `SMTP_*` satırları boş; doldurulana kadar e-posta gönderilmez (bkz. [Sipariş e-postaları](#sipariş-e-postaları)).
-2. **Yarım kalan kart ödemeleri** — müşteri iyzico sayfasında tarayıcıyı kapatırsa sipariş "Ödeme Bekleniyor"da kalır, stok ayrılı durur. Şimdilik admin elle kontrol eder.
-3. **İletişim formu** — mesaj sunucuya gitmiyor, kullanıcının e-posta programını açıyor.
-4. **Gerçek bilgiler** — footer'daki adres/telefon, firma unvanı, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`), Hakkımızda metni; yasal metinler hukukçuya okutulmalı.
-5. **Yayına alma** — alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifrelerinin değiştirilmesi, veritabanı ve `uploads` volume yedeği.
-6. Sonra: Projeler/Blog sayfaları (linkleri şu an `#`), ürün yorumları, üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme, e-Arşiv fatura, `sitemap.xml`, otomatik testler.
+2. **Gerçek bilgiler** — footer'daki adres/telefon, firma unvanı, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`), Hakkımızda metni; yasal metinler hukukçuya okutulmalı.
+3. **Yayına alma** — alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifrelerinin değiştirilmesi, veritabanı ve `uploads` volume yedeği.
+4. Sonra: Projeler/Blog sayfaları (linkleri şu an `#`), ürün yorumları, üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme, e-Arşiv fatura, `sitemap.xml`, otomatik testler.
 
 ## Kurulum
 
@@ -161,6 +162,9 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `PUT/DELETE /api/admin/categories/{slug}` | admin | Alt kategori güncelle / sil (içinde ürün varsa silinmez, 409) |
 | `POST /api/admin/category-groups` | admin | Üst kategori ekle `{ slug?, label, sortOrder? }` |
 | `PUT/DELETE /api/admin/category-groups/{slug}` | admin | Üst kategori güncelle / sil (alt kategoriler kalır) |
+| `POST /api/contact`            | herkes  | İletişim formu `{ name, email, phone?, subject, orderNumber?, message, kvkk }` (IP başına 10 dk'da 5) |
+| `GET /api/admin/messages`      | admin   | Mesajlar: `okunmamis=1`, `page`, `pageSize` → `{ total, unread, items }` |
+| `POST /api/admin/messages/{id}/read` · `DELETE /api/admin/messages/{id}` | admin | Okundu/okunmadı `{ read }` · sil |
 | `POST /api/payments/iyzico/callback` | iyzico | Kart ödemesi dönüşü (form: `token`, sorgu: `no`). Sonucu doğrular, sonuç sayfasına yönlendirir |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
@@ -231,9 +235,9 @@ satırlarına yazın, sonra `docker compose up -d --build api`. Anahtarlar boşs
 (3D ekranında test şifresi sayfada yazar). Canlıda `IYZICO_BASE_URL=https://api.iyzipay.com`, canlı anahtarlar ve
 HTTPS'li `PUBLIC_URL` gerekir.
 
-Eksik: ödeme sayfasında tarayıcı kapanırsa sipariş "Ödeme Bekleniyor"da kalır (stok ayrılı). Şimdilik
-admin iyzico panelinden kontrol edip durumu elle değiştirir; ileride token saklanıp zamanlanmış kontrol
-ya da iyzico bildirimi (webhook) eklenecek.
+Yarım kalan ödemeler: ödeme sayfası açılınca iyzico token'ı siparişe kaydedilir. Müşteri sayfayı kapatırsa
+geri dönüş gelmez; `PendingPaymentWorker` 5 dakikada bir, 35 dakikadan eski "Ödeme Bekleniyor" kartlı
+siparişleri token ile iyzico'ya sorar: ödenmişse onaylar, ödenmemişse iptal edip stoğu iade eder.
 
 ### Arayüz bağlantısı (soykok-web)
 

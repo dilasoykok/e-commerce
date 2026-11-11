@@ -5,7 +5,8 @@ using Microsoft.Extensions.Options;
 
 namespace Soykok.Infrastructure.Notifications;
 
-public sealed record EmailMessage(string To, string Subject, string Html);
+/// <param name="ReplyTo">Yanıtla denince gidilecek adres (ör. iletişim formunu dolduran müşteri)</param>
+public sealed record EmailMessage(string To, string Subject, string Html, string? ReplyTo = null);
 
 /// <summary>SMTP ile e-posta gönderir (ek paket gerektirmez).</summary>
 public sealed class SmtpEmailSender(IOptions<EmailOptions> options)
@@ -34,6 +35,7 @@ public sealed class SmtpEmailSender(IOptions<EmailOptions> options)
             IsBodyHtml = true,
         };
         mail.To.Add(message.To);
+        if (!string.IsNullOrWhiteSpace(message.ReplyTo)) mail.ReplyToList.Add(message.ReplyTo);
 
         await client.SendMailAsync(mail, ct);
     }

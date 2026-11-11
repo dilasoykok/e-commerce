@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IStockReservation, StockReservation>();
+        services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
         return services;
     }
 
@@ -56,6 +57,7 @@ public static class DependencyInjection
         // iyzico (kartla ödeme). Anahtarlar yoksa kartla ödeme kapalı, havale çalışmaya devam eder.
         services.Configure<IyzicoOptions>(config.GetSection(IyzicoOptions.Section));
         services.AddHttpClient<IPaymentGateway, IyzicoPaymentGateway>(c => c.Timeout = TimeSpan.FromSeconds(30));
+        services.AddHostedService<PendingPaymentWorker>(); // yarım kalan kart ödemeleri (5 dk'da bir)
 
         // Keycloak (site için oturum çerezi, araçlar için JWT)
         services.AddKeycloakAuthentication(config);

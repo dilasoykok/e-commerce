@@ -1,4 +1,5 @@
 using Soykok.Api.Endpoints;
+using System.Threading.RateLimiting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Soykok.Api.Http;
@@ -13,6 +14,14 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.Configure<UploadOptions>(builder.Configuration.GetSection(UploadOptions.Section));
+// İletişim formu: IP başına 10 dakikada 5 mesaj (spam'e karşı)
+builder.Services.AddRateLimiter(o =>
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    o.AddPolicy(ContactEndpoints.RateLimitPolicy, http => RateLimitPartition.GetFixedWindowLimiter(
+        ContactEndpoints.ClientIp(http),
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 5, Window = TimeSpan.FromMinutes(10), QueueLimit = 0 }));
+});
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
@@ -33,6 +42,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 // Tüm uç noktalar /api altında (nginx /api/ isteklerini bu servise yönlendirir)
 app.MapOpenApi("/api/openapi/{documentName}.json");
@@ -45,6 +55,7 @@ api.MapAdminOrderEndpoints();
 api.MapAdminCategoryEndpoints();
 api.MapAdminUploadEndpoints();
 api.MapPaymentEndpoints();
+api.MapContactEndpoints();
 
 // Veritabanı migration'ları ayrı "migrator" servisinde uygulanır (bkz. Soykok.Migrator)
 app.Run();

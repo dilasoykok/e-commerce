@@ -27,6 +27,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     // reviews
     public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
+    public DbSet<Soykok.Domain.Support.ContactMessage> ContactMessages => Set<Soykok.Domain.Support.ContactMessage>();
 
     public async Task<T> ExecuteInTransactionAsync<T>(
         Func<CancellationToken, Task<(T Result, bool Commit)>> action, CancellationToken ct = default)

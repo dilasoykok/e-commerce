@@ -18,7 +18,8 @@ public interface IPaymentGateway
     Task<PaymentOutcome> GetCheckoutResultAsync(string token, string orderNumber, CancellationToken ct);
 }
 
-public sealed record PaymentSession(bool Success, string? PaymentPageUrl, string? ErrorMessage);
+/// <param name="Token">Ödeme oturumu; siparişe kaydedilir, yarım kalan ödeme sonradan bununla sorgulanır</param>
+public sealed record PaymentSession(bool Success, string? PaymentPageUrl, string? ErrorMessage, string? Token = null);
 
 /// <param name="OrderNumber">Kuruluşun döndürdüğü sepet numarası (= sipariş numarası)</param>
 public sealed record PaymentOutcome(

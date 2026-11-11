@@ -15,6 +15,9 @@ export const queryKeys = {
   adminOrders: (query: AdminOrderQuery) => ['admin', 'orders', 'list', query] as const,
   adminOrder: (number: string) => ['admin', 'orders', 'detail', number] as const,
 
+  adminMessagesAll: ['admin', 'messages'] as const,
+  adminMessages: (query: { okunmamis?: boolean; page?: number }) => ['admin', 'messages', query] as const,
+
   catalog: ['catalog'] as const,
   categories: ['catalog', 'categories'] as const,
   adminCategories: ['catalog', 'admin-categories'] as const,

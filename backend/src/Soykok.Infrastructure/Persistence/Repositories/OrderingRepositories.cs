@@ -19,6 +19,18 @@ internal sealed class OrderRepository(AppDbContext db) : IOrderRepository
             .AsSplitQuery()
             .FirstOrDefaultAsync(o => o.Number == number, ct);
 
+    public async Task<IReadOnlyList<(string Number, string? PaymentToken)>> ListPendingCardPaymentsAsync(
+        DateTimeOffset placedBefore, int max, CancellationToken ct)
+    {
+        var rows = await db.Orders.AsNoTracking()
+            .Where(o => o.PaymentMethod == PaymentMethod.Card && o.Status == OrderStatus.AwaitingPayment && o.PlacedAt < placedBefore)
+            .OrderBy(o => o.PlacedAt)
+            .Take(max)
+            .Select(o => new { o.Number, o.PaymentToken })
+            .ToListAsync(ct);
+        return rows.Select(r => (r.Number, r.PaymentToken)).ToList();
+    }
+
     public Task<Order?> GetForUpdateAsync(string number, CancellationToken ct) =>
         db.Orders
             .Include(o => o.Items)

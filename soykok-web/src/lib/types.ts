@@ -231,3 +231,32 @@ export type AdminCategoryList = { categories: AdminCategoryRow[]; groups: AdminC
 
 export type SaveCategoryInput = { slug?: string | null; name: string; sortOrder?: number | null; groups: string[] };
 export type SaveCategoryGroupInput = { slug?: string | null; label: string; sortOrder?: number | null };
+
+/* ---------- İletişim formu ---------- */
+
+export type ContactInput = {
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  orderNumber?: string | null;
+  message: string;
+  kvkk: boolean;
+  /** Spam tuzağı: her zaman boş gönderilir */
+  website?: string;
+};
+
+export type ContactMessage = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  subjectLabel: string;
+  orderNumber: string | null;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+};
+
+export type ContactMessagePage = { total: number; unread: number; page: number; pageSize: number; items: ContactMessage[] };

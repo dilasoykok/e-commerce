@@ -105,7 +105,7 @@ public sealed class IyzicoPaymentGateway(
         var url = Str(root, "paymentPageUrl");
         return url is null
             ? new PaymentSession(false, null, "Ödeme sayfası adresi alınamadı")
-            : new PaymentSession(true, url, null);
+            : new PaymentSession(true, url, null, token);
     }
 
     public async Task<PaymentOutcome> GetCheckoutResultAsync(string token, string orderNumber, CancellationToken ct)

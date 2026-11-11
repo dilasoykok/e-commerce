@@ -12,6 +12,7 @@ using Soykok.Application.Ordering.Commands;
 using Soykok.Application.Ordering.Contracts;
 using Soykok.Application.Ordering.Queries;
 using Soykok.Application.Payments;
+using Soykok.Application.Support;
 
 namespace Soykok.Application;
 
@@ -54,8 +55,16 @@ public static class DependencyInjection
         services.AddScoped<IQueryHandler<GetAdminOrderQuery, Result<AdminOrderDetail>>, GetAdminOrderHandler>();
         services.AddScoped<ICommandHandler<ChangeOrderStatusCommand, Result<AdminOrderDetail>>, ChangeOrderStatusHandler>();
 
+        // İletişim formu + admin mesajları
+        services.AddScoped<ICommandHandler<SendContactCommand, Result<ContactReceipt>>, SendContactHandler>();
+        services.AddScoped<ContactMessagesAdminHandler>();
+        services.AddScoped<IQueryHandler<ListContactMessagesQuery, ContactMessagePage>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
+        services.AddScoped<ICommandHandler<MarkContactMessageCommand, Result<ContactMessageDto>>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
+        services.AddScoped<ICommandHandler<DeleteContactMessageCommand, Result>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
+
         // Kartla ödeme geri dönüşü
         services.AddScoped<ICommandHandler<CompleteCardPaymentCommand, CardPaymentResult>, CompleteCardPaymentHandler>();
+        services.AddScoped<ICommandHandler<ResolvePendingCardPaymentsCommand, int>, PendingCardPaymentsHandler>();
 
         return services;
     }

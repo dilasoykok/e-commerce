@@ -16,6 +16,9 @@
 
 import { apiFetch, toQueryString, type ApiRequestInit } from './client';
 import type {
+  ContactInput,
+  ContactMessage,
+  ContactMessagePage,
   AdminCategoryList,
   SaveCategoryGroupInput,
   SaveCategoryInput,
@@ -50,6 +53,11 @@ export const api = {
       apiFetch<ProductPage>(`/products${toQueryString(query)}`, opts),
 
     product: (id: string, opts?: Opts) => apiFetch<ProductDetail>(`/products/${encodeURIComponent(id)}`, opts),
+  },
+
+  contact: {
+    /** POST /api/contact — iletişim formu (IP başına 10 dakikada 5 mesaj) */
+    send: (input: ContactInput) => apiFetch<{ received: boolean }>('/contact', { method: 'POST', json: input }),
   },
 
   orders: {
@@ -91,6 +99,16 @@ export const api = {
         method: 'POST',
         json: { status, note: note || null, carrier: shipment?.carrier ?? null, trackingNumber: shipment?.trackingNumber ?? null },
       }),
+
+    /** İletişim mesajları */
+    messages: (query: { okunmamis?: boolean; page?: number; pageSize?: number } = {}, opts?: Opts) =>
+      apiFetch<ContactMessagePage>(
+        `/admin/messages${toQueryString({ okunmamis: query.okunmamis ? '1' : undefined, page: query.page, pageSize: query.pageSize })}`,
+        { cache: 'no-store', ...opts },
+      ),
+    markMessage: (id: string, read: boolean) =>
+      apiFetch<ContactMessage>(`/admin/messages/${id}/read`, { method: 'POST', json: { read } }),
+    deleteMessage: (id: string) => apiFetch<void>(`/admin/messages/${id}`, { method: 'DELETE' }),
 
     /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } */
     uploadImage: (file: File) => {
