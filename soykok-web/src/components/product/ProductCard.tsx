@@ -55,6 +55,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
       </h3>
       <p className="mt-0.5 text-[10px] text-gray-500">{p.brand}</p>
 
+      {p.reviews > 0 && (
       <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-gray-500">
         <span className="relative inline-block leading-none" role="img" aria-label={`5 üzerinden ${p.rating} puan`}>
           <span className="text-gray-300">★★★★★</span>
@@ -64,6 +65,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
         </span>
         {p.rating} ({p.reviews})
       </div>
+      )}
 
       <p className="mt-1.5 flex items-baseline gap-2">
         {p.oldPrice ? (

@@ -101,7 +101,7 @@ export function MainImageField({ value, onChange, error }: { value: string; onCh
               className="form-input"
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              placeholder="laminat-oak-naturel.jpg"
+              placeholder="ic-boya-silikonlu-7-5l.jpg"
               aria-invalid={Boolean(error)}
             />
           ) : (

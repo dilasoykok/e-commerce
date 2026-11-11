@@ -40,7 +40,7 @@ export default function AboutPage() {
     <>
       {/* Sayfa başlığı */}
       <section className="relative overflow-hidden bg-brand-900 text-white">
-        <Image src="/images/hero/hero-1.jpg" alt="" fill preload sizes="100vw" className="object-cover opacity-30" />
+        <Image src="/images/hero/yapi-1.jpg" alt="" fill preload sizes="100vw" className="object-cover opacity-30" />
         <div className="absolute inset-0 bg-linear-to-r from-brand-950/90 via-brand-950/60 to-transparent" />
         <div className="container-site relative py-14 lg:py-20">
           <nav aria-label="Sayfa yolu" className="text-xs text-white/70">
@@ -76,10 +76,10 @@ export default function AboutPage() {
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-              <Image src="/images/categories/parke.jpg" alt="Mağazamızdaki ürünlerden örnekler" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+              <Image src="/images/categories/magaza.jpg" alt="Mağazamızın rafları" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             </div>
             <div className="absolute -right-2 -bottom-6 hidden aspect-[4/3] w-2/5 overflow-hidden rounded-lg border-4 border-white shadow-xl sm:block lg:-right-6">
-              <Image src="/images/categories/deck.jpg" alt="Dış mekan deck uygulaması" fill sizes="20vw" className="object-cover" />
+              <Image src="/images/categories/boya.jpg" alt="Boya ürünleri" fill sizes="20vw" className="object-cover" />
             </div>
             <div className="absolute -top-4 -left-2 rounded-lg bg-wood-500 px-5 py-4 text-white shadow-lg lg:-left-6">
               <p className="text-3xl leading-none font-bold">[XX]+</p>
@@ -107,7 +107,7 @@ export default function AboutPage() {
               </p>
             </div>
             <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-              {['Orijinal ve garantili ürünler', 'Boya, hırdavat ve tesisat tek yerde', 'Uzman ekipten keşif ve danışmanlık', 'Türkiye geneline hızlı teslimat'].map(
+              {['Orijinal ve garantili ürünler', 'Boya, hırdavat ve tesisat tek yerde', 'Uzman ekipten malzeme danışmanlığı', 'Türkiye geneline hızlı teslimat'].map(
                 (t) => (
                   <li key={t} className="flex items-center gap-2.5">
                     <CircleCheck className="size-5 shrink-0 text-wood-600" strokeWidth={SW} aria-hidden /> {t}
@@ -220,19 +220,12 @@ export default function AboutPage() {
       <section className="border-y border-gray-200 py-10" aria-labelledby="partnerBrands">
         <div className="container-site">
           <h2 id="partnerBrands" className="text-center text-sm font-semibold text-gray-500">
-            Yetkili satıcısı olduğumuz markalar
+            Mağazamızda bulabileceğiniz markalardan bazıları
           </h2>
           <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             {BRANDS.map((b) => (
               <li key={b.name}>
-                <Image
-                  src={`/images/brands/${b.logo}`}
-                  alt={b.name}
-                  width={120}
-                  height={40}
-                  className="h-10 opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0"
-                  style={{ width: 'auto' }}
-                />
+                <span className="text-lg font-bold tracking-wide text-gray-400 transition hover:text-brand-900">{b.name}</span>
               </li>
             ))}
           </ul>
@@ -242,7 +235,7 @@ export default function AboutPage() {
       {/* Kapanış */}
       <section className="container-site py-14 lg:py-20">
         <div className="relative overflow-hidden rounded-xl bg-brand-900 px-6 py-12 text-center text-white sm:px-12">
-          <Image src="/images/categories/duvar.jpg" alt="" fill sizes="100vw" className="object-cover opacity-15" />
+          <Image src="/images/categories/insaat.jpg" alt="" fill sizes="100vw" className="object-cover opacity-15" />
           <div className="relative">
             <h2 className="text-2xl font-bold sm:text-3xl">Projeniz için birlikte çalışalım</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-white/80">

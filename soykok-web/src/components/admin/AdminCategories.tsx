@@ -21,8 +21,8 @@ type Editing =
   | { kind: 'category'; slug: string | null; group?: string };
 
 /**
- * /admin/kategoriler — üst kategori (menü başlığı: Parke, Aksesuarlar …) ve
- * alt kategori (ürünün kategorisi: Laminat, Masif …) ekle / düzenle / sil.
+ * /admin/kategoriler — üst kategori (menü başlığı: Boya ve Vernik, Hırdavat …) ve
+ * alt kategori (ürünün kategorisi: İç Cephe Boyası, El Aletleri …) ekle / düzenle / sil.
  * Değişiklikler sitenin menüsüne, arama kutusuna ve filtrelere hemen yansır.
  */
 export default function AdminCategories() {
@@ -45,8 +45,8 @@ export default function AdminCategories() {
         <div>
           <h1 className="text-xl font-bold">Kategoriler</h1>
           <p className="mt-1 max-w-2xl text-sm text-gray-500">
-            <strong>Üst kategori</strong> menüdeki başlıktır (ör. Parke). <strong>Alt kategori</strong> ürünlerin bağlandığı
-            kategoridir (ör. Laminat Parke); bir alt kategori birden çok üst kategoride olabilir.
+            <strong>Üst kategori</strong> menüdeki başlıktır (ör. Boya ve Vernik). <strong>Alt kategori</strong> ürünlerin bağlandığı
+            kategoridir (ör. İç Cephe Boyası); bir alt kategori birden çok üst kategoride olabilir.
           </p>
         </div>
         <div className="flex gap-2">
@@ -331,14 +331,14 @@ function CategoryForm({
   return (
     <FormShell onSubmit={onSubmit} onCancel={onCancel} pending={save.isPending} error={err.general}>
       <Field label="Ad *" error={err.name}>
-        <input className="form-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="ör. Laminat Parke" autoFocus />
+        <input className="form-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="ör. İç Cephe Boyası" autoFocus />
       </Field>
       {category ? (
         <p className="text-xs text-gray-500">
           Kod: {category.slug} · {category.productCount} ürün (kod değiştirilemez)
         </p>
       ) : (
-        <Field label="Kod" hint="Boş bırakılırsa addan üretilir (ör. laminat-parke). Sonradan değiştirilemez." error={err.slug}>
+        <Field label="Kod" hint="Boş bırakılırsa addan üretilir (ör. ic-cephe-boyasi). Sonradan değiştirilemez." error={err.slug}>
           <input className="form-input" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="otomatik" />
         </Field>
       )}

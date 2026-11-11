@@ -10,7 +10,7 @@ import { BRANDS, brandHref } from '@/lib/brands';
  * katalogdan (API) gelir, fiyat değişince burası da güncellenir.
  * TODO: Backend'e "öne çıkan" alanı eklenince bu liste oradan yönetilebilir.
  */
-const PICK_IDS = ['p1', 'p2', 'p3', 'p4', 'p5'];
+const PICK_IDS = ['ic-boya-silikonlu-7-5l', 'darbeli-matkap-750w', 'seramik-yapistiricisi-25kg', 'lavabo-bataryasi-krom', 'saten-alci-25kg'];
 
 /** Sizin İçin Seçtiklerimiz (eski partials/home/picks.html) */
 export default async function Picks() {
@@ -32,7 +32,7 @@ export default async function Picks() {
         <aside className="flex flex-col gap-5">
           <Link href="/iletisim" className="group relative block h-[142px] overflow-hidden rounded-md bg-brand-800">
             <Image
-              src="/images/banners/toplu-alim.jpg"
+              src="/images/banners/toplu-alim-yapi.jpg"
               alt=""
               fill
               sizes="(min-width: 1024px) 238px, 100vw"
@@ -50,21 +50,14 @@ export default async function Picks() {
 
           <div>
             <h3 className="mb-2.5 text-xs font-semibold">Popüler Markalar</h3>
-            <ul className="grid grid-cols-5 gap-1.5">
+            <ul className="grid grid-cols-2 gap-1.5">
               {BRANDS.map((b) => (
                 <li key={b.name}>
                   <Link
                     href={brandHref(b.name)}
-                    className="grid h-11 place-items-center rounded border border-gray-200 bg-white p-1.5 grayscale transition hover:border-gray-300 hover:grayscale-0"
+                    className="grid h-9 place-items-center rounded border border-gray-200 bg-white px-1.5 text-center text-[11px] font-semibold text-brand-800 transition hover:border-brand-900"
                   >
-                    <Image
-                      src={`/images/brands/${b.logo}`}
-                      alt={b.name}
-                      width={64}
-                      height={32}
-                      className="max-h-full object-contain"
-                      style={{ width: 'auto', height: 'auto' }}
-                    />
+                    {b.name}
                   </Link>
                 </li>
               ))}

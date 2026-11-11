@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 const CATEGORIES = [
-  { href: '/urunler?kategori=parke', image: 'parke.jpg', title: 'Parke Çeşitleri', text: 'Laminat, Masif, Vinil, SPC ve daha fazlası' },
-  { href: '/urunler?kategori=aksesuar', image: 'aksesuar.jpg', title: 'Aksesuarlar', text: 'Süpürgelik, Profil, Dış Köşe ve Tamamlayıcılar' },
-  { href: '/urunler?kategori=kimyasal', image: 'kimyasal.jpg', title: 'Yapı Kimyasalları', text: 'Yapıştırıcı, Derz, Su Yalıtımı' },
-  { href: '/urunler?kategori=deck', image: 'deck.jpg', title: 'Deck Ürünleri', text: 'Dış mekanlar için dayanıklı çözümler' },
-  { href: '/urunler?kategori=duvar', image: 'duvar.jpg', title: 'Duvar Kaplama', text: 'Modern ve estetik tasarımlar' },
+  { href: '/urunler?kategori=boya', image: 'boya.jpg', title: 'Boya ve Vernik', text: 'İç ve dış cephe, vernik, rulo ve fırça' },
+  { href: '/urunler?kategori=hirdavat', image: 'hirdavat.jpg', title: 'Hırdavat', text: 'El aletleri, vida, dübel, elektrikli aletler' },
+  { href: '/urunler?kategori=tesisat', image: 'tesisat.jpg', title: 'Tesisat ve Banyo', text: 'Batarya, boru, vana ve su sayacı' },
+  { href: '/urunler?kategori=insaat-malzemeleri', image: 'insaat.jpg', title: 'İnşaat Malzemeleri', text: 'Çimento, alçı, alçıpan, yalıtım' },
+  { href: '/urunler?kategori=kimyasal', image: 'yapi-kimyasal.jpg', title: 'Yapı Kimyasalları', text: 'Yapıştırıcı, derz, silikon, su yalıtımı' },
 ];
 
 /** Kategori kartları (eski partials/home/categories.html + components/category-card.html) */

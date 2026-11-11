@@ -1,8 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { BRANDS, brandHref } from '@/lib/brands';
 
-// Bant genişliği dolsun diye marka listesi iki kez tekrarlanır (eskisi gibi 10 logo)
+// Bant genişliği dolsun diye marka listesi iki kez tekrarlanır
 const BAND = [...BRANDS, ...BRANDS];
 
 /**
@@ -36,10 +35,9 @@ function BrandList({ hidden = false }: { hidden?: boolean }) {
             href={brandHref(b.name)}
             title={b.name}
             tabIndex={hidden ? -1 : undefined}
-            className="flex h-[88px] w-[160px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-3 transition hover:border-gray-300 hover:bg-white sm:h-[96px] sm:w-[180px]"
+            className="flex h-[72px] w-[160px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-3 text-center text-base font-bold tracking-wide text-brand-800 transition hover:border-brand-900 hover:bg-white sm:h-[80px] sm:w-[180px]"
           >
-            <Image src={`/images/brands/${b.logo}`} alt={b.name} width={156} height={72} className="max-h-full object-contain"
-                      style={{ width: 'auto', height: 'auto' }} />
+            {b.name}
           </Link>
         </li>
       ))}

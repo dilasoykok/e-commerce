@@ -10,7 +10,8 @@ import type { NavLink } from './navigation';
  */
 
 /** İkon adı → components/layout/CategoryIcon.tsx */
-export type CategoryIconName = 'layers' | 'ruler' | 'flask' | 'grid' | 'wall' | 'building' | 'sofa' | 'boxes';
+export type CategoryIconName =
+  | 'layers' | 'ruler' | 'flask' | 'grid' | 'wall' | 'building' | 'sofa' | 'boxes' | 'paint' | 'wrench' | 'droplets';
 
 export type CategoryNavItem = NavLink & {
   icon: CategoryIconName;
@@ -31,6 +32,10 @@ export type SiteNav = {
 
 /** Bilinen kodların ikonları; yeni eklenen kategoriler varsayılan ikonu alır */
 const ICONS: Record<string, CategoryIconName> = {
+  boya: 'paint',
+  hirdavat: 'wrench',
+  tesisat: 'droplets',
+  'insaat-malzemeleri': 'wall',
   parke: 'layers',
   aksesuar: 'ruler',
   kimyasal: 'flask',

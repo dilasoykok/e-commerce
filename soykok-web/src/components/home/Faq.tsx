@@ -1,7 +1,7 @@
 const QUESTIONS = [
   {
-    q: 'Kaç metrekare parke ya da kaplama almam gerektiğini nasıl hesaplarım?',
-    a: "Odanın eni ile boyunu çarparak alanı bulun, kesim ve fire payı için üzerine yaklaşık %5–10 ekleyin. Örneğin 4 m × 5 m bir oda 20 m²'dir; fire payıyla 21–22 m² parke almanız önerilir.",
+    q: 'Ne kadar boya almam gerekir?',
+    a: "Boyanacak duvarların alanını (en × yükseklik) toplayın, kapı ve pencereleri çıkarın. Bir litre boya tek katta genellikle 8–12 m² örter; iki kat için bu alanı ikiyle çarpın. Kesin sarfiyat için ürün etiketine bakın ya da mağazamıza danışın.",
   },
   {
     q: 'Montaj hizmetiniz var mı?',
@@ -12,8 +12,8 @@ const QUESTIONS = [
     a: 'Stoktaki ürünler Safranbolu ve Karabük içinde genellikle [X] iş günü içinde teslim edilir. Şehir dışı gönderimlerde süre bölgeye göre değişir.',
   },
   {
-    q: 'Satın almadan önce numune görebilir miyim?',
-    a: 'Elbette. Safranbolu mağazamızda ürünleri yerinde inceleyebilir; parke, kaplama ve boya gibi renk ve dokusu önemli ürünlerde numune isteyebilirsiniz.',
+    q: 'Ürünleri satın almadan önce görebilir miyim?',
+    a: 'Elbette. Safranbolu mağazamızda ürünleri yerinde inceleyebilir, boya renklerini kartelada görebilirsiniz.',
   },
   {
     q: 'Hangi ödeme yöntemlerini kabul ediyorsunuz?',

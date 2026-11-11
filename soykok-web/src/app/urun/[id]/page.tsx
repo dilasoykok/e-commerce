@@ -100,12 +100,16 @@ export default async function ProductPage({ params }: Props) {
           <h1 className="mt-1 text-2xl leading-snug font-bold sm:text-3xl">{product.name}</h1>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-            <a href="#degerlendirmeler" className="flex items-center gap-1.5 hover:underline">
-              <Stars rating={product.rating} className="text-base" />
-              <strong className="text-brand-900">{product.rating}</strong>
-              <span>({product.reviews} değerlendirme)</span>
-            </a>
-            <span aria-hidden>|</span>
+            {product.reviews > 0 && (
+              <>
+                <a href="#degerlendirmeler" className="flex items-center gap-1.5 hover:underline">
+                  <Stars rating={product.rating} className="text-base" />
+                  <strong className="text-brand-900">{product.rating}</strong>
+                  <span>({product.reviews} değerlendirme)</span>
+                </a>
+                <span aria-hidden>|</span>
+              </>
+            )}
             <span>
               Ürün kodu: <span className="font-medium text-brand-900">{product.id.toUpperCase()}</span>
             </span>
@@ -219,6 +223,9 @@ export default async function ProductPage({ params }: Props) {
             id: 'yorum',
             label: `Değerlendirmeler (${product.reviews})`,
             content: (
+              product.reviews === 0 ? (
+                <p className="text-sm text-gray-500">Bu ürün için henüz değerlendirme yok.</p>
+              ) : (
               <div className="max-w-sm rounded-lg border border-gray-200 p-5 text-center">
                 <p className="text-5xl font-bold">{product.rating.toLocaleString('tr-TR', { minimumFractionDigits: 1 })}</p>
                 <Stars rating={product.rating} className="mt-2 text-2xl" />
@@ -226,6 +233,7 @@ export default async function ProductPage({ params }: Props) {
                 {/* TODO: backend'e değerlendirme uç noktaları (GET/POST /api/products/{id}/reviews) eklenince liste ve form */}
                 <p className="mt-4 text-xs text-gray-500">Yazılı yorumlar ve değerlendirme formu yakında burada olacak.</p>
               </div>
+              )
             ),
           },
         ]}

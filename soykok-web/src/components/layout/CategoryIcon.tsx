@@ -1,4 +1,6 @@
-import { Boxes, BrickWall, Building2, FlaskConical, LayoutGrid, Layers, Ruler, Sofa, type LucideIcon } from 'lucide-react';
+import {
+  Boxes, BrickWall, Building2, Droplets, FlaskConical, LayoutGrid, Layers, PaintBucket, Ruler, Sofa, Wrench, type LucideIcon,
+} from 'lucide-react';
 import type { CategoryIconName } from '@/lib/category-nav';
 
 const ICONS: Record<CategoryIconName, LucideIcon> = {
@@ -10,6 +12,9 @@ const ICONS: Record<CategoryIconName, LucideIcon> = {
   building: Building2,
   sofa: Sofa,
   boxes: Boxes,
+  paint: PaintBucket,
+  wrench: Wrench,
+  droplets: Droplets,
 };
 
 /** Menüdeki kategori ikonu (ikon adı sunucudan düz metin olarak gelir) */

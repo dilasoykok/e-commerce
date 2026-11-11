@@ -184,6 +184,18 @@ kaydedilmez (409). Stok kaydı olmayan ürünler (admin panelinden sonradan ekle
 girmez. Her sipariş "Ödeme Bekleniyor" durumunda açılır: havalede admin parayı görünce, kartta iyzico
 onaylayınca "Sipariş Alındı" olur.
 
+### Örnek katalog
+
+`backend/src/Soykok.Infrastructure/Persistence/Seed/` altındaki örnek katalog yapı malzemeleri mağazasına
+göredir: 5 üst kategori (Boya ve Vernik, Hırdavat, Tesisat ve Banyo, İnşaat Malzemeleri, Yapı Kimyasalları),
+17 alt kategori, 32 ürün. **Fiyat, marka ve teknik bilgiler örnektir**; yayına almadan önce admin panelinden
+gerçekleriyle değiştirin. Ürün görselleri çizimdir (`soykok-web/public/images/products/<ürün-kodu>.jpg`);
+gerçek fotoğrafı admin formundan yükleyebilirsiniz.
+
+Eski parke örnek kataloğu (p1–p33) olan bir veritabanında migrator bir kez çalışınca bu ürünler yeni
+katalogla değiştirilir (`DatabaseInitializer.ReplaceLegacySampleCatalogAsync`). Siparişler, müşteriler ve
+admin panelinden eklenen ürünler korunur.
+
 ### Ürün görselleri ve stok
 
 - **Görseller:** Admin ürün formunda "Bilgisayardan yükle" ile yüklenir; API dosyayı `uploads` docker

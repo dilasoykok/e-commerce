@@ -34,7 +34,7 @@ export default async function AccountPage({ searchParams }: Props) {
         <div className="mx-auto grid max-w-5xl items-stretch overflow-hidden rounded-lg border border-gray-200 bg-white lg:grid-cols-[1fr_1.1fr]">
           {/* Sol: tanıtım paneli (masaüstü) */}
           <aside className="relative hidden overflow-hidden bg-brand-900 p-10 text-white lg:flex lg:flex-col">
-            <Image src="/images/hero/hero-1.jpg" alt="" fill sizes="40vw" className="object-cover opacity-25" />
+            <Image src="/images/hero/yapi-1.jpg" alt="" fill sizes="40vw" className="object-cover opacity-25" />
             <div className="relative flex flex-1 flex-col">
               <Logo id="Auth" className="block h-11 w-auto text-white" />
               <h2 className="mt-auto text-2xl leading-snug font-bold">

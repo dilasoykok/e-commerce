@@ -75,7 +75,7 @@ export default function Page() {
             <ul>
               <li>Paketleri kargo görevlisinin yanında kontrol edin.</li>
               <li>Hasarlı paketi teslim almayın ya da hasar tespit tutanağı tutturun; ardından bize bildirin.</li>
-              <li>Parke, çimento, alçı gibi ağır ürünler bina girişine teslim edilir. [Kata çıkarma hizmeti varsa koşullarını yazın.]</li>
+              <li>Çimento, alçı, alçıpan gibi ağır ürünler bina girişine teslim edilir. [Kata çıkarma hizmeti varsa koşullarını yazın.]</li>
             </ul>
           ),
         },

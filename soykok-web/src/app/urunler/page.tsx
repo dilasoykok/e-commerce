@@ -27,7 +27,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title,
     description:
-      'Yapı malzemeleri, yapı kimyasalları, parke, aksesuar ve daha fazlası. Filtreleyin, karşılaştırın, güvenle alışveriş yapın.',
+      'Boya, hırdavat, tesisat, inşaat malzemeleri ve yapı kimyasalları. Filtreleyin, karşılaştırın, güvenle alışveriş yapın.',
     // Filtreli/sıralı sayfaların hepsi aynı listenin varyasyonu: arama motorları ana adresi esas alsın
     alternates: { canonical: state.categories.length === 1 ? toListUrl({ ...EMPTY_STATE, categories: state.categories }) : '/urunler' },
   };

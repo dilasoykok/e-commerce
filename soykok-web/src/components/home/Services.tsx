@@ -5,9 +5,9 @@ import NewsletterForm from './NewsletterForm';
 const SERVICES = [
   {
     icon: SwatchBook,
-    title: 'Ücretsiz Numune Talebi',
-    text: 'Parke, kaplama ve boya renklerinde numune talep edin.',
-    cta: 'Numune Talep Et',
+    title: 'Renk Danışmanlığı',
+    text: 'Boya renklerini kartelada görün, doğru tonu birlikte seçelim.',
+    cta: 'Bize Danışın',
     href: '/iletisim?konu=numune',
   },
   {

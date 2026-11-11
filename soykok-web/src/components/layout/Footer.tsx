@@ -22,12 +22,7 @@ const FOOTER_NAV = [
     id: 'ftCategories',
     title: 'Kategoriler',
     links: [
-      { href: '/urunler?kategori=parke', label: 'Parke' },
-      { href: '/urunler?kategori=aksesuar', label: 'Aksesuarlar' },
-      { href: '/urunler?kategori=kimyasal', label: 'Yapı Kimyasalları' },
-      { href: '/urunler?kategori=zemin', label: 'Zemin Kaplama' },
-      { href: '/urunler?kategori=duvar', label: 'Duvar Kaplama' },
-      { href: '/urunler?kategori=deck', label: 'Deck (Dış Mekan)' },
+      // Menüyle aynı veriden doldurulur (aşağıda getSiteNav)
     ],
   },
   {

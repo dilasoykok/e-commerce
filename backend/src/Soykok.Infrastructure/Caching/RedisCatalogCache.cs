@@ -11,7 +11,7 @@ namespace Soykok.Infrastructure.Caching;
 internal sealed class RedisCatalogCache(IDistributedCache cache, IConfiguration config, ILogger<RedisCatalogCache> log)
     : ICatalogCache
 {
-    private const string Key = "catalog:v1";
+    private const string Key = "catalog:v2"; // v2: yapı malzemeleri kataloğu (eski önbellek okunmasın)
 
     public async Task<CatalogSnapshot?> GetAsync(CancellationToken ct)
     {

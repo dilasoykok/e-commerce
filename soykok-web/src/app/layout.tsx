@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | Soykök Ticaret',
   },
   description:
-    'Safranbolu’da yapı malzemeleri mağazası: boya, hırdavat, tesisat, yapı kimyasalları, parke ve daha fazlası. Uygun fiyat, güvenli alışveriş.',
+    'Safranbolu’da yapı malzemeleri mağazası: boya, hırdavat, tesisat, inşaat malzemeleri ve yapı kimyasalları. Uygun fiyat, güvenli alışveriş.',
   icons: { icon: { url: '/favicon.svg', type: 'image/svg+xml' } },
 };
 

@@ -1,110 +1,132 @@
 {
   "categories": [
     {
-      "slug": "laminat",
-      "name": "Laminat Parke",
+      "slug": "ic-cephe-boyasi",
+      "name": "İç Cephe Boyası",
       "sortOrder": 1
     },
     {
-      "slug": "masif",
-      "name": "Masif Parke",
+      "slug": "dis-cephe-boyasi",
+      "name": "Dış Cephe Boyası",
       "sortOrder": 2
     },
     {
-      "slug": "vinil",
-      "name": "Vinil Parke",
+      "slug": "vernik-ahsap",
+      "name": "Vernik ve Ahşap Koruyucu",
       "sortOrder": 3
     },
     {
-      "slug": "spc",
-      "name": "SPC Parke",
+      "slug": "boya-malzemeleri",
+      "name": "Fırça, Rulo ve Boya Malzemeleri",
       "sortOrder": 4
     },
     {
-      "slug": "lvt",
-      "name": "LVT Parke",
+      "slug": "el-aletleri",
+      "name": "El Aletleri",
       "sortOrder": 5
     },
     {
-      "slug": "deck",
-      "name": "Deck (Dış Mekan)",
+      "slug": "baglanti-elemanlari",
+      "name": "Vida, Dübel ve Bağlantı",
       "sortOrder": 6
     },
     {
-      "slug": "supurgelik",
-      "name": "Süpürgelik",
+      "slug": "elektrikli-aletler",
+      "name": "Elektrikli Aletler",
       "sortOrder": 7
     },
     {
-      "slug": "profil",
-      "name": "Profil",
+      "slug": "batarya-musluk",
+      "name": "Batarya ve Musluk",
       "sortOrder": 8
     },
     {
-      "slug": "dis-kose",
-      "name": "Dış Köşe",
+      "slug": "boru-baglanti",
+      "name": "Boru ve Bağlantı Parçaları",
       "sortOrder": 9
     },
     {
-      "slug": "tamamlayici",
-      "name": "Tamamlayıcılar",
+      "slug": "vana-sayac",
+      "name": "Vana ve Su Sayacı",
       "sortOrder": 10
+    },
+    {
+      "slug": "cimento-harc",
+      "name": "Çimento ve Harç",
+      "sortOrder": 11
+    },
+    {
+      "slug": "alci-alcipan",
+      "name": "Alçı ve Alçıpan",
+      "sortOrder": 12
+    },
+    {
+      "slug": "isi-yalitimi",
+      "name": "Isı Yalıtımı",
+      "sortOrder": 13
     },
     {
       "slug": "yapistirici",
       "name": "Yapıştırıcı",
-      "sortOrder": 11
+      "sortOrder": 14
     },
     {
       "slug": "derz",
-      "name": "Derz",
-      "sortOrder": 12
+      "name": "Derz Dolgu",
+      "sortOrder": 15
+    },
+    {
+      "slug": "silikon-mastik",
+      "name": "Silikon ve Mastik",
+      "sortOrder": 16
     },
     {
       "slug": "su-yalitimi",
       "name": "Su Yalıtımı",
-      "sortOrder": 13
-    },
-    {
-      "slug": "duvar",
-      "name": "Duvar Kaplama",
-      "sortOrder": 14
-    },
-    {
-      "slug": "insaat",
-      "name": "İnşaat Malzemeleri",
-      "sortOrder": 15
-    },
-    {
-      "slug": "dekorasyon",
-      "name": "Dekorasyon Ürünleri",
-      "sortOrder": 16
+      "sortOrder": 17
     }
   ],
   "groups": [
     {
-      "slug": "parke",
-      "label": "Parke Çeşitleri",
+      "slug": "boya",
+      "label": "Boya ve Vernik",
       "categories": [
-        "laminat",
-        "masif",
-        "vinil",
-        "spc",
-        "lvt",
-        "deck"
+        "ic-cephe-boyasi",
+        "dis-cephe-boyasi",
+        "vernik-ahsap",
+        "boya-malzemeleri"
       ],
       "sortOrder": 1
     },
     {
-      "slug": "aksesuar",
-      "label": "Aksesuarlar",
+      "slug": "hirdavat",
+      "label": "Hırdavat ve El Aletleri",
       "categories": [
-        "supurgelik",
-        "profil",
-        "dis-kose",
-        "tamamlayici"
+        "el-aletleri",
+        "baglanti-elemanlari",
+        "elektrikli-aletler"
       ],
       "sortOrder": 2
+    },
+    {
+      "slug": "tesisat",
+      "label": "Tesisat ve Banyo",
+      "categories": [
+        "batarya-musluk",
+        "boru-baglanti",
+        "vana-sayac"
+      ],
+      "sortOrder": 3
+    },
+    {
+      "slug": "insaat-malzemeleri",
+      "label": "İnşaat Malzemeleri",
+      "categories": [
+        "cimento-harc",
+        "alci-alcipan",
+        "isi-yalitimi"
+      ],
+      "sortOrder": 4
     },
     {
       "slug": "kimyasal",
@@ -112,26 +134,10 @@
       "categories": [
         "yapistirici",
         "derz",
+        "silikon-mastik",
         "su-yalitimi"
       ],
-      "sortOrder": 3
-    },
-    {
-      "slug": "zemin",
-      "label": "Zemin Kaplama Ürünleri",
-      "categories": [
-        "laminat",
-        "masif",
-        "vinil",
-        "spc",
-        "lvt",
-        "deck",
-        "supurgelik",
-        "profil",
-        "dis-kose",
-        "tamamlayici"
-      ],
-      "sortOrder": 4
+      "sortOrder": 5
     }
   ]
 }

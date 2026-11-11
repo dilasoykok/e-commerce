@@ -7,15 +7,15 @@ const SW = 1.75;
 
 const SLIDES = [
   {
-    image: 'hero-1.jpg',
+    image: 'yapi-1.jpg',
     eyebrow: 'Safranbolu’nun Yapı Malzemeleri Mağazası',
     title: ['Yapınız İçin Gereken', 'Her Şey Tek Adreste'],
-    text: 'Boya, hırdavat, tesisat, yapı kimyasalları ve parkede geniş ürün yelpazesi, uygun fiyatlar ve güvenli alışveriş.',
+    text: 'Boya, hırdavat, tesisat, inşaat malzemeleri ve yapı kimyasallarında geniş ürün yelpazesi, uygun fiyatlar ve güvenli alışveriş.',
     cta: 'Alışverişe Başla',
     href: '/urunler',
   },
   {
-    image: 'hero-2.jpg',
+    image: 'yapi-2.jpg',
     eyebrow: 'Kampanyalı Ürünler',
     title: ['Seçili Ürünlerde', 'İndirim Fırsatları'],
     text: 'İndirimdeki yapı malzemelerini kaçırmayın; fırsatlar stoklarla sınırlıdır.',
@@ -23,15 +23,15 @@ const SLIDES = [
     href: '/#kampanyalar',
   },
   {
-    image: 'hero-3.jpg',
-    eyebrow: 'Dış Mekan Çözümleri',
-    title: ['Bahçeniz İçin', 'Dayanıklı Deck Ürünleri'],
-    text: 'Kompozit ve ahşap deck seçenekleriyle her mevsime uygun yaşam alanları.',
-    cta: 'Deck Ürünlerini İncele',
-    href: '/urunler?kategori=deck',
+    image: 'yapi-3.jpg',
+    eyebrow: 'Tesisat ve Banyo',
+    title: ['Batarya, Vana ve', 'Tesisat Malzemeleri'],
+    text: 'Mutfak ve banyo bataryalarından boru ve bağlantı parçalarına, tesisatınız için gereken her şey.',
+    cta: 'Tesisat Ürünlerini İncele',
+    href: '/urunler?kategori=tesisat',
   },
   {
-    image: 'hero-4.jpg',
+    image: 'yapi-4.jpg',
     eyebrow: 'Profesyonellere Özel',
     title: ['Projeleriniz İçin', 'Toplu Alım Avantajı'],
     text: 'Ticari ve konut projelerinize özel fiyatlandırma için hemen teklif alın.',

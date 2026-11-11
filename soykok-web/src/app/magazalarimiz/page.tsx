@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 const SW = 1.75;
 
 const SERVICES = [
-  { icon: Layers, title: 'Geniş Ürün Yelpazesi', text: 'Boya, hırdavat, tesisat, yapı kimyasalları ve parke aynı mağazada.' },
-  { icon: SwatchBook, title: 'Numune ve Renk Kartelası', text: 'Parke, kaplama ve boya renklerini yerinde görün, numune isteyin.' },
+  { icon: Layers, title: 'Geniş Ürün Yelpazesi', text: 'Boya, hırdavat, tesisat, inşaat malzemeleri ve yapı kimyasalları aynı mağazada.' },
+  { icon: SwatchBook, title: 'Renk Kartelası', text: 'Boya renklerini kartelada yerinde görün, doğru tonu birlikte seçelim.' },
   { icon: Ruler, title: 'Malzeme Danışmanlığı', text: 'İşiniz için hangi malzemeden ne kadar gerektiğini birlikte hesaplayalım.' },
   { icon: Truck, title: 'Teslimat', text: 'Mağazadan aldığınız ürünleri adresinize kadar teslim ediyoruz.' },
 ];
@@ -25,7 +25,7 @@ export default function StoresPage() {
     <>
       {/* Sayfa başlığı */}
       <section className="relative overflow-hidden bg-brand-900 text-white">
-        <Image src="/images/categories/parke.jpg" alt="" fill preload sizes="100vw" className="object-cover opacity-25" />
+        <Image src="/images/categories/magaza.jpg" alt="" fill preload sizes="100vw" className="object-cover opacity-25" />
         <div className="absolute inset-0 bg-linear-to-r from-brand-950/90 via-brand-950/60 to-transparent" />
         <div className="container-site relative py-12 lg:py-16">
           <nav aria-label="Sayfa yolu" className="text-xs text-white/70">
