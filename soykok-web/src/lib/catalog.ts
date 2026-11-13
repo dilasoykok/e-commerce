@@ -16,7 +16,8 @@ import * as fallback from '@/data/products';
 import { api } from './api/endpoints';
 import { buildSiteNav, type SiteNav } from './category-nav';
 import { ApiError } from './api/client';
-import type { CatalogCategories, Product, ProductDetail, ProductPage, ProductQuery } from './types';
+import type { BrandInfo, CatalogCategories, Product, ProductDetail, ProductPage, ProductQuery } from './types';
+import { BRANDS } from './brands';
 
 export const CATALOG_TAG = 'catalog';
 const cacheOpts = { next: { revalidate: 60, tags: [CATALOG_TAG] } };
@@ -165,6 +166,16 @@ export async function getCategories(): Promise<CatalogCategories> {
 }
 
 /* ---------- Menü (header, mobil menü, footer, arama kutusu) ---------- */
+
+/** Sitede gösterilen markalar (admin → Markalar). API'ye ulaşılamazsa lib/brands.ts'teki sabit liste. */
+export async function getBrands(): Promise<BrandInfo[]> {
+  try {
+    return await api.catalog.brands(cacheOpts);
+  } catch (err) {
+    warn('Markalar', err);
+    return BRANDS;
+  }
+}
 
 /** Kategori menüsü + arama önerileri. Admin kategori değiştirince "catalog" etiketiyle yenilenir. */
 export async function getSiteNav(): Promise<SiteNav> {

@@ -45,6 +45,42 @@ namespace Soykok.Infrastructure.Persistence.Migrations
                     b.ToTable("categories", "catalog");
                 });
 
+            modelBuilder.Entity("Soykok.Domain.Catalog.Brand", b =>
+                {
+                    b.Property<string>("Slug")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("slug");
+
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("logo_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<bool>("ShowInBand")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_in_band");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer")
+                        .HasColumnName("sort_order");
+
+                    b.HasKey("Slug")
+                        .HasName("pk_brands");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_brands_name");
+
+                    b.ToTable("brands", "catalog");
+                });
+
             modelBuilder.Entity("Soykok.Domain.Catalog.CategoryGroup", b =>
                 {
                     b.Property<string>("Slug")

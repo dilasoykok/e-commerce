@@ -32,5 +32,14 @@ public sealed class CustomerAddress
     public bool IsDefault { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
 
+    internal void Update(string title, string recipientName, string phone, PostalAddress address, InvoiceInfo? invoice)
+    {
+        Title = Guard.NotEmpty(title, "Adres başlığı");
+        RecipientName = Guard.NotEmpty(recipientName, "Alıcı adı");
+        Phone = Guard.NotEmpty(phone, "Telefon");
+        Address = address;
+        Invoice = invoice;
+    }
+
     internal void MarkDefault(bool isDefault) => IsDefault = isDefault;
 }

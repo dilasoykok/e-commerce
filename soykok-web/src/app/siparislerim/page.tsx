@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, LayoutDashboard, LogIn, LogOut, Package, User } from 'lucide-react';
+import { ArrowRight, ChevronRight, LayoutDashboard, LogIn, Package, User } from 'lucide-react';
 
 import OrderCard from '@/components/orders/OrderCard';
+import AccountNav from '@/components/account/AccountNav';
 import GuestTracking from '@/components/orders/GuestTracking';
 import { getCurrentUser } from '@/lib/auth-server';
 import { getMyOrders } from '@/lib/orders-server';
-import { isAdmin, logoutUrl } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'Siparişlerim', robots: { index: false } };
 
@@ -75,15 +76,10 @@ async function MemberView({
               <LayoutDashboard className="size-4" strokeWidth={SW} aria-hidden /> Yönetim Paneli
             </Link>
           )}
-          {/* Keycloak oturumu da kapatılır: tam sayfa yönlendirme */}
-          <a
-            href={logoutUrl('/')}
-            className="inline-flex h-9 items-center gap-2 rounded border border-gray-300 px-4 text-xs font-medium hover:border-sale hover:text-sale"
-          >
-            <LogOut className="size-4" strokeWidth={SW} aria-hidden /> Çıkış Yap
-          </a>
         </div>
       </div>
+
+      <AccountNav current="/siparislerim" />
 
       {error ? (
         <p role="alert" className="mt-6 rounded border border-sale/30 bg-red-50 px-4 py-3 text-sm text-sale">

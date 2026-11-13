@@ -51,6 +51,25 @@ internal sealed class CategoryRepository(AppDbContext db) : ICategoryRepository
     public void Remove(CategoryGroup group) => db.CategoryGroups.Remove(group);
 }
 
+internal sealed class BrandRepository(AppDbContext db) : IBrandRepository
+{
+    public Task<List<Brand>> ListForUpdateAsync(CancellationToken ct) =>
+        db.Brands.OrderBy(b => b.SortOrder).ThenBy(b => b.Name).ToListAsync(ct);
+
+    public Task<List<Brand>> ListVisibleAsync(CancellationToken ct) =>
+        db.Brands.AsNoTracking().Where(b => b.ShowInBand).OrderBy(b => b.SortOrder).ThenBy(b => b.Name).ToListAsync(ct);
+
+    public Task<Dictionary<string, int>> CountProductsAsync(CancellationToken ct) =>
+        db.Products.GroupBy(p => p.Brand).Select(g => new { g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Key, x => x.Count, ct);
+
+    public Task<int> RenameInProductsAsync(string oldName, string newName, CancellationToken ct) =>
+        db.Products.Where(p => p.Brand == oldName).ExecuteUpdateAsync(u => u.SetProperty(p => p.Brand, newName), ct);
+
+    public void Add(Brand brand) => db.Brands.Add(brand);
+    public void Remove(Brand brand) => db.Brands.Remove(brand);
+}
+
 internal sealed class CatalogReadRepository(AppDbContext db) : ICatalogReadRepository
 {
     public async Task<IReadOnlyList<Product>> ListProductsAsync(CancellationToken ct) =>

@@ -84,6 +84,9 @@ internal sealed class CustomerRepository(AppDbContext db) : ICustomerRepository
     public Task<Customer?> FindByIdentityIdAsync(string identityId, CancellationToken ct) =>
         db.Customers.FirstOrDefaultAsync(c => c.IdentityId == identityId, ct);
 
+    public Task<Customer?> FindWithAddressesAsync(string identityId, CancellationToken ct) =>
+        db.Customers.Include(c => c.Addresses).FirstOrDefaultAsync(c => c.IdentityId == identityId, ct);
+
     public void Add(Customer customer) => db.Customers.Add(customer);
 }
 

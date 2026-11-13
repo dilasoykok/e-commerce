@@ -10,13 +10,15 @@ import { useCart, useCartSummary } from '@/store/cart';
 import { useCartSync } from '@/hooks/useCartSync';
 import { usePlaceOrder } from '@/hooks/useOrders';
 import { useUser } from '@/hooks/useUser';
+import { useProfile } from '@/hooks/useProfile';
+import { useAddresses, useCreateAddress } from '@/hooks/useAddresses';
 import { useInstallments } from '@/hooks/useInstallments';
 import { installmentSummary } from '@/components/payment/Installments';
 import { ApiError } from '@/lib/api/client';
 import { formatTL } from '@/lib/format';
 import { saveLastOrder } from '@/lib/last-order';
 import { PROVINCES_SORTED } from '@/data/provinces';
-import type { DeliveryMethod, PaymentMethod, PlaceOrderInput } from '@/lib/types';
+import type { DeliveryMethod, PaymentMethod, PlaceOrderInput, SavedAddress } from '@/lib/types';
 import { productImageSrc, isUploadedImage } from '@/lib/product-image';
 
 const SW = 1.75;
@@ -61,18 +63,81 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
     if (hydrated && summary.items.length === 0 && !placed.current) router.replace('/sepet');
   }, [hydrated, summary.items.length, router]);
 
-  // Üyenin adı ve e-postası boş alanlara yazılır
+  // Üyenin bilgileri boş alanlara yazılır: önce Profilim'deki ad/soyad/telefon, yoksa giriş bilgileri.
+  // Form, sepet yüklenene kadar ekranda olmadığı için formReady değişince de yeniden denenir.
+  const profile = useProfile(Boolean(user)).data;
+  const formReady = hydrated && summary.items.length > 0;
   useEffect(() => {
     const form = formRef.current;
     if (!form || !user) return;
-    const fill = (name: string, value: string) => {
+    const fill = (name: string, value: string | null | undefined) => {
       const el = form.elements.namedItem(name) as HTMLInputElement | null;
       if (el && !el.value && value) el.value = value;
     };
-    fill('firstName', user.firstName);
-    fill('lastName', user.lastName);
+    fill('firstName', profile?.firstName || user.firstName);
+    fill('lastName', profile?.lastName || user.lastName);
     fill('email', user.email);
-  }, [user]);
+    fill('phone', profile?.phone);
+  }, [user, profile, formReady]);
+
+  // Adres defteri: kayıtlı adres seçilince teslimat alanları doldurulur; yeni adres istenirse deftere kaydedilir
+  const savedAddresses = useAddresses(isLoggedIn).data ?? [];
+  const createAddress = useCreateAddress();
+  const [addressChoice, setAddressChoice] = useState<string | null>(null); // adres id'si ya da 'new'
+  const [saveToBook, setSaveToBook] = useState(true);
+
+  const applyAddress = (a: SavedAddress | null) => {
+    const form = formRef.current;
+    if (!form) return;
+    const set = (name: string, value: string) => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | null;
+      if (el) el.value = value;
+    };
+    set('city', a?.city ?? '');
+    set('district', a?.district ?? '');
+    set('address', a?.line ?? '');
+    set('postalCode', a?.postalCode ?? '');
+    const phone = form.elements.namedItem('phone') as HTMLInputElement | null;
+    if (a && phone && !phone.value) phone.value = a.phone;
+  };
+
+  const chooseAddress = (choice: string) => {
+    setAddressChoice(choice);
+    applyAddress(savedAddresses.find((a) => a.id === choice) ?? null);
+  };
+
+  // İlk açılışta varsayılan adres seçili gelir (alanlar boşsa)
+  useEffect(() => {
+    if (!formReady || addressChoice !== null || savedAddresses.length === 0) return;
+    const form = formRef.current;
+    const addressEl = form?.elements.namedItem('address') as HTMLTextAreaElement | null;
+    if (addressEl?.value) return setAddressChoice('new');
+    const first = savedAddresses.find((a) => a.isDefault) ?? savedAddresses[0];
+    setAddressChoice(first.id);
+    applyAddress(first);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formReady, savedAddresses, addressChoice]);
+
+  const offerSave =
+    isLoggedIn && delivery === 'cargo' && savedAddresses.length < 10 && (savedAddresses.length === 0 || addressChoice === 'new');
+
+  /** Sipariş verildikten sonra adresi deftere ekler; hata siparişi etkilemez, en fazla 3 sn beklenir */
+  const saveAddressQuietly = (input: PlaceOrderInput) =>
+    Promise.race([
+      createAddress
+        .mutateAsync({
+          title: input.district || 'Adresim',
+          recipientName: `${input.firstName} ${input.lastName}`.trim(),
+          phone: input.phone,
+          city: input.city ?? '',
+          district: input.district ?? '',
+          line: input.address ?? '',
+          postalCode: input.postalCode ?? null,
+          isDefault: savedAddresses.length === 0,
+        })
+        .catch(() => undefined),
+      new Promise((resolve) => setTimeout(resolve, 3000)),
+    ]);
 
   const focusFirstError = (errs: Errors) => {
     const first = FIELD_ORDER.find((f) => errs[f]);
@@ -127,9 +192,10 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
     }
 
     placeOrder.mutate(input, {
-      onSuccess: (order) => {
+      onSuccess: async (order) => {
         placed.current = true;
         saveLastOrder(order);
+        if (offerSave && saveToBook) await saveAddressQuietly(input);
         if (order.paymentPageUrl) {
           // Kartla ödeme: iyzico'nun güvenli ödeme sayfasına. Sepet, ödeme başarılı olunca boşaltılır.
           setRedirecting(true);
@@ -183,6 +249,33 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               , siparişiniz hesabınızda görünsün. Üye olmadan da devam edebilir, siparişinizi sipariş numarasıyla takip
               edebilirsiniz.
             </p>
+          )}
+
+          {isLoggedIn && delivery === 'cargo' && savedAddresses.length > 0 && (
+            <fieldset className="mt-5">
+              <legend className="form-label">Kayıtlı adreslerim</legend>
+              <div className="flex flex-wrap gap-2">
+                {[...savedAddresses.map((a) => ({ id: a.id, label: a.title, sub: `${a.district} / ${a.city}` })),
+                  { id: 'new', label: 'Yeni adres', sub: 'Elle gir' }].map((o) => (
+                  <label
+                    key={o.id}
+                    className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-blue-600 ${
+                      addressChoice === o.id ? 'border-brand-900 bg-brand-900/5' : 'border-gray-300 hover:border-brand-900'
+                    }`}
+                  >
+                    <input type="radio" name="savedAddress" value={o.id} checked={addressChoice === o.id}
+                      onChange={() => chooseAddress(o.id)} className="size-4 accent-brand-900" />
+                    <span>
+                      <span className="block font-semibold">{o.label}</span>
+                      <span className="block text-xs text-gray-600">{o.sub}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+              <Link href="/hesabim/adresler" className="mt-2 inline-block text-xs font-semibold text-brand-900 underline">
+                Adreslerimi düzenle
+              </Link>
+            </fieldset>
           )}
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -260,6 +353,14 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               </>
             </div>
           </div>
+
+          {offerSave && (
+            <label className="mt-4 flex cursor-pointer items-center gap-3 text-sm">
+              <input type="checkbox" checked={saveToBook} onChange={(e) => setSaveToBook(e.target.checked)}
+                className="size-4 accent-brand-900" />
+              Bu adresi adres defterime kaydet
+            </label>
+          )}
         </section>
 
         {/* 2. Fatura */}

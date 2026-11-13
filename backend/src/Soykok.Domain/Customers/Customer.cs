@@ -8,6 +8,9 @@ namespace Soykok.Domain.Customers;
 /// </summary>
 public sealed class Customer
 {
+    /// <summary>Bir üyenin kaydedebileceği en fazla adres</summary>
+    public const int MaxAddresses = 10;
+
     private readonly List<CustomerAddress> _addresses = [];
 
     private Customer() { } // EF Core
@@ -56,12 +59,26 @@ public sealed class Customer
         string title, string recipientName, string phone, PostalAddress address, InvoiceInfo? invoice, bool makeDefault,
         DateTimeOffset now)
     {
+        if (_addresses.Count >= MaxAddresses)
+            throw new DomainException($"En fazla {MaxAddresses} adres kaydedebilirsiniz.");
+
         var item = new CustomerAddress(Id, title, recipientName, phone, address, invoice, now);
         _addresses.Add(item);
         if (makeDefault || _addresses.Count == 1)
             SetDefaultAddress(item.Id);
         UpdatedAt = now;
         return item;
+    }
+
+    public void UpdateAddress(
+        Guid addressId, string title, string recipientName, string phone, PostalAddress address, InvoiceInfo? invoice,
+        bool makeDefault, DateTimeOffset now)
+    {
+        var item = _addresses.FirstOrDefault(a => a.Id == addressId)
+            ?? throw new DomainException("Adres bulunamadı.");
+        item.Update(title, recipientName, phone, address, invoice);
+        if (makeDefault) SetDefaultAddress(item.Id);
+        UpdatedAt = now;
     }
 
     public void RemoveAddress(Guid addressId, DateTimeOffset now)

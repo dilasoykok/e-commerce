@@ -31,7 +31,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Yapı malzemeleri örnek kataloğu: 5 üst kategori, 17 alt kategori, 32 ürün ve görselleri
 - Kategori menüsü (masaüstü, mobil, footer) ve arama kutusundaki kategoriler veritabanından gelir
 - Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (alci → Alçı ve Alçıpan)
-- Üyelik (Keycloak): giriş, kayıt, siparişlerim; misafir sipariş takibi (numara + e-posta)
+- Üyelik (Keycloak): giriş, kayıt, siparişlerim, **profilim** (ad, soyad, cep telefonu, kampanya izni; ödeme formunu otomatik doldurur), **adreslerim** (en fazla 10 adres; ödemede tek tıkla seçilir, yeni adres siparişte deftere kaydedilebilir); misafir sipariş takibi (numara + e-posta)
 - Favoriler (tarayıcıda saklanır)
 - Ürün yorumları: üyeler puan + yorum yazar, admin onayından sonra yayınlanır; ürünü satın almış üyede "Doğrulanmış alıcı" rozeti
 - Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**; ürün sayfasında taksit tablosu ve "Peşin fiyatına N taksit" bilgisi
@@ -47,6 +47,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Siparişler: liste, arama, durum değiştirme (havale onayı, hazırlanıyor, kargoya verildi + takip no, teslim, iptal → stok iadesi)
 - Ürünler: ekle / düzenle / sil, fiyat ve indirim, **görsel yükleme** (ana görsel + galeri), **stok adedi**
 - Kategoriler: üst ve alt kategori ekle / düzenle / sil
+- Markalar: marka ekle / düzenle / sil, **logo yükle / değiştir**, sıra, ana sayfa bandında göster / gizle
 - Yorumlar: onay bekleyen yorumları onayla / reddet (onaylanınca ürünün puanı ve yorum sayısı güncellenir)
 - Mesajlar: iletişim formundan gelen mesajlar (okunmamış rozeti, okundu işaretleme, e-postayla yanıtla, sil)
 
@@ -72,7 +73,7 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 1. ~~Firma bilgileri ve yapı malzemeleri kataloğu~~ ✓
 2. ~~Erişilebilirlik ve duyarlı tasarım (WCAG 2.2 AA)~~ ✓
 3. ~~Ürün yorumları~~ ✓
-4. Üye hesabı: profil, kayıtlı adresler, favorilerin hesaba kaydı
+4. Üye hesabı: ~~profil~~ ✓, ~~kayıtlı adresler~~ ✓, favorilerin hesaba kaydı
 5. Admin: toplu fiyat güncelleme, Excel/CSV içe-dışa aktarma
 6. Otomatik testler ve GitHub Actions
 7. Yayına alma: alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifreleri, Keycloak geliştirme kullanıcısının silinmesi, veritabanı ve `uploads` volume yedeği
@@ -208,13 +209,15 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `GET /api/admin/orders`        | admin   | Sipariş listesi: `durum`, `q` (numara/ad/e-posta/telefon), `page`, `pageSize` |
 | `GET /api/admin/orders/{number}` | admin | Sipariş detayı + fatura + geçilebilecek durumlar |
 | `POST /api/admin/orders/{number}/status` | admin | Durum değiştir `{ status, note, carrier?, trackingNumber? }` (havale onayı, kargo, teslim, iptal). Kargoya verirken firma + takip no zorunlu; iptalde stok geri eklenir |
-| `POST /api/admin/uploads`      | admin   | Ürün görseli yükle (multipart, alan `file`; JPG/PNG/WEBP, en fazla 5 MB) → `{ url }` |
+| `POST /api/admin/uploads`      | admin   | Görsel yükle (multipart, alan `file`; JPG/PNG/WEBP, en fazla 5 MB) → `{ url }`. Marka logosu için `?klasor=brands` |
 | `GET /api/files/products/...`  | herkes  | Yüklenen görseller (`uploads` volume'u) |
 | `GET /api/admin/categories`    | admin   | Alt kategoriler (ürün sayısıyla) + üst kategoriler |
 | `POST /api/admin/categories`   | admin   | Alt kategori ekle `{ slug?, name, sortOrder?, groups: ["boya"] }` (kod boşsa addan üretilir) |
 | `PUT/DELETE /api/admin/categories/{slug}` | admin | Alt kategori güncelle / sil (içinde ürün varsa silinmez, 409) |
 | `POST /api/admin/category-groups` | admin | Üst kategori ekle `{ slug?, label, sortOrder? }` |
 | `PUT/DELETE /api/admin/category-groups/{slug}` | admin | Üst kategori güncelle / sil (alt kategoriler kalır) |
+| `GET /api/brands`              | herkes  | Sitede gösterilen markalar `[{ name, logo }]` (ana sayfa bandı, Hakkımızda) |
+| `GET/POST /api/admin/brands` · `PUT/DELETE /api/admin/brands/{slug}` | admin | Marka yönetimi `{ name, logoUrl?, sortOrder?, showInBand? }`; ad değişirse ürünlerdeki marka adı da güncellenir |
 | `POST /api/contact`            | herkes  | İletişim formu `{ name, email, phone?, subject, orderNumber?, message, kvkk }` (IP başına 10 dk'da 5) |
 | `GET /api/admin/messages`      | admin   | Mesajlar: `okunmamis=1`, `page`, `pageSize` → `{ total, unread, items }` |
 | `POST /api/admin/messages/{id}/read` · `DELETE /api/admin/messages/{id}` | admin | Okundu/okunmadı `{ read }` · sil |
@@ -222,6 +225,10 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `POST /api/admin/reviews/{id}/approve` · `DELETE /api/admin/reviews/{id}` | admin | Yorumu onayla · reddet/sil (ürün puanı yeniden hesaplanır) |
 | `GET /api/payments/installments?price=` | herkes | Tutar için kart ailelerine göre taksitler (iyzico; Redis'te 6 saat, IP başına dakikada 60) |
 | `POST /api/payments/iyzico/callback` | iyzico | Kart ödemesi dönüşü (form: `token`, sorgu: `no`). Sonucu doğrular, sonuç sayfasına yönlendirir |
+| `GET /api/me/profile`          | giriş   | Üyenin profili (kaydı yoksa giriş bilgileriyle doldurulur) |
+| `PUT /api/me/profile`          | giriş   | Profili güncelle `{ firstName, lastName, phone?, marketingConsent }` (telefon 05XXXXXXXXX'e çevrilir) |
+| `GET/POST /api/me/addresses`   | giriş   | Adres defteri: liste / ekle `{ title, recipientName, phone, city, district, line, postalCode?, isDefault }` |
+| `PUT/DELETE /api/me/addresses/{id}` · `POST /api/me/addresses/{id}/default` | giriş | Düzenle / sil / varsayılan yap (hepsi güncel listeyi döner) |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
 | `GET /api/auth/login`          | herkes  | Keycloak girişine yönlendirir (`?returnUrl=/...`) |
@@ -290,6 +297,14 @@ API içindeki `OrderEmailWorker` RabbitMQ'daki `soykok.order-emails` kuyruğunu 
 Ayarlar `.env`'deki `SMTP_*` satırları (port 587). Boşsa mail gönderilmez, site normal çalışır.
 Gmail için normal şifre değil, Google hesabında açılan **uygulama şifresi** gerekir. Gönderilemeyen
 mail bir kez yeniden denenir; hata `docker compose logs api` çıktısında görünür.
+
+### Markalar
+
+Ana sayfadaki **Popüler Markalar** bandı ve Hakkımızda'daki markalar **/admin/markalar** sayfasından yönetilir:
+logo yükle / değiştir / kaldır (PNG, JPG, WEBP; şeffaf arka planlı PNG önerilir), marka ekle / sil, sıra ve
+"bantta göster". Yüklenen logolar ürün görselleri gibi `uploads` volume'una yazılır. Marka adı değiştirilirse o
+markanın ürünlerindeki marka adı da güncellenir; marka silinirse ürünler silinmez. İlk kayıtlar (8 marka ve
+markaların kendi sitelerinden alınan logoları, `soykok-web/public/images/brands/`) migration ile gelir.
 
 ### Kategoriler
 

@@ -12,12 +12,21 @@
  *            GET|POST /api/admin/categories · PUT|DELETE /api/admin/categories/{slug}
  *            POST /api/admin/category-groups · PUT|DELETE /api/admin/category-groups/{slug}
  *   Yorum    GET|POST /api/products/{id}/reviews · GET /api/admin/reviews · POST /api/admin/reviews/{id}/approve · DELETE /api/admin/reviews/{id}
+ *   Hesap    GET|PUT /api/me/profile · GET|POST /api/me/addresses · PUT|DELETE /api/me/addresses/{id} · POST /api/me/addresses/{id}/default
+ *   Marka    GET /api/brands · GET|POST /api/admin/brands · PUT|DELETE /api/admin/brands/{slug}
  *   Sistem   GET  /api/health · GET /api/me
  */
 
 import { apiFetch, toQueryString, type ApiRequestInit } from './client';
 import type {
+  AdminBrand,
+  BrandInfo,
+  SaveBrandInput,
   AdminReviewPage,
+  SaveAddressInput,
+  SavedAddress,
+  Profile,
+  UpdateProfileInput,
   InstallmentInfo,
   ProductReviews,
   WriteReviewInput,
@@ -58,6 +67,8 @@ export const api = {
       apiFetch<ProductPage>(`/products${toQueryString(query)}`, opts),
 
     product: (id: string, opts?: Opts) => apiFetch<ProductDetail>(`/products/${encodeURIComponent(id)}`, opts),
+    /** Sitede gösterilen markalar (admin → Markalar'dan yönetilir) */
+    brands: (opts?: Opts) => apiFetch<BrandInfo[]>('/brands', opts),
   },
 
   reviews: {
@@ -75,6 +86,22 @@ export const api = {
   contact: {
     /** POST /api/contact — iletişim formu (IP başına 10 dakikada 5 mesaj) */
     send: (input: ContactInput) => apiFetch<{ received: boolean }>('/contact', { method: 'POST', json: input }),
+  },
+
+  profile: {
+    /** Giriş yapan üyenin profili (kaydı yoksa Keycloak bilgileriyle doldurulur) */
+    get: (opts?: Opts) => apiFetch<Profile>('/me/profile', { cache: 'no-store', ...opts }),
+    update: (input: UpdateProfileInput) => apiFetch<Profile>('/me/profile', { method: 'PUT', json: input }),
+  },
+
+  addresses: {
+    /** Kayıtlı adresler (varsayılan en üstte). Her işlem güncel listeyi döner. */
+    list: (opts?: Opts) => apiFetch<SavedAddress[]>('/me/addresses', { cache: 'no-store', ...opts }),
+    create: (input: SaveAddressInput) => apiFetch<SavedAddress[]>('/me/addresses', { method: 'POST', json: input }),
+    update: (id: string, input: SaveAddressInput) =>
+      apiFetch<SavedAddress[]>(`/me/addresses/${id}`, { method: 'PUT', json: input }),
+    remove: (id: string) => apiFetch<SavedAddress[]>(`/me/addresses/${id}`, { method: 'DELETE' }),
+    makeDefault: (id: string) => apiFetch<SavedAddress[]>(`/me/addresses/${id}/default`, { method: 'POST' }),
   },
 
   payments: {
@@ -142,12 +169,23 @@ export const api = {
     approveReview: (id: string) => apiFetch<void>(`/admin/reviews/${id}/approve`, { method: 'POST' }),
     deleteReview: (id: string) => apiFetch<void>(`/admin/reviews/${id}`, { method: 'DELETE' }),
 
-    /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } */
-    uploadImage: (file: File) => {
+    /** Görsel yükleme → { url: "/api/files/products/xxx.jpg" } (marka logosu için klasor: 'brands') */
+    uploadImage: (file: File, klasor: 'products' | 'brands' = 'products') => {
       const form = new FormData();
       form.append('file', file);
-      return apiFetch<{ url: string }>('/admin/uploads', { method: 'POST', form, timeoutMs: 60_000 });
+      return apiFetch<{ url: string }>(`/admin/uploads${toQueryString({ klasor: klasor === 'products' ? undefined : klasor })}`, {
+        method: 'POST',
+        form,
+        timeoutMs: 60_000,
+      });
     },
+
+    /** Marka yönetimi — her işlem güncel listeyi döner */
+    brands: (opts?: Opts) => apiFetch<AdminBrand[]>('/admin/brands', { cache: 'no-store', ...opts }),
+    createBrand: (input: SaveBrandInput) => apiFetch<AdminBrand[]>('/admin/brands', { method: 'POST', json: input }),
+    updateBrand: (slug: string, input: SaveBrandInput) =>
+      apiFetch<AdminBrand[]>(`/admin/brands/${encodeURIComponent(slug)}`, { method: 'PUT', json: input }),
+    deleteBrand: (slug: string) => apiFetch<AdminBrand[]>(`/admin/brands/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
 
     /** Kategori yönetimi — her işlem güncel listeyi döner */
     categories: (opts?: Opts) => apiFetch<AdminCategoryList>('/admin/categories', { cache: 'no-store', ...opts }),

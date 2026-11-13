@@ -5,14 +5,16 @@ using Soykok.Infrastructure.Identity;
 namespace Soykok.Api.Endpoints;
 
 /// <summary>
-/// Ürün görseli yükleme (yalnızca admin).
-///   POST /api/admin/uploads   (multipart/form-data, alan adı: file) → { url: "/api/files/products/0193....jpg" }
-/// Dönen adres ürünün "image" / "images" alanına yazılır. Dosyalar UploadOptions.RootPath altında
+/// Görsel yükleme (yalnızca admin).
+///   POST /api/admin/uploads              (multipart/form-data, alan adı: file) → { url: "/api/files/products/0193....jpg" }
+///   POST /api/admin/uploads?klasor=brands → marka logosu: { url: "/api/files/brands/0193....png" }
+/// Dönen adres ürünün "image" / "images" alanına ya da markanın logoUrl alanına yazılır. Dosyalar UploadOptions.RootPath altında
 /// saklanır ve /api/files/... adresinden sunulur (Program.cs → UseStaticFiles).
 /// </summary>
 public static class AdminUploadEndpoints
 {
-    private const string Folder = "products";
+    /// <summary>İzin verilen klasörler (adres çubuğundan gelen değer yalnızca bunlardan biri olabilir)</summary>
+    private static readonly string[] Folders = ["products", "brands"];
 
     public static RouteGroupBuilder MapAdminUploadEndpoints(this RouteGroupBuilder api)
     {
@@ -42,7 +44,11 @@ public static class AdminUploadEndpoints
         var ext = DetectImage(header);
         if (ext is null) return Invalid("Yalnızca JPG, PNG veya WEBP görsel yüklenebilir.");
 
-        var dir = Path.Combine(o.RootPath, Folder);
+        var requested = request.Query["klasor"].ToString();
+        var folder = string.IsNullOrEmpty(requested) ? Folders[0] : Folders.FirstOrDefault(f => f == requested);
+        if (folder is null) return Invalid("Geçersiz klasör.");
+
+        var dir = Path.Combine(o.RootPath, folder);
         Directory.CreateDirectory(dir);
         var name = $"{Guid.CreateVersion7():N}{ext}";
         await using (var target = File.Create(Path.Combine(dir, name)))
@@ -50,7 +56,7 @@ public static class AdminUploadEndpoints
             await source.CopyToAsync(target, ct);
 
         logs.CreateLogger("Uploads").LogInformation("Görsel yüklendi: {Name} ({Bytes} bayt)", name, file.Length);
-        return Results.Ok(new { url = $"{UploadOptions.RequestPath}/{Folder}/{name}" });
+        return Results.Ok(new { url = $"{UploadOptions.RequestPath}/{folder}/{name}" });
     }
 
     private static string? DetectImage(ReadOnlySpan<byte> h)

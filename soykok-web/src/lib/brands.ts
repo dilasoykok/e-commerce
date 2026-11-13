@@ -1,17 +1,19 @@
+import type { BrandInfo } from './types';
+
 /**
- * Markalar — kayan marka bandında, "Sizin İçin Seçtiklerimiz"de ve Hakkımızda'da isim olarak gösterilir.
- * Katalogdaki marka adlarıyla aynı yazılmalı (tıklayınca /urunler?marka=... filtresi açılır).
- * Logo kullanmak isterseniz markanın izin verdiği logoyu public/images/brands altına koyup buraya ekleyin.
+ * Markalar artık YÖNETİM PANELİNDEN (Admin → Markalar) yönetilir: logo yükle/değiştir, ekle, sil, sırala.
+ * Bu liste yalnızca API'ye ulaşılamadığında (ör. Docker kapalıyken `npm run dev`) kullanılan yedektir;
+ * veritabanındaki ilk kayıtlar da buradaki markalar ve logolardır (migration AddBrands).
  */
-export const BRANDS = [
-  { name: 'Filli Boya' },
-  { name: 'Marshall' },
-  { name: 'Dyo' },
-  { name: 'Kalekim' },
-  { name: 'Knauf' },
-  { name: 'Bosch' },
-  { name: 'Artema' },
-  { name: 'Akfix' },
+export const BRANDS: BrandInfo[] = [
+  { name: 'Filli Boya', logo: '/images/brands/filli-boya.png' },
+  { name: 'Marshall', logo: '/images/brands/marshall.png' },
+  { name: 'Dyo', logo: '/images/brands/dyo.png' },
+  { name: 'Kalekim', logo: '/images/brands/kalekim.svg' },
+  { name: 'Knauf', logo: '/images/brands/knauf.svg' },
+  { name: 'Bosch', logo: '/images/brands/bosch.svg' },
+  { name: 'Artema', logo: '/images/brands/artema.png' },
+  { name: 'Akfix', logo: '/images/brands/akfix.svg' },
 ];
 
 export const brandHref = (name: string) => `/urunler?marka=${encodeURIComponent(name)}`;

@@ -7,6 +7,7 @@ using Soykok.Application.Catalog.Contracts;
 using Soykok.Application.Catalog.Queries;
 using Soykok.Application.Common.Messaging;
 using Soykok.Application.Common.Results;
+using Soykok.Application.Customers;
 using Soykok.Application.Ordering.Admin;
 using Soykok.Application.Ordering.Commands;
 using Soykok.Application.Ordering.Contracts;
@@ -45,6 +46,14 @@ public static class DependencyInjection
         services.AddScoped<ICommandHandler<UpdateCategoryGroupCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
         services.AddScoped<ICommandHandler<DeleteCategoryGroupCommand, Result<AdminCategoryList>>>(sp => sp.GetRequiredService<AdminCategoriesHandler>());
 
+        // Markalar (site bandı + admin)
+        services.AddScoped<BrandsHandler>();
+        services.AddScoped<IQueryHandler<GetBrandsQuery, IReadOnlyList<PublicBrand>>>(sp => sp.GetRequiredService<BrandsHandler>());
+        services.AddScoped<IQueryHandler<GetAdminBrandsQuery, IReadOnlyList<AdminBrandRow>>>(sp => sp.GetRequiredService<BrandsHandler>());
+        services.AddScoped<ICommandHandler<CreateBrandCommand, Result<IReadOnlyList<AdminBrandRow>>>>(sp => sp.GetRequiredService<BrandsHandler>());
+        services.AddScoped<ICommandHandler<UpdateBrandCommand, Result<IReadOnlyList<AdminBrandRow>>>>(sp => sp.GetRequiredService<BrandsHandler>());
+        services.AddScoped<ICommandHandler<DeleteBrandCommand, Result<IReadOnlyList<AdminBrandRow>>>>(sp => sp.GetRequiredService<BrandsHandler>());
+
         // Siparişler
         services.AddScoped<ICommandHandler<PlaceOrderCommand, Result<OrderDetail>>, PlaceOrderHandler>();
         services.AddScoped<IQueryHandler<GetMyOrdersQuery, IReadOnlyList<OrderSummary>>, GetMyOrdersHandler>();
@@ -65,6 +74,19 @@ public static class DependencyInjection
 
         // Taksit seçenekleri (ürün sayfası, ödeme)
         services.AddScoped<IQueryHandler<GetInstallmentsQuery, Result<InstallmentInfo>>, GetInstallmentsHandler>();
+
+        // Üye profili
+        services.AddScoped<ProfileHandler>();
+        services.AddScoped<IQueryHandler<GetMyProfileQuery, ProfileDto>>(sp => sp.GetRequiredService<ProfileHandler>());
+        services.AddScoped<ICommandHandler<UpdateMyProfileCommand, Result<ProfileDto>>>(sp => sp.GetRequiredService<ProfileHandler>());
+
+        // Adres defteri
+        services.AddScoped<AddressBookHandler>();
+        services.AddScoped<IQueryHandler<GetMyAddressesQuery, IReadOnlyList<AddressDto>>>(sp => sp.GetRequiredService<AddressBookHandler>());
+        services.AddScoped<ICommandHandler<CreateAddressCommand, Result<IReadOnlyList<AddressDto>>>>(sp => sp.GetRequiredService<AddressBookHandler>());
+        services.AddScoped<ICommandHandler<UpdateAddressCommand, Result<IReadOnlyList<AddressDto>>>>(sp => sp.GetRequiredService<AddressBookHandler>());
+        services.AddScoped<ICommandHandler<DeleteAddressCommand, Result<IReadOnlyList<AddressDto>>>>(sp => sp.GetRequiredService<AddressBookHandler>());
+        services.AddScoped<ICommandHandler<SetDefaultAddressCommand, Result<IReadOnlyList<AddressDto>>>>(sp => sp.GetRequiredService<AddressBookHandler>());
 
         // Ürün yorumları (site + admin)
         services.AddScoped<ProductReviewsHandler>();

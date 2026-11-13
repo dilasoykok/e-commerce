@@ -2,10 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import FavoritesPage from '@/components/favorites/FavoritesPage';
+import AccountNav from '@/components/account/AccountNav';
+import { getCurrentUser } from '@/lib/auth-server';
 
 export const metadata: Metadata = { title: 'Favorilerim', robots: { index: false } };
 
-export default function Page() {
+export default async function Page() {
+  const user = await getCurrentUser();
   return (
     <div className="container-site py-6 lg:py-8">
       <nav aria-label="Sayfa yolu" className="text-xs text-gray-500">
@@ -23,7 +26,8 @@ export default function Page() {
           </li>
         </ol>
       </nav>
-      <h1 className="mt-3 text-2xl font-bold">Favorilerim</h1>
+      <h1 className="mt-3 text-2xl font-bold">{user ? 'Hesabım' : 'Favorilerim'}</h1>
+      {user && <AccountNav current="/favorilerim" />}
       <FavoritesPage />
     </div>
   );

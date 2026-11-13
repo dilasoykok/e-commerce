@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Award, ChevronRight, CircleCheck, Eye, Handshake, Leaf, MapPin, Target, Users } from 'lucide-react';
-import { BRANDS } from '@/lib/brands';
+import { getBrands } from '@/lib/catalog';
 
 export const metadata: Metadata = {
   title: 'Hakkımızda',
@@ -19,7 +19,8 @@ const VALUES = [
 ];
 
 /** Hakkımızda (eski hakkimizda.html) */
-export default function AboutPage() {
+export default async function AboutPage() {
+  const brands = await getBrands();
   return (
     <>
       {/* Sayfa başlığı */}
@@ -157,9 +158,13 @@ export default function AboutPage() {
             Mağazamızda bulabileceğiniz markalardan bazıları
           </h2>
           <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
-            {BRANDS.map((b) => (
+            {brands.map((b) => (
               <li key={b.name}>
-                <span className="text-lg font-bold tracking-wide text-gray-500 transition hover:text-brand-900">{b.name}</span>
+                {b.logo ? (
+                  <Image src={b.logo} alt={b.name} width={140} height={48} unoptimized className="max-h-10 w-auto max-w-[9rem] object-contain" />
+                ) : (
+                  <span className="text-lg font-bold tracking-wide text-gray-500 transition hover:text-brand-900">{b.name}</span>
+                )}
               </li>
             ))}
           </ul>

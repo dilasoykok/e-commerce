@@ -35,6 +35,21 @@ public interface ICategoryRepository
     void Remove(CategoryGroup group);
 }
 
+/// <summary>Markalar (Popüler Markalar bandı, admin → Markalar)</summary>
+public interface IBrandRepository
+{
+    /// <summary>Sıralı liste (takip edilir — admin düzenler)</summary>
+    Task<List<Brand>> ListForUpdateAsync(CancellationToken ct);
+    /// <summary>Sitede gösterilenler (takip edilmez)</summary>
+    Task<List<Brand>> ListVisibleAsync(CancellationToken ct);
+    /// <summary>Marka adı → o markanın ürün sayısı</summary>
+    Task<Dictionary<string, int>> CountProductsAsync(CancellationToken ct);
+    /// <summary>Marka adı değişince ürünlerdeki marka adı da güncellenir</summary>
+    Task<int> RenameInProductsAsync(string oldName, string newName, CancellationToken ct);
+    void Add(Brand brand);
+    void Remove(Brand brand);
+}
+
 /// <summary>Katalog okuma tarafı (takip edilmeyen, sıralı listeler).</summary>
 public interface ICatalogReadRepository
 {

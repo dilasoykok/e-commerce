@@ -316,3 +316,33 @@ export type InstallmentInfo = {
   interestFreeInstallments: number;
   cards: CardInstallments[];
 };
+
+/* ---------- Üye profili ---------- */
+
+export type Profile = { email: string; firstName: string; lastName: string; phone: string | null; marketingConsent: boolean };
+export type UpdateProfileInput = { firstName: string; lastName: string; phone: string | null; marketingConsent: boolean };
+
+/* ---------- Adres defteri ---------- */
+
+export type SavedAddress = {
+  id: string;
+  title: string;
+  recipientName: string;
+  phone: string;
+  city: string;
+  district: string;
+  line: string;
+  postalCode: string | null;
+  isDefault: boolean;
+};
+export type SaveAddressInput = Omit<SavedAddress, 'id' | 'isDefault' | 'postalCode'> & {
+  postalCode?: string | null;
+  isDefault: boolean;
+};
+
+/* ---------- Markalar ---------- */
+
+/** Sitede gösterilen marka (Popüler Markalar bandı, Hakkımızda) */
+export type BrandInfo = { name: string; logo?: string | null };
+export type AdminBrand = { slug: string; name: string; logoUrl: string | null; sortOrder: number; showInBand: boolean; productCount: number };
+export type SaveBrandInput = { name: string; logoUrl: string | null; sortOrder?: number; showInBand: boolean };

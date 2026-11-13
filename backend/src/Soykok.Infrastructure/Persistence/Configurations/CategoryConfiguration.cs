@@ -25,3 +25,16 @@ internal sealed class CategoryGroupConfiguration : IEntityTypeConfiguration<Cate
         e.Property(x => x.Label).HasMaxLength(128);
     }
 }
+
+internal sealed class BrandConfiguration : IEntityTypeConfiguration<Brand>
+{
+    public void Configure(EntityTypeBuilder<Brand> e)
+    {
+        e.ToTable("brands", Schemas.Catalog);
+        e.HasKey(x => x.Slug);
+        e.Property(x => x.Slug).HasMaxLength(64);
+        e.Property(x => x.Name).HasMaxLength(100);
+        e.Property(x => x.LogoUrl).HasMaxLength(500);
+        e.HasIndex(x => x.Name).IsUnique();
+    }
+}

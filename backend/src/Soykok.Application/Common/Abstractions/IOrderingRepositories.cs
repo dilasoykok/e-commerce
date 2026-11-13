@@ -30,6 +30,8 @@ public interface IOrderRepository
 public interface ICustomerRepository
 {
     Task<Customer?> FindByIdentityIdAsync(string identityId, CancellationToken ct);
+    /// <summary>Kayıtlı adresleriyle birlikte (adres defteri için)</summary>
+    Task<Customer?> FindWithAddressesAsync(string identityId, CancellationToken ct);
     void Add(Customer customer);
 }
 

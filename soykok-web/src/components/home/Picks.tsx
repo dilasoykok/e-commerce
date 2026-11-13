@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/product/ProductCard';
-import { getProductsByIds } from '@/lib/catalog';
-import { BRANDS, brandHref } from '@/lib/brands';
+import { getBrands, getProductsByIds } from '@/lib/catalog';
+import { brandHref } from '@/lib/brands';
 
 /**
  * Elle seçilen ürünler. Eskiden fiyatlar HTML'e sabit yazılıydı; artık ürünler
@@ -14,7 +14,7 @@ const PICK_IDS = ['ic-boya-silikonlu-7-5l', 'darbeli-matkap-750w', 'seramik-yapi
 
 /** Sizin İçin Seçtiklerimiz (eski partials/home/picks.html) */
 export default async function Picks() {
-  const products = await getProductsByIds(PICK_IDS);
+  const [products, brands] = await Promise.all([getProductsByIds(PICK_IDS), getBrands()]);
 
   return (
     <section className="container-site mt-8" aria-labelledby="picksTitle">
@@ -51,7 +51,7 @@ export default async function Picks() {
           <div>
             <h3 className="mb-2.5 text-xs font-semibold">Popüler Markalar</h3>
             <ul className="grid grid-cols-2 gap-1.5">
-              {BRANDS.map((b) => (
+              {brands.slice(0, 8).map((b) => (
                 <li key={b.name}>
                   <Link
                     href={brandHref(b.name)}

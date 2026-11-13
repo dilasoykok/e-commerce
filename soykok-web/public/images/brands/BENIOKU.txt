@@ -1,0 +1,5 @@
+Marka logoları artık YÖNETİM PANELİNDEN değiştirilir: Admin → Markalar → Düzenle → "Logoyu değiştir".
+Yüklenen logolar sunucudaki uploads klasörüne kaydedilir; bu klasöre dosya koymanız gerekmez.
+
+Buradaki dosyalar ilk kurulumdaki logolardır (markaların kendi resmi sitelerinden alındı, Kasım 2026).
+Admin panelinden logo değiştirilmemiş markalar bunları kullanmaya devam eder; silmeyin.

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FolderTree, MessageSquare, Package, ReceiptText, Star } from 'lucide-react';
+import { BadgeCheck, FolderTree, MessageSquare, Package, ReceiptText, Star } from 'lucide-react';
 import { useUnreadMessageCount } from '@/hooks/useAdminMessages';
 import { usePendingReviewCount } from '@/hooks/useReviews';
 
@@ -10,6 +10,7 @@ const TABS = [
   { href: '/admin/siparisler', label: 'Siparişler', icon: ReceiptText },
   { href: '/admin/urunler', label: 'Ürünler', icon: Package },
   { href: '/admin/kategoriler', label: 'Kategoriler', icon: FolderTree },
+  { href: '/admin/markalar', label: 'Markalar', icon: BadgeCheck },
   { href: '/admin/yorumlar', label: 'Yorumlar', icon: Star },
   { href: '/admin/mesajlar', label: 'Mesajlar', icon: MessageSquare },
 ];

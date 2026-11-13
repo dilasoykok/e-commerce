@@ -14,6 +14,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<CategoryGroup> CategoryGroups => Set<CategoryGroup>();
+    public DbSet<Brand> Brands => Set<Brand>();
 
     // customers
     public DbSet<Customer> Customers => Set<Customer>();
