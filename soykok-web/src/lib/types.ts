@@ -10,7 +10,7 @@ export type Product = {
   name: string;
   brand: string;
   category: string;
-  unit?: string | null; // verilmezse m²
+  unit?: string | null; // verilmezse adet
   image: string; // public/images/products altındaki dosya adı
   price: number;
   oldPrice: number | null;
@@ -302,3 +302,17 @@ export type AdminReview = {
 };
 
 export type AdminReviewPage = { total: number; pending: number; page: number; pageSize: number; items: AdminReview[] };
+
+/* ---------- Taksit ---------- */
+
+export type InstallmentPrice = { count: number; monthly: number; total: number };
+export type CardInstallments = { cardFamily: string; bankName: string | null; prices: InstallmentPrice[] };
+export type InstallmentInfo = {
+  /** Kartla ödeme kapalıysa false — taksit bilgisi hiç gösterilmez */
+  enabled: boolean;
+  price: number;
+  maxInstallments: number;
+  /** "Peşin fiyatına N taksit" (yoksa 1) */
+  interestFreeInstallments: number;
+  cards: CardInstallments[];
+};

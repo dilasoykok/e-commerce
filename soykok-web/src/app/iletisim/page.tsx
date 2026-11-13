@@ -17,22 +17,22 @@ const FAQ = [
     a: 'Stokta olan ürünler genellikle 3–7 iş günü içinde kargoya verilir. Siparişinizin durumunu Sipariş Takibi sayfasından izleyebilirsiniz.',
   },
   {
-    q: 'Numune nasıl talep edebilirim?',
-    a: 'Bu formda konu olarak "Numune talebi"ni seçip istediğiniz ürünleri yazmanız yeterli. Mağazamızdan da ücretsiz numune alabilirsiniz.',
+    q: 'Toplu alımda fiyat teklifi alabilir miyim?',
+    a: 'Evet. Bu formda konu olarak "Proje / toplu alım teklifi"ni seçip ürünleri ve miktarları yazın; size özel fiyatla dönelim.',
   },
   {
     q: 'İade süresi ne kadar?',
     a: 'Teslimattan itibaren 14 gün içinde, kullanılmamış ve ambalajı açılmamış ürünleri iade edebilirsiniz.',
   },
   {
-    q: 'Uygulama (montaj) hizmeti veriyor musunuz?',
-    a: 'Montaj ve uygulama talepleriniz için mağazamızı arayın; ürüne ve bölgenize göre bilgi verelim.',
+    q: 'Siparişimi mağazadan teslim alabilir miyim?',
+    a: 'Evet. Ödeme sayfasında "Mağazadan Teslim Al"ı seçin; siparişiniz hazır olunca e-postayla haber veririz, kargo ücreti alınmaz.',
   },
 ];
 
 type Props = { searchParams: Promise<{ konu?: string }> };
 
-/** İletişim (eski iletisim.html). ?konu=numune gibi adreslerle konu önceden seçili gelir. */
+/** İletişim (eski iletisim.html). ?konu=proje gibi adreslerle konu önceden seçili gelir. */
 export default async function ContactPage({ searchParams }: Props) {
   const { konu } = await searchParams;
 

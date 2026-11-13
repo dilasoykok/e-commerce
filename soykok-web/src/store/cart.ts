@@ -25,7 +25,7 @@ export type CartProduct = {
   brand?: string;
   image?: string; // public/images/products altındaki dosya adı
   price: number;
-  unit?: string; // m², mt, adet
+  unit?: string; // adet, kg, torba, m²
 };
 
 export type CartItem = Required<CartProduct> & { qty: number };
@@ -70,7 +70,7 @@ export const useCart = create<CartState>()(
                 brand: product.brand ?? '',
                 image: product.image ?? '',
                 price: Number(product.price) || 0,
-                unit: product.unit || 'm²',
+                unit: product.unit || 'adet',
                 qty: clampQty(qty),
               },
             ],

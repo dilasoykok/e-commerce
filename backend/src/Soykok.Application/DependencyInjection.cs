@@ -63,6 +63,9 @@ public static class DependencyInjection
         services.AddScoped<ICommandHandler<MarkContactMessageCommand, Result<ContactMessageDto>>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
         services.AddScoped<ICommandHandler<DeleteContactMessageCommand, Result>>(sp => sp.GetRequiredService<ContactMessagesAdminHandler>());
 
+        // Taksit seçenekleri (ürün sayfası, ödeme)
+        services.AddScoped<IQueryHandler<GetInstallmentsQuery, Result<InstallmentInfo>>, GetInstallmentsHandler>();
+
         // Ürün yorumları (site + admin)
         services.AddScoped<ProductReviewsHandler>();
         services.AddScoped<IQueryHandler<GetProductReviewsQuery, Result<ProductReviewsResponse>>>(sp => sp.GetRequiredService<ProductReviewsHandler>());

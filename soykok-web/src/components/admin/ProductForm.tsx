@@ -34,7 +34,7 @@ const EMPTY: FormState = {
   name: '',
   brand: '',
   category: '',
-  unit: 'm²',
+  unit: 'adet',
   image: '',
   price: '',
   oldPrice: '',
@@ -206,7 +206,7 @@ function FormBody({ initial, productId, onClose, onSaved }: Props & { initial: F
     }
     if (stock) input.stock = stock;
     if ([input.price, input.oldPrice, input.boxM2].some((n) => Number.isNaN(n))) {
-      setClientError('Fiyat ve m² alanlarına yalnızca sayı girin (ör. 1062 veya 1062,50).');
+      setClientError('Fiyat ve paket alanlarına yalnızca sayı girin (ör. 1062 veya 1062,50).');
       return;
     }
     if (productId) {
@@ -259,7 +259,7 @@ function FormBody({ initial, productId, onClose, onSaved }: Props & { initial: F
             <input className="form-input" inputMode="decimal" value={f.oldPrice} onChange={set('oldPrice')} aria-invalid={Boolean(err('oldPrice'))} />
           </Field>
           <Field label="Birim">
-            <input className="form-input" value={f.unit} onChange={set('unit')} placeholder="m², mt, adet" />
+            <input className="form-input" value={f.unit} onChange={set('unit')} placeholder="adet, kg, torba, m²" />
           </Field>
         </div>
 

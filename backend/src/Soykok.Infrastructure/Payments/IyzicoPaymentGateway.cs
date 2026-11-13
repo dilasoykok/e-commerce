@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Soykok.Application.Common.Abstractions;
@@ -15,14 +16,20 @@ namespace Soykok.Infrastructure.Payments;
 /// iyzico Ortak Ödeme Sayfası (Checkout Form) — resmi SDK yerine doğrudan REST (iki uç nokta yeterli).
 ///   Başlat:  POST /payment/iyzipos/checkoutform/initialize/auth/ecom  → paymentPageUrl
 ///   Sonuç:   POST /payment/iyzipos/checkoutform/auth/ecom/detail       → paymentStatus
+///   Taksit:  POST /payment/iyzipos/installment                         → kart ailelerine göre taksitler
 /// Kimlik doğrulama IYZWSv2: HMACSHA256(randomKey + yol + gövde, secretKey).
 /// Dokümantasyon: https://docs.iyzico.com
 /// </summary>
 public sealed class IyzicoPaymentGateway(
     HttpClient http,
     IOptions<IyzicoOptions> options,
+    IDistributedCache cache,
     ILogger<IyzicoPaymentGateway> log) : IPaymentGateway
 {
+    private const string InstallmentPath = "/payment/iyzipos/installment";
+    /// <summary>Taksit oranları sık değişmez; aynı tutar için iyzico'ya 6 saatte bir sorulur</summary>
+    private static readonly TimeSpan InstallmentCacheTime = TimeSpan.FromHours(6);
+
     private const string InitializePath = "/payment/iyzipos/checkoutform/initialize/auth/ecom";
     private const string RetrievePath = "/payment/iyzipos/checkoutform/auth/ecom/detail";
 
@@ -148,6 +155,65 @@ public sealed class IyzicoPaymentGateway(
 
         return new PaymentOutcome(false, basketId, paymentId, 0,
             Str(root, "errorMessage") ?? (fraud == -1 ? "Ödeme güvenlik kontrolünden geçemedi." : "Ödeme tamamlanamadı."));
+    }
+
+    public async Task<IReadOnlyList<CardInstallments>> GetInstallmentsAsync(decimal price, CancellationToken ct)
+    {
+        if (!IsEnabled || price <= 0) return [];
+
+        var key = $"installments:v1:{Money(price)}";
+        try
+        {
+            if (await cache.GetStringAsync(key, ct) is { } cached)
+                return JsonSerializer.Deserialize<List<CardInstallments>>(cached, Json) ?? [];
+        }
+        catch (Exception ex) { log.LogWarning(ex, "Taksit önbelleği okunamadı"); }
+
+        List<CardInstallments> result;
+        try
+        {
+            using var doc = await PostAsync(InstallmentPath, new { locale = "tr", conversationId = $"taksit-{Money(price)}", price = Money(price) }, ct);
+            var root = doc.RootElement;
+            if (Str(root, "status") != "success" || !root.TryGetProperty("installmentDetails", out var details) ||
+                details.ValueKind != JsonValueKind.Array)
+            {
+                log.LogWarning("iyzico taksit sorgusu reddedildi: {Code} {Message}", Str(root, "errorCode"), Str(root, "errorMessage"));
+                return [];
+            }
+
+            var allowed = _o.EnabledInstallments is { Length: > 0 } inst ? inst.ToHashSet() : null;
+            result = [];
+            foreach (var d in details.EnumerateArray())
+            {
+                var family = Str(d, "cardFamilyName");
+                if (string.IsNullOrWhiteSpace(family) || result.Any(r => r.CardFamily == family)) continue;
+                if (!d.TryGetProperty("installmentPrices", out var prices) || prices.ValueKind != JsonValueKind.Array) continue;
+
+                var list = prices.EnumerateArray()
+                    .Select(p => new InstallmentPrice(
+                        p.TryGetProperty("installmentNumber", out var n) && n.ValueKind == JsonValueKind.Number ? n.GetInt32() : 0,
+                        Dec(p, "installmentPrice"),
+                        Dec(p, "totalPrice")))
+                    .Where(p => p.Count >= 1 && p.Total > 0 && (allowed is null || allowed.Contains(p.Count)))
+                    .OrderBy(p => p.Count)
+                    .ToList();
+                if (list.Count > 0) result.Add(new CardInstallments(family, Str(d, "bankName"), list));
+            }
+            result = result.OrderBy(r => r.CardFamily, StringComparer.Create(new CultureInfo("tr-TR"), true)).ToList();
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            log.LogWarning(ex, "iyzico taksit sorgusuna ulaşılamadı");
+            return [];
+        }
+
+        try
+        {
+            await cache.SetStringAsync(key, JsonSerializer.Serialize(result, Json),
+                new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = InstallmentCacheTime }, ct);
+        }
+        catch (Exception ex) { log.LogWarning(ex, "Taksit önbelleği yazılamadı"); }
+        return result;
     }
 
     /* ---------- HTTP + IYZWSv2 ---------- */

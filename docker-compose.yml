@@ -148,8 +148,12 @@ services:
       KC_HEALTH_ENABLED: "true"
       # realm dosyasındaki ${KEYCLOAK_BFF_SECRET} yer tutucusu bununla doldurulur
       KEYCLOAK_BFF_SECRET: ${KEYCLOAK_BFF_SECRET:-dev-bff-secret-change-me}
+      # Giriş temasındaki "Siteye dön" bağlantısı
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost}
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import:ro
+      # Soykök giriş teması (start-dev'de önbellek kapalı: dosya değişince sayfayı yenilemek yeter)
+      - ./keycloak/themes/soykok:/opt/keycloak/themes/soykok:ro
     depends_on:
       postgres:
         condition: service_healthy

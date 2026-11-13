@@ -16,7 +16,20 @@ public interface IPaymentGateway
 
     /// <summary>Geri dönüşteki token ile ödemenin sonucunu kuruluştan sorar (tarayıcıya güvenilmez).</summary>
     Task<PaymentOutcome> GetCheckoutResultAsync(string token, string orderNumber, CancellationToken ct);
+
+    /// <summary>
+    /// Tutar için kart ailelerine göre taksit seçenekleri (Bonus, World, Maximum ...).
+    /// Kartla ödeme kapalıysa ya da kuruluşa ulaşılamazsa boş liste.
+    /// </summary>
+    Task<IReadOnlyList<CardInstallments>> GetInstallmentsAsync(decimal price, CancellationToken ct);
 }
+
+/// <param name="Count">Taksit sayısı (1 = tek çekim)</param>
+/// <param name="Monthly">Aylık taksit tutarı</param>
+/// <param name="Total">Toplam ödenecek (vade farkı dahil)</param>
+public sealed record InstallmentPrice(int Count, decimal Monthly, decimal Total);
+
+public sealed record CardInstallments(string CardFamily, string? BankName, IReadOnlyList<InstallmentPrice> Prices);
 
 /// <param name="Token">Ödeme oturumu; siparişe kaydedilir, yarım kalan ödeme sonradan bununla sorgulanır</param>
 public sealed record PaymentSession(bool Success, string? PaymentPageUrl, string? ErrorMessage, string? Token = null);

@@ -43,12 +43,25 @@ internal static class OrderEmailTemplates
             ? "<p>Siparişiniz hazırlanıyor. Mağazadan teslim almaya hazır olduğunda size tekrar haber vereceğiz.</p>"
             : "<p>Siparişiniz hazırlanıyor. Kargoya verildiğinde takip numarasıyla birlikte size haber vereceğiz.</p>");
 
+    /// <summary>Mağaza adresi ve saatleri (soykok-web/src/lib/store-info.ts ile aynı olmalı)</summary>
+    private const string StorePickupBox = """
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;background:#f8f7f5;border-radius:6px">
+          <tr><td style="padding:14px 16px;font-size:14px;line-height:1.6;color:#1f2a36">
+            <strong>Soykök Ticaret — Safranbolu</strong><br>
+            Atatürk Mah., Karabük Cad. No:41, 78600 Safranbolu / Karabük<br>
+            Pazartesi – Cumartesi 08:00 – 20:00 · Pazar 11:00 – 16:00<br>
+            Telefon: <a href="tel:+903707251640" style="color:#1f2a36">0370 725 16 40</a> ·
+            <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Soyk%C3%B6k+Ticaret+Safranbolu&amp;destination_place_id=ChIJFTwMxtOqnEARPgeCprU4zpg" style="color:#1f2a36">Yol tarifi</a>
+          </td></tr>
+        </table>
+        """;
+
     public static EmailMessage Shipped(Order o, EmailOptions s)
     {
         if (o.DeliveryMethod == DeliveryMethod.Store)
             return Customer(o, s, $"Siparişiniz teslim almaya hazır — {o.Number}", "Siparişiniz hazır",
                 "<p>Siparişiniz hazır! Safranbolu mağazamızdan çalışma saatleri içinde teslim alabilirsiniz. " +
-                "Gelirken sipariş numaranızı yanınızda bulundurun.</p>");
+                "Gelirken sipariş numaranızı yanınızda bulundurun.</p>" + StorePickupBox);
 
         var shipment = ShipmentDto.From(o);
         var trackLink = shipment?.TrackingUrl is null
@@ -139,7 +152,7 @@ internal static class OrderEmailTemplates
             rows.Append($"""
                 <tr>
                   <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px">{E(i.ProductName)}<br>
-                    <span style="color:#6b7280;font-size:12px">{i.Quantity} {E(i.Unit ?? "m²")} × {Money(i.UnitPrice)}</span></td>
+                    <span style="color:#6b7280;font-size:12px">{i.Quantity} {E(i.Unit ?? "adet")} × {Money(i.UnitPrice)}</span></td>
                   <td align="right" style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px;white-space:nowrap"><strong>{Money(i.LineTotal)}</strong></td>
                 </tr>
                 """);

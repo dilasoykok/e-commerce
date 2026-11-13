@@ -133,7 +133,7 @@ function Body({ data }: { data: AdminOrderDetail }) {
                 <span>
                   {i.productName}
                   <span className="block text-xs text-gray-500">
-                    {i.productId} · {i.quantity} {i.unit ?? 'm²'} × {formatTL(i.unitPrice)}
+                    {i.productId} · {i.quantity} {i.unit ?? 'adet'} × {formatTL(i.unitPrice)}
                   </span>
                 </span>
                 <span className="font-semibold whitespace-nowrap">{formatTL(i.lineTotal)}</span>

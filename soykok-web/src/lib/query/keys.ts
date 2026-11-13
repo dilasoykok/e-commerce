@@ -24,6 +24,8 @@ export const queryKeys = {
   reviews: (productId: string, page: number) => ['reviews', productId, page] as const,
   reviewsOf: (productId: string) => ['reviews', productId] as const,
 
+  installments: (price: number) => ['installments', price.toFixed(2)] as const,
+
   catalog: ['catalog'] as const,
   categories: ['catalog', 'categories'] as const,
   adminCategories: ['catalog', 'admin-categories'] as const,

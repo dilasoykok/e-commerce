@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, ChevronRight, Package, SwatchBook, Truck } from 'lucide-react';
+import { ArrowRight, ChevronRight, Package, Store, Truck } from 'lucide-react';
 
 import Gallery from '@/components/product-detail/Gallery';
 import PurchasePanel from '@/components/product-detail/PurchasePanel';
 import ProductTabs from '@/components/product-detail/ProductTabs';
 import ProductReviews from '@/components/product-detail/ProductReviews';
+import { InstallmentHint, InstallmentTable } from '@/components/payment/Installments';
 import ProductCard from '@/components/product/ProductCard';
 import { getCategories, getProduct, getProducts } from '@/lib/catalog';
 import { formatTL } from '@/lib/format';
@@ -26,7 +27,7 @@ const SW = 1.75;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProduct(decodeURIComponent((await params).id));
   if (!product) return { title: 'Ürün bulunamadı' };
-  const description = product.description ?? `${product.brand} ${product.name} — ${formatTL(product.price)}/${product.unit || 'm²'}`;
+  const description = product.description ?? `${product.brand} ${product.name} — ${formatTL(product.price)}/${product.unit || 'adet'}`;
   return {
     title: product.name,
     description,
@@ -40,7 +41,7 @@ export default async function ProductPage({ params }: Props) {
   const [product, catalog, all] = await Promise.all([getProduct(id), getCategories(), getProducts({ limit: 100 })]);
   if (!product) notFound();
 
-  const unit = product.unit || 'm²';
+  const unit = product.unit || 'adet';
   const categoryName = catalog.categories.find((c) => c.slug === product.category)?.name ?? product.category;
   const group = parentGroup(product.category, catalog);
   const related = relatedProducts(product, all, catalog);
@@ -134,6 +135,7 @@ export default async function ProductPage({ params }: Props) {
             KDV dahil
             {product.boxM2 && <span className="before:mx-1.5 before:content-['·']">1 paket = {product.boxM2.toLocaleString('tr-TR')} m²</span>}
           </p>
+          <InstallmentHint price={product.price} className="mt-2" />
 
           {product.features.length > 0 && (
             <ul className="mt-5 space-y-1.5 text-sm">
@@ -160,10 +162,7 @@ export default async function ProductPage({ params }: Props) {
               <Truck className="size-5 shrink-0 text-brand-700" strokeWidth={SW} aria-hidden /> {formatTL(FREE_SHIPPING_LIMIT)} üzeri ücretsiz kargo
             </li>
             <li className="flex items-center gap-2">
-              <SwatchBook className="size-5 shrink-0 text-brand-700" strokeWidth={SW} aria-hidden />
-              <Link href="/iletisim?konu=numune" className="underline hover:text-brand-900">
-                Ücretsiz numune iste
-              </Link>
+              <Store className="size-5 shrink-0 text-brand-700" strokeWidth={SW} aria-hidden /> Safranbolu mağazamızdan ücretsiz teslim
             </li>
             <li className="flex items-center gap-2">
               <Package className="size-5 shrink-0 text-brand-700" strokeWidth={SW} aria-hidden /> 14 gün kolay iade
@@ -173,7 +172,10 @@ export default async function ProductPage({ params }: Props) {
       </div>
 
       <ProductTabs
-        hashTab={{ hash: 'degerlendirmeler', tabId: 'yorum' }}
+        hashTabs={[
+          { hash: 'degerlendirmeler', tabId: 'yorum' },
+          { hash: 'taksit-secenekleri', tabId: 'taksit' },
+        ]}
         tabs={[
           {
             id: 'aciklama',
@@ -219,6 +221,11 @@ export default async function ProductPage({ params }: Props) {
                 </p>
               </div>
             ),
+          },
+          {
+            id: 'taksit',
+            label: 'Taksit Seçenekleri',
+            content: <InstallmentTable price={product.price} />,
           },
           {
             id: 'yorum',

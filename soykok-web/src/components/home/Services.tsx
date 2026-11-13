@@ -8,7 +8,7 @@ const SERVICES = [
     title: 'Renk Danışmanlığı',
     text: 'Boya renklerini kartelada görün, doğru tonu birlikte seçelim.',
     cta: 'Bize Danışın',
-    href: '/iletisim?konu=numune',
+    href: '/iletisim?konu=renk',
   },
   {
     icon: Building,

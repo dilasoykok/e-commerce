@@ -47,7 +47,8 @@ public static class ContactSubjects
         ["urun"] = "Ürün bilgisi",
         ["siparis"] = "Sipariş",
         ["iade"] = "İade ve değişim",
-        ["numune"] = "Numune talebi",
+        ["renk"] = "Renk / boya danışmanlığı",
+        ["numune"] = "Numune talebi", // eski mesajlar için; formda artık yok
         ["proje"] = "Proje / toplu alım teklifi",
         ["diger"] = "Diğer",
     };

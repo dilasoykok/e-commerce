@@ -5,7 +5,7 @@ import { LEGAL_PAGES } from '@/lib/company';
 
 export const metadata: Metadata = {
   title: 'Sıkça Sorulan Sorular',
-  description: 'Metrekare hesabı, montaj, teslimat, numune, ödeme ve iade hakkında sıkça sorulan sorular.',
+  description: 'Boya hesabı, toplu alım, teslimat, ödeme, taksit ve iade hakkında sıkça sorulan sorular.',
 };
 
 /** SSS — ana sayfadaki SSS bölümünün aynısı + yardım sayfalarına linkler */

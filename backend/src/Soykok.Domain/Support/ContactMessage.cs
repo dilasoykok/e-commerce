@@ -13,7 +13,7 @@ public sealed class ContactMessage
     public string Name { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string? Phone { get; private set; }
-    /// <summary>Konu kodu: urun, siparis, iade, numune, proje, diger</summary>
+    /// <summary>Konu kodu: urun, siparis, iade, renk, proje, diger</summary>
     public string Subject { get; private set; } = null!;
     public string? OrderNumber { get; private set; }
     public string Message { get; private set; } = null!;

@@ -6,6 +6,7 @@ import { productHref } from '@/lib/routes';
 import { BANK_TRANSFER, STAGES, deliveryLabel, formatDateTime, paymentLabel, stageIndex, statusLabel } from '@/lib/orders';
 import type { OrderDetail, OrderItem, OrderSummary } from '@/lib/types';
 import { productImageSrc, isUploadedImage } from '@/lib/product-image';
+import StorePickupInfo from './StorePickupInfo';
 
 const SW = 1.75;
 
@@ -116,7 +117,7 @@ export default function OrderCard({ order, open = false }: { order: OrderSummary
                   {detail.shippingAddress.postalCode && ` ${detail.shippingAddress.postalCode}`}
                 </p>
               )}
-              {detail?.deliveryMethod === 'store' && <p>Safranbolu mağazamızdan teslim alabilirsiniz.</p>}
+              {order.deliveryMethod === 'store' && <StorePickupInfo />}
               <p>Ödeme: {paymentLabel(order.paymentMethod)}</p>
             </div>
 
@@ -194,7 +195,7 @@ function ItemRow({ item }: { item: OrderItem }) {
           {item.productName}
         </Link>
         <p className="text-xs text-gray-500">
-          {item.brand} · {item.quantity} {item.unit ?? 'm²'} × {formatTL(item.unitPrice)}
+          {item.brand} · {item.quantity} {item.unit ?? 'adet'} × {formatTL(item.unitPrice)}
         </p>
       </div>
       <p className="text-sm font-bold">{formatTL(item.lineTotal)}</p>

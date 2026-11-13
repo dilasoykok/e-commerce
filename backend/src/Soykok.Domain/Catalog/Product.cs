@@ -11,7 +11,7 @@ public sealed class Product
     public string Brand { get; private set; } = null!;
     public string CategorySlug { get; private set; } = null!;
 
-    /// <summary>Fiyat birimi: "mt", "adet" ... Boşsa m².</summary>
+    /// <summary>Fiyat birimi: "adet", "torba", "m²" ... Boşsa adet.</summary>
     public string? Unit { get; private set; }
 
     public string Image { get; private set; } = null!;

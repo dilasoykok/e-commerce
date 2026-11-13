@@ -16,7 +16,7 @@ export { productHref };
  * Server Component; yalnızca "Sepete Ekle" ve favori butonları tarayıcıda çalışır.
  */
 export default function ProductCard({ product: p, priority = false }: { product: Product; priority?: boolean }) {
-  const unit = p.unit || 'm²';
+  const unit = p.unit || 'adet';
   const href = productHref(p.id);
 
   return (

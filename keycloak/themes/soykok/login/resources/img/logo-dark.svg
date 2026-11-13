@@ -1,0 +1,14 @@
+<svg viewBox="0 0 216 52" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Soykök Ticaret">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c99a5f"/>
+      <stop offset="1" stop-color="#8a5726"/>
+    </linearGradient>
+  </defs>
+  <path d="M12 7h34v11H23v6h23v27H12V40h23v-6H12z" fill="#5e3b1b"/>
+  <path d="M8 3h34v11H19v6h23v27H8V36h23v-6H8z" fill="url(#w)"/>
+  <g fill="#1f2a36" font-family="Inter, 'Inter Variable', Arial, sans-serif">
+    <text x="58" y="31" font-size="30" font-weight="700" textLength="152" lengthAdjust="spacingAndGlyphs">SOYKÖK</text>
+    <text x="62" y="47" font-size="9" font-weight="500" textLength="128" lengthAdjust="spacing">TİCARET</text>
+  </g>
+</svg>

@@ -1,6 +1,7 @@
 {
   "realm": "soykok",
   "displayName": "Soykök Ticaret",
+  "loginTheme": "soykok",
   "enabled": true,
   "registrationAllowed": true,
   "registrationEmailAsUsername": true,

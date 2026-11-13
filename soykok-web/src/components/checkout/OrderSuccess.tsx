@@ -11,6 +11,7 @@ import { formatTL } from '@/lib/format';
 import { BANK_TRANSFER, deliveryLabel, paymentLabel } from '@/lib/orders';
 import type { OrderDetail } from '@/lib/types';
 import { productImageSrc, isUploadedImage } from '@/lib/product-image';
+import StorePickupInfo from '@/components/orders/StorePickupInfo';
 
 const SW = 1.75;
 
@@ -149,6 +150,7 @@ export default function OrderSuccess({ paidNumber }: { paidNumber?: string | nul
             <dd className="font-semibold">
               {deliveryLabel(order.deliveryMethod)}
               {order.shippingAddress && ` — ${order.shippingAddress.district} / ${order.shippingAddress.city}`}
+              {order.deliveryMethod === 'store' && <StorePickupInfo className="mt-1 font-normal" />}
             </dd>
           </div>
           <div className="flex justify-between sm:block">
@@ -166,7 +168,7 @@ export default function OrderSuccess({ paidNumber }: { paidNumber?: string | nul
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold">{item.productName}</p>
                 <p className="text-xs text-gray-500">
-                  {item.quantity} {item.unit ?? 'm²'} × {formatTL(item.unitPrice)}
+                  {item.quantity} {item.unit ?? 'adet'} × {formatTL(item.unitPrice)}
                 </p>
               </div>
               <p className="text-sm font-bold">{formatTL(item.lineTotal)}</p>

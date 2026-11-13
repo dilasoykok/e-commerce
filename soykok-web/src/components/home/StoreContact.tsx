@@ -51,7 +51,7 @@ export default function StoreContact() {
           </span>
           <h2 className="mt-4 text-3xl font-bold text-stone-800 md:text-4xl">Mağazamız ve İletişim</h2>
           <p className="mx-auto mt-3 max-w-2xl text-stone-600">
-            Ürünleri yerinde görmek, numune almak ve kampanyalar hakkında bilgi almak için Safranbolu mağazamıza bekleriz.
+            Ürünleri yerinde görmek, boya renklerini kartelada seçmek ve kampanyalar hakkında bilgi almak için Safranbolu mağazamıza bekleriz.
           </p>
         </div>
 

@@ -137,7 +137,7 @@ public sealed partial class PlaceOrderHandler(
 
         if (shortages.Count > 0)
             return OrderingErrors.OutOfStock(shortages.Select(s =>
-                $"{found[s.ProductId].Name} (en fazla {s.Available} {found[s.ProductId].Unit ?? "m²"})"));
+                $"{found[s.ProductId].Name} (en fazla {s.Available} {found[s.ProductId].Unit ?? "adet"})"));
 
         log.LogInformation("Sipariş oluşturuldu: {Number} ({Total} TL, {Lines} kalem)", order.Number, order.Total, lines.Count);
 

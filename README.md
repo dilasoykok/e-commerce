@@ -1,4 +1,7 @@
-# Soykök Ticaret — E-Ticaret Altyapısı (Docker)
+# Soykök Ticaret — E-Ticaret Sitesi
+
+Safranbolu / Karabük'teki Soykök Ticaret (Harun Soykök) yapı malzemeleri mağazasının online satış sitesi:
+boya ve vernik, hırdavat, tesisat, inşaat malzemeleri, yapı kimyasalları.
 
 Arayüz (`soykok-web/`, Next.js) ve altyapı servisleri tek bir `docker compose` ile ayağa kalkar.
 Tüm trafik **nginx** reverse proxy üzerinden geçer.
@@ -23,16 +26,22 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 ### Yapılanlar
 
 **Mağaza (müşteri tarafı)**
-- Next.js 16 arayüz: ana sayfa, ürün listesi (filtre, sıralama, sayfalama), ürün detayı (galeri, m² hesaplayıcı), sepet, ödeme, sipariş onayı
+- Next.js 16 arayüz: ana sayfa, ürün listesi (filtre, sıralama, sayfalama), ürün detayı (galeri, miktar hesaplayıcı), sepet, ödeme, sipariş onayı
+- Firma bilgileri (Harun Soykök – Soykök Ticaret, Safranbolu adresi, telefon, çalışma saatleri, harita ve yol tarifi) tek yerden: `src/lib/store-info.ts`, `src/lib/company.ts`
+- Yapı malzemeleri örnek kataloğu: 5 üst kategori, 17 alt kategori, 32 ürün ve görselleri
 - Kategori menüsü (masaüstü, mobil, footer) ve arama kutusundaki kategoriler veritabanından gelir
-- Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (supurge → Süpürgelik)
+- Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (alci → Alçı ve Alçıpan)
 - Üyelik (Keycloak): giriş, kayıt, siparişlerim; misafir sipariş takibi (numara + e-posta)
 - Favoriler (tarayıcıda saklanır)
 - Ürün yorumları: üyeler puan + yorum yazar, admin onayından sonra yayınlanır; ürünü satın almış üyede "Doğrulanmış alıcı" rozeti
-- Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**
+- Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**; ürün sayfasında taksit tablosu ve "Peşin fiyatına N taksit" bilgisi
+- Teslimat: kargo ya da **Safranbolu mağazasından ücretsiz teslim** (adres, saatler ve yol tarifi sipariş sayfasında ve e-postada)
 - Stok: tükenen ürün "Tükendi" görünür, sepete eklenemez; az kalan stok uyarısı
 - Kargo takibi: kargo firması + takip numarası ve takip bağlantısı
+- İletişim formu, Hakkımızda, Mağazamız sayfaları
 - Yasal ve yardım sayfaları: KVKK, ön bilgilendirme, mesafeli satış, iade, kargo, SSS (şablon metinler)
+- SEO: sayfa başlıkları/açıklamaları, ürün yapısal verisi (JSON-LD), `sitemap.xml`, `robots.txt`
+- Erişilebilirlik: WCAG 2.2 AA, akışkan yazı boyutu, 320px'e kadar yatay kaydırmasız (bkz. [Erişilebilirlik](#erişilebilirlik-ve-duyarlı-tasarım-wcag-22-aa))
 
 **Yönetim paneli (`/admin`, admin rolü gerekir)**
 - Siparişler: liste, arama, durum değiştirme (havale onayı, hazırlanıyor, kargoya verildi + takip no, teslim, iptal → stok iadesi)
@@ -50,10 +59,25 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 
 ### Eksikler / sıradaki işler
 
-1. **SMTP ayarı** — `.env`'deki `SMTP_*` satırları boş; doldurulana kadar e-posta gönderilmez (bkz. [Sipariş e-postaları](#sipariş-e-postaları)).
-2. **Gerçek bilgiler** — footer'daki adres/telefon, firma unvanı, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`), Hakkımızda metni; yasal metinler hukukçuya okutulmalı.
-3. **Yayına alma** — alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifrelerinin değiştirilmesi, veritabanı ve `uploads` volume yedeği.
-4. Sonra: üye profili/adres defteri, favorilerin hesaba kaydı, toplu fiyat güncelleme ve Excel içe/dışa aktarma, e-Arşiv fatura, otomatik testler.
+**Firmadan beklenen bilgiler**
+- E-posta adresi, vergi dairesi ve vergi no, IBAN (`soykok-web/src/lib/company.ts`, `store-info.ts`, `orders.ts`)
+- İade/değişim politikası, kata çıkarma hizmeti, anlaşmalı kargo firması, kuruluş yılı ve Hakkımızda hikâyesi
+- Gerçek ürün fiyatları, markalar ve fotoğraflar (örnek katalog yerine)
+- Yasal metinler bir hukukçuya okutulmalı
+
+**Ayarlar**
+- **SMTP** — `.env`'deki `SMTP_*` satırları boş; doldurulana kadar e-posta gönderilmez (bkz. [Sipariş e-postaları](#sipariş-e-postaları)).
+
+**Geliştirme sırası**
+1. ~~Firma bilgileri ve yapı malzemeleri kataloğu~~ ✓
+2. ~~Erişilebilirlik ve duyarlı tasarım (WCAG 2.2 AA)~~ ✓
+3. ~~Ürün yorumları~~ ✓
+4. Üye hesabı: profil, kayıtlı adresler, favorilerin hesaba kaydı
+5. Admin: toplu fiyat güncelleme, Excel/CSV içe-dışa aktarma
+6. Otomatik testler ve GitHub Actions
+7. Yayına alma: alan adı, HTTPS, canlı iyzico anahtarları, `.env`'deki `change_me` şifreleri, Keycloak geliştirme kullanıcısının silinmesi, veritabanı ve `uploads` volume yedeği
+
+İleride: e-Arşiv fatura.
 
 ## Kurulum
 
@@ -89,13 +113,31 @@ sürebilir: `docker compose logs -f keycloak`
   (Yönetim konsolu → soykok realm → Realm settings → Email).
 - `PUBLIC_URL` değişirse (ör. canlı alan adı) realm dosyasındaki `soykok-bff` yönlendirme adreslerini de güncelleyin.
 
+### Giriş teması
+
+E-posta/şifre ekranları (giriş, üye ol, şifremi unuttum ...) Keycloak'ta, **`keycloak/themes/soykok/login`**
+temasıyla açılır: ortada logo ve form; sitenin renkleri ve Inter yazı tipi.
+
+- `template.ftl` — tüm giriş sayfalarının ortak iskeleti (formların kendisi Keycloak'ın klasik temasından gelir)
+- `resources/css/soykok.css` — görünüm; `messages/messages_tr.properties` — Türkçe metinler
+
+Yeni kurulumda realm dosyası temayı kendisi seçer (`"loginTheme": "soykok"`). **Var olan** kurulumda bir kez:
+
+```bash
+docker compose up -d keycloak
+docker compose exec keycloak sh -c '/opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user "$KC_BOOTSTRAP_ADMIN_USERNAME" --password "$KC_BOOTSTRAP_ADMIN_PASSWORD" && /opt/keycloak/bin/kcadm.sh update realms/soykok -s loginTheme=soykok'
+```
+
+(ya da yönetim konsolu → soykok realm → Realm settings → Themes → Login theme: `soykok`). Geliştirmede
+tema önbelleği kapalı; CSS/metin değişince sayfayı yenilemek yeter.
+
 ### Site girişi nasıl çalışır
 
-1. `hesap.html`'deki **Giriş Yap / Kayıt Ol** butonları `/api/auth/login` ya da `/api/auth/register`'a gider.
+1. Sitedeki **Giriş Yap / Kayıt Ol** butonları (`/hesap`, üst menü) `/api/auth/login` ya da `/api/auth/register`'a gider.
 2. Backend tarayıcıyı Keycloak'ın giriş/kayıt sayfasına yönlendirir; şifre siteye hiç gelmez.
 3. Keycloak `/api/auth/callback`'e döner; backend **HttpOnly** `soykok.session` çerezi verir.
    Oturum bilgisi (kullanıcı, roller, token'lar) **Redis**'te tutulur, çerez yalnızca anahtarı taşır.
-4. Sayfalar giriş durumunu `GET /api/auth/user` ile öğrenir (`src/js/store/session.js`).
+4. Sayfalar giriş durumunu `GET /api/auth/user` ile öğrenir (`soykok-web/src/hooks/useUser.ts`).
 5. Çıkış: `/api/auth/logout` hem sitedeki hem Keycloak'taki oturumu kapatır.
 
 API'yi araçlarla (curl, Postman) test ederken `Authorization: Bearer <token>` da kullanılabilir.
@@ -119,14 +161,21 @@ backend/
     │   ├── Ordering/            # Order, OrderItem, OrderStatusChange (durum geçişleri)
     │   ├── Inventory/           # StockItem
     │   ├── Reviews/             # ProductReview
+    │   ├── Support/             # ContactMessage (iletişim formu)
     │   └── Common/              # PostalAddress, InvoiceInfo, DomainException
     ├── Soykok.Application/      # kullanım senaryoları — yalnızca Domain'e bağlı
     │   ├── Common/              # Result/Error, IQueryHandler/ICommandHandler, arayüzler (repository, cache, olay)
-    │   └── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Contracts (DTO)
+    │   ├── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Admin (kategoriler), Contracts (DTO)
+    │   ├── Ordering/            # sipariş verme, takip, admin durum değişikliği
+    │   ├── Payments/            # kart ödemesi sonucu, yarım kalan ödemeler
+    │   ├── Reviews/             # ürün yorumları (site + admin onayı)
+    │   └── Support/             # iletişim mesajları
     ├── Soykok.Infrastructure/   # arayüzlerin uygulamaları — Application'a bağlı
     │   ├── Persistence/         # EF Core DbContext, konfigürasyonlar, migration'lar, repository'ler, örnek veri
     │   ├── Caching/             # Redis katalog önbelleği
     │   ├── Messaging/           # RabbitMQ olay yayıncısı
+    │   ├── Payments/            # iyzico Checkout Form, PendingPaymentWorker
+    │   ├── Notifications/       # SMTP, e-posta şablonları, OrderEmailWorker
     │   ├── Identity/            # Keycloak (OIDC + çerez + JWT), Redis oturum deposu
     │   └── Health/              # PostgreSQL / Redis / RabbitMQ sağlık kontrolleri
     ├── Soykok.Api/              # HTTP uç noktaları ve başlangıç (Program.cs)
@@ -144,9 +193,11 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | Uç nokta                       | Yetki   | Açıklama |
 |--------------------------------|---------|----------|
 | `GET /api/health`              | herkes  | PostgreSQL / Redis / RabbitMQ durumu |
-| `GET /api/categories`          | herkes  | Kategoriler + üst gruplar (parke, aksesuar ...) |
-| `GET /api/products`            | herkes  | Liste. Parametreler `urunler.html` ile aynı: `q`, `kategori`, `marka`, `min`, `max`, `indirim=1`, `sirala` (`onerilen`, `populer`, `yeni`, `fiyat-artan`, `fiyat-azalan`, `puan`), `page`, `pageSize` |
+| `GET /api/categories`          | herkes  | Kategoriler + üst gruplar (boya, hırdavat ...) |
+| `GET /api/products`            | herkes  | Liste. Parametreler `/urunler` sayfasıyla aynı: `q`, `kategori`, `marka`, `min`, `max`, `indirim=1`, `sirala` (`onerilen`, `populer`, `yeni`, `fiyat-artan`, `fiyat-azalan`, `puan`), `page`, `pageSize` |
 | `GET /api/products/{id}`       | herkes  | Ürün detayı (açıklama, özellikler, görseller) |
+| `GET /api/products/{id}/reviews` | herkes | Onaylı yorumlar + puan özeti (`page`); giriş yapılmışsa kendi yorumu |
+| `POST /api/products/{id}/reviews` | giriş | Yorum yaz / düzenle `{ rating, title?, comment }` → onaya düşer |
 | `POST /api/products`           | admin   | Ürün ekle |
 | `PUT /api/products/{id}`       | admin   | Ürün güncelle |
 | `DELETE /api/products/{id}`    | admin   | Ürün sil |
@@ -160,13 +211,16 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 | `POST /api/admin/uploads`      | admin   | Ürün görseli yükle (multipart, alan `file`; JPG/PNG/WEBP, en fazla 5 MB) → `{ url }` |
 | `GET /api/files/products/...`  | herkes  | Yüklenen görseller (`uploads` volume'u) |
 | `GET /api/admin/categories`    | admin   | Alt kategoriler (ürün sayısıyla) + üst kategoriler |
-| `POST /api/admin/categories`   | admin   | Alt kategori ekle `{ slug?, name, sortOrder?, groups: ["parke"] }` (kod boşsa addan üretilir) |
+| `POST /api/admin/categories`   | admin   | Alt kategori ekle `{ slug?, name, sortOrder?, groups: ["boya"] }` (kod boşsa addan üretilir) |
 | `PUT/DELETE /api/admin/categories/{slug}` | admin | Alt kategori güncelle / sil (içinde ürün varsa silinmez, 409) |
 | `POST /api/admin/category-groups` | admin | Üst kategori ekle `{ slug?, label, sortOrder? }` |
 | `PUT/DELETE /api/admin/category-groups/{slug}` | admin | Üst kategori güncelle / sil (alt kategoriler kalır) |
 | `POST /api/contact`            | herkes  | İletişim formu `{ name, email, phone?, subject, orderNumber?, message, kvkk }` (IP başına 10 dk'da 5) |
 | `GET /api/admin/messages`      | admin   | Mesajlar: `okunmamis=1`, `page`, `pageSize` → `{ total, unread, items }` |
 | `POST /api/admin/messages/{id}/read` · `DELETE /api/admin/messages/{id}` | admin | Okundu/okunmadı `{ read }` · sil |
+| `GET /api/admin/reviews`       | admin   | Yorumlar: `durum=bekleyen\|onayli`, `page` → `{ total, pending, items }` |
+| `POST /api/admin/reviews/{id}/approve` · `DELETE /api/admin/reviews/{id}` | admin | Yorumu onayla · reddet/sil (ürün puanı yeniden hesaplanır) |
+| `GET /api/payments/installments?price=` | herkes | Tutar için kart ailelerine göre taksitler (iyzico; Redis'te 6 saat, IP başına dakikada 60) |
 | `POST /api/payments/iyzico/callback` | iyzico | Kart ödemesi dönüşü (form: `token`, sorgu: `no`). Sonucu doğrular, sonuç sayfasına yönlendirir |
 | `GET /api/me`                  | giriş   | Giriş yapmış kullanıcı ve roller (çerez veya Bearer) |
 | `GET /api/auth/user`           | herkes  | `{ authenticated, user }` — sayfaların giriş durumu |
@@ -177,7 +231,8 @@ Yeni bir özellik eklerken sıra: Domain'de varlık → Application'da arayüz +
 
 Ürün ekleme/güncelleme/silme `soykok.events` (topic) exchange'ine `product.created`,
 `product.updated`, `product.deleted` olaylarını yayınlar.
-Sipariş oluşunca `order.created`, durumu değişince `order.status_changed` yayınlanır.
+Sipariş oluşunca `order.created`, durumu değişince `order.status_changed`, iletişim formundan mesaj gelince
+`contact.received` yayınlanır.
 
 Sipariş kuralları: tarayıcıdan yalnızca ürün kodu ve adet gelir; fiyat katalogdan okunur.
 Kargo 1000 TL altı siparişte 149 TL (`ShippingPolicy`, arayüzde `src/lib/shipping.ts` — ikisi aynı
@@ -238,7 +293,7 @@ mail bir kez yeniden denenir; hata `docker compose logs api` çıktısında gör
 
 ### Kategoriler
 
-Üst kategori (menü başlığı: Parke, Aksesuarlar …) ve alt kategori (ürünün kategorisi: Laminat, Masif …)
+Üst kategori (menü başlığı: Boya ve Vernik, Hırdavat …) ve alt kategori (ürünün kategorisi: İç Cephe Boyası, El Aletleri …)
 admin panelinde **/admin/kategoriler** sayfasından eklenir, düzenlenir, silinir. Sitenin mega menüsü, mobil
 menüsü, footer'daki kategori sütunu ve arama kutusu bu kayıtlardan üretilir (`soykok-web/src/lib/category-nav.ts`);
 değişiklik kaydedilince hemen yansır. Hiçbir üst kategoride olmayan alt kategori menüde tek başına başlık olur.
@@ -274,6 +329,11 @@ satırlarına yazın, sonra `docker compose up -d --build api`. Anahtarlar boşs
 (3D ekranında test şifresi sayfada yazar). Canlıda `IYZICO_BASE_URL=https://api.iyzipay.com`, canlı anahtarlar ve
 HTTPS'li `PUBLIC_URL` gerekir.
 
+Taksit: ürün sayfasındaki **Taksit Seçenekleri** sekmesi ve fiyat altındaki satır `GET /api/payments/installments`
+ile iyzico'nun taksit sorgusundan gelir (kart aileleri: Bonus, World, Maximum …). Sonuç Redis'te 6 saat tutulur.
+`.env`'de `IYZICO_*` boşsa taksit bilgisi hiç gösterilmez. Gösterilecek taksitleri sınırlamak için
+`Iyzico__EnabledInstallments__0=1`, `__1=3`, `__2=6` … (ödeme ekranı da aynı listeyi kullanır).
+
 Yarım kalan ödemeler: ödeme sayfası açılınca iyzico token'ı siparişe kaydedilir. Müşteri sayfayı kapatırsa
 geri dönüş gelmez; `PendingPaymentWorker` 5 dakikada bir, 35 dakikadan eski "Ödeme Bekleniyor" kartlı
 siparişleri token ile iyzico'ya sorar: ödenmişse onaylar, ödenmemişse iptal edip stoğu iade eder.
@@ -307,7 +367,8 @@ Production'da `FRONTEND_UPSTREAM` boş bırakılır (varsayılan `http://fronten
 
 ```bash
 curl http://localhost/api/health
-curl "http://localhost/api/products?kategori=parke&sirala=fiyat-artan"
+curl "http://localhost/api/products?kategori=boya&sirala=fiyat-artan"
+curl "http://localhost/api/products/<urun-kodu>/reviews"
 
 # Geliştirme admin kullanıcısıyla token al (yalnızca yerel ortam için)
 TOKEN=$(curl -s http://localhost/auth/realms/soykok/protocol/openid-connect/token \
@@ -339,8 +400,8 @@ dotnet run --project src/Soykok.Api
 sıfırdan başlatmak için `docker compose down -v`.
 
 `ecommerce` veritabanının tabloları **migrator** servisi tarafından EF Core migration'larıyla kurulur;
-veritabanı boşsa örnek katalog (33 ürün) ve stok (ürün başına 250) yüklenir. Tablolar modül başına
-şemalardadır (`catalog`, `customers`, `ordering`, `inventory`, `reviews`); migration geçmişi
+veritabanı boşsa örnek katalog (32 ürün) ve stok (ürün başına 250) yüklenir. Tablolar modül başına
+şemalardadır (`catalog`, `customers`, `ordering`, `inventory`, `reviews`, `support`); migration geçmişi
 `public.__ef_migrations_history` tablosundadır.
 
 ```bash
@@ -400,6 +461,7 @@ docker compose down -v                # durdur + tüm verileri sil
 | Migrator ilk açılışta `Failed executing DbCommand ... __ef_migrations_history` yazıyor | Normal: migration geçmişi tablosu henüz yok, EF hemen ardından oluşturur |
 | Migrator `Hiç migration bulunamadı` diyor | `./backend/scripts/add-migration.sh InitialCreate` ile migration oluşturun |
 | Eski veritabanıyla migration hatası (`relation ... already exists`) | Veritabanı migration'sız kurulmuş. Yerel ortamda: `docker compose down -v && docker compose up -d --build` |
+| Admin panelinde "An error occurred" / 500 | Yeni migration uygulanmamış: `docker compose up -d --build migrator api` |
 | Ürün görselleri açılmıyor (403) | Görsel dosyaları Mac'te kısıtlı izinle duruyordu; frontend Dockerfile derlemede düzeltir. `docker compose up -d --build frontend` |
 | http://localhost `502 Bad Gateway` | nginx arayüze ulaşamıyor. Geliştirmede `npm run dev` çalışıyor mu? `.env`'deki `FRONTEND_UPSTREAM` doğru mu? Değiştirdiyseniz `docker compose up -d --force-recreate nginx` |
 | Girişten sonra eski siteye / 3000 portuna dönmüyor | Siteyi http://localhost:3000 yerine http://localhost üzerinden açın; Keycloak dönüş adresi nginx'e göre ayarlı |

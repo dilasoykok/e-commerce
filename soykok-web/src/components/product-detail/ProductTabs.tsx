@@ -7,24 +7,28 @@ type Tab = { id: string; label: React.ReactNode; content: React.ReactNode };
 /**
  * Sekmeler (eski product-detail.js → initTabs). İçerikler sunucuda çizilip
  * gelir; burada yalnızca hangisinin görüneceği seçilir. Ok tuşlarıyla gezilir.
- * Adres #degerlendirmeler ise değerlendirme sekmesi açılır.
+ * Adres #degerlendirmeler ya da #taksit-secenekleri ise ilgili sekme açılır.
  */
-export default function ProductTabs({ tabs, hashTab }: { tabs: Tab[]; hashTab?: { hash: string; tabId: string } }) {
+type HashTab = { hash: string; tabId: string };
+
+export default function ProductTabs({ tabs, hashTabs = [] }: { tabs: Tab[]; hashTabs?: HashTab[] }) {
   const [active, setActive] = useState(tabs[0]?.id);
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!hashTab) return;
+    if (hashTabs.length === 0) return;
     const sync = () => {
-      if (location.hash !== `#${hashTab.hash}`) return;
-      setActive(hashTab.tabId);
+      const match = hashTabs.find((h) => location.hash === `#${h.hash}`);
+      if (!match) return;
+      setActive(match.tabId);
       // Panel görünür olduktan sonra sekmelere kaydır
       requestAnimationFrame(() => listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     };
     sync();
     window.addEventListener('hashchange', sync);
     return () => window.removeEventListener('hashchange', sync);
-  }, [hashTab]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hashTabs.map((h) => h.hash).join()]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;

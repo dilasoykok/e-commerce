@@ -10,6 +10,8 @@ import { useCart, useCartSummary } from '@/store/cart';
 import { useCartSync } from '@/hooks/useCartSync';
 import { usePlaceOrder } from '@/hooks/useOrders';
 import { useUser } from '@/hooks/useUser';
+import { useInstallments } from '@/hooks/useInstallments';
+import { installmentSummary } from '@/components/payment/Installments';
 import { ApiError } from '@/lib/api/client';
 import { formatTL } from '@/lib/format';
 import { saveLastOrder } from '@/lib/last-order';
@@ -51,6 +53,8 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
 
   const shipping = delivery === 'store' ? 0 : summary.shipping;
   const total = summary.subtotal + shipping;
+  // "Peşin fiyatına 3 taksit · 9 taksite varan seçenekler" (kartla ödeme kapalıysa null)
+  const installmentText = installmentSummary(useInstallments(total).data);
 
   // Sepet boşsa ödeme sayfasının anlamı yok
   useEffect(() => {
@@ -329,7 +333,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               icon={<Store className="size-4" strokeWidth={SW} aria-hidden />}
               title="Mağazadan Teslim Al"
               aside={<span className="text-xs font-semibold text-green-800">Ücretsiz</span>}
-              text="Safranbolu mağazamızdan; hazır olduğunda SMS ile bilgilendirilirsiniz."
+              text="Safranbolu mağazamızdan; hazır olduğunda e-postayla haber veririz."
             />
           </fieldset>
         </section>
@@ -347,7 +351,7 @@ export default function CheckoutPage({ paymentError }: { paymentError?: string |
               onChange={() => setPayment('card')}
               icon={<CreditCard className="size-4" strokeWidth={SW} aria-hidden />}
               title="Kredi / Banka Kartı"
-              text="Siparişi onayladıktan sonra ödeme kuruluşunun 3D Secure güvenli ödeme ekranına yönlendirilirsiniz. Kart bilgileriniz sitemizde işlenmez ve saklanmaz."
+              text={`${installmentText ? `${installmentText}; taksiti ödeme ekranında seçersiniz. ` : ''}Siparişi onayladıktan sonra ödeme kuruluşunun 3D Secure güvenli ödeme ekranına yönlendirilirsiniz. Kart bilgileriniz sitemizde işlenmez ve saklanmaz.`}
             />
             <OptionCard
               name="payment"

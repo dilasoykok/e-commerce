@@ -220,7 +220,7 @@ function ProductRow({
       <td className="px-4 py-3 text-right whitespace-nowrap">
         {p.oldPrice && <del className="mr-2 text-xs text-gray-500">{formatTL(p.oldPrice)}</del>}
         <span className="font-semibold">{formatTL(p.price)}</span>
-        <span className="text-xs text-gray-500">/{p.unit || 'm²'}</span>
+        <span className="text-xs text-gray-500">/{p.unit || 'adet'}</span>
       </td>
       <td className="px-4 py-3 text-right whitespace-nowrap">
         {p.stock == null ? (

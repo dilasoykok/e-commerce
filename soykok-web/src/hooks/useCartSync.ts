@@ -43,7 +43,7 @@ export function useCartSync() {
       (_, i) => results[i]?.error instanceof ApiError && (results[i].error as ApiError).isNotFound,
     );
     const { changed, removed } = syncProducts(
-      fresh.map((p) => ({ id: p.id, name: p.name, brand: p.brand, image: p.image, price: p.price, unit: p.unit || 'm²' })),
+      fresh.map((p) => ({ id: p.id, name: p.name, brand: p.brand, image: p.image, price: p.price, unit: p.unit || 'adet' })),
       missing,
     );
 

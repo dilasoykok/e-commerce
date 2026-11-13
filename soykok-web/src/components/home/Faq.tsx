@@ -4,8 +4,8 @@ const QUESTIONS = [
     a: "Boyanacak duvarların alanını (en × yükseklik) toplayın, kapı ve pencereleri çıkarın. Bir litre boya tek katta genellikle 8–12 m² örter; iki kat için bu alanı ikiyle çarpın. Kesin sarfiyat için ürün etiketine bakın ya da mağazamıza danışın.",
   },
   {
-    q: 'Montaj hizmetiniz var mı?',
-    a: 'Montaj ve uygulama talepleriniz için mağazamızı arayın; ürüne ve bölgenize göre bilgi verelim.',
+    q: 'Usta ve müteahhitlere toplu alımda indirim var mı?',
+    a: 'Proje ve toplu alımlarınız için İletişim sayfasından "Proje / toplu alım teklifi" konusunu seçin ya da mağazamızı arayın; miktara göre fiyat verelim.',
   },
   {
     q: 'Teslimat ne kadar sürer?',
@@ -17,7 +17,7 @@ const QUESTIONS = [
   },
   {
     q: 'Hangi ödeme yöntemlerini kabul ediyorsunuz?',
-    a: 'Nakit, kredi kartı, banka kartı ve havale/EFT ile ödeme yapabilirsiniz. Kredi kartına taksit seçenekleri için mağazamızla iletişime geçin.',
+    a: 'Sitede kredi kartı, banka kartı ve havale/EFT ile; mağazada nakit ve kartla ödeyebilirsiniz. Kredi kartına taksit seçeneklerini her ürünün sayfasındaki "Taksit Seçenekleri" sekmesinde görebilirsiniz.',
   },
   {
     q: 'Fazla aldığım ürünü iade edebilir miyim?',

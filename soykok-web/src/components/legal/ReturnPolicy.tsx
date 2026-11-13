@@ -27,8 +27,8 @@ export function WithdrawalRight() {
         </li>
         <li>Ürün bedeli, cayma bildiriminin bize ulaşmasından itibaren en geç 14 gün içinde, ödemeyi yaptığınız yöntemle iade edilir.</li>
         <li>
-          Ürünü inceleme amacıyla açabilirsiniz. Ancak olağan inceleme dışında kullanım (ör. döşenmiş, kesilmiş, yapıştırılmış
-          ürün) nedeniyle oluşan değer kaybından alıcı sorumludur.
+          Ürünü inceleme amacıyla açabilirsiniz. Ancak olağan inceleme dışında kullanım (ör. kullanılmış, kesilmiş, karıştırılmış
+          ya da renklendirilmiş ürün) nedeniyle oluşan değer kaybından alıcı sorumludur.
         </li>
       </ul>
     </>

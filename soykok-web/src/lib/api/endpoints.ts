@@ -18,6 +18,7 @@
 import { apiFetch, toQueryString, type ApiRequestInit } from './client';
 import type {
   AdminReviewPage,
+  InstallmentInfo,
   ProductReviews,
   WriteReviewInput,
   ContactInput,
@@ -74,6 +75,12 @@ export const api = {
   contact: {
     /** POST /api/contact — iletişim formu (IP başına 10 dakikada 5 mesaj) */
     send: (input: ContactInput) => apiFetch<{ received: boolean }>('/contact', { method: 'POST', json: input }),
+  },
+
+  payments: {
+    /** Tutar için kart ailelerine göre taksit seçenekleri (iyzico; sunucuda 6 saat önbellekte) */
+    installments: (price: number, opts?: Opts) =>
+      apiFetch<InstallmentInfo>(`/payments/installments${toQueryString({ price: price.toFixed(2) })}`, opts),
   },
 
   orders: {

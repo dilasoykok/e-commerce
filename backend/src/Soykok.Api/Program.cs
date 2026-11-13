@@ -21,6 +21,9 @@ builder.Services.AddRateLimiter(o =>
     o.AddPolicy(ContactEndpoints.RateLimitPolicy, http => RateLimitPartition.GetFixedWindowLimiter(
         ContactEndpoints.ClientIp(http),
         _ => new FixedWindowRateLimiterOptions { PermitLimit = 5, Window = TimeSpan.FromMinutes(10), QueueLimit = 0 }));
+    o.AddPolicy(PaymentEndpoints.InstallmentRateLimitPolicy, http => RateLimitPartition.GetFixedWindowLimiter(
+        ContactEndpoints.ClientIp(http),
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
 });
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddProblemDetails();

@@ -12,7 +12,7 @@ export const SUBJECTS = [
   { value: 'urun', label: 'Ürün bilgisi' },
   { value: 'siparis', label: 'Sipariş' },
   { value: 'iade', label: 'İade ve değişim' },
-  { value: 'numune', label: 'Numune talebi' },
+  { value: 'renk', label: 'Renk / boya danışmanlığı' },
   { value: 'proje', label: 'Proje / toplu alım teklifi' },
   { value: 'diger', label: 'Diğer' },
 ];
