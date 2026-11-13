@@ -32,12 +32,15 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Kategori menüsü (masaüstü, mobil, footer) ve arama kutusundaki kategoriler veritabanından gelir
 - Canlı arama önerileri: 2 harften itibaren kategori, marka ve ürün; Türkçe karakterden bağımsız (alci → Alçı ve Alçıpan)
 - Üyelik (Keycloak): giriş, kayıt, siparişlerim, **profilim** (ad, soyad, cep telefonu, kampanya izni; ödeme formunu otomatik doldurur), **adreslerim** (en fazla 10 adres; ödemede tek tıkla seçilir, yeni adres siparişte deftere kaydedilebilir); misafir sipariş takibi (numara + e-posta)
+- Hesabım sekmeleri: Siparişlerim · Profilim · Adreslerim · Favorilerim · Çıkış (`/siparislerim`, `/hesabim/profil`, `/hesabim/adresler`)
+- Giriş / üye ol ekranları sitenin tasarımında (Keycloak teması, bkz. [Giriş teması](#giriş-teması))
 - Favoriler (tarayıcıda saklanır)
 - Ürün yorumları: üyeler puan + yorum yazar, admin onayından sonra yayınlanır; ürünü satın almış üyede "Doğrulanmış alıcı" rozeti
 - Ödeme: **kredi kartı (iyzico, 3D Secure)** ve **havale/EFT**; ürün sayfasında taksit tablosu ve "Peşin fiyatına N taksit" bilgisi
 - Teslimat: kargo ya da **Safranbolu mağazasından ücretsiz teslim** (adres, saatler ve yol tarifi sipariş sayfasında ve e-postada)
 - Stok: tükenen ürün "Tükendi" görünür, sepete eklenemez; az kalan stok uyarısı
 - Kargo takibi: kargo firması + takip numarası ve takip bağlantısı
+- Popüler Markalar: logolu, yumuşak kayan bant (kenarlarda şeffaf geçiş, fareyle durur, Durdur/Oynat düğmesi); markalar ve logolar admin panelinden
 - İletişim formu, Hakkımızda, Mağazamız sayfaları
 - Yasal ve yardım sayfaları: KVKK, ön bilgilendirme, mesafeli satış, iade, kargo, SSS (şablon metinler)
 - SEO: sayfa başlıkları/açıklamaları, ürün yapısal verisi (JSON-LD), `sitemap.xml`, `robots.txt`
@@ -57,6 +60,20 @@ birbirine her zaman iç ağdan (`postgres:5432`, `redis:6379` ...) bağlanır.
 - Sipariş e-postaları (SMTP): sipariş alındı, ödeme onayı, kargoda, teslim, iptal + admin'e yeni sipariş / yeni mesaj bildirimi
 - Yarım kalan kart ödemeleri 5 dakikada bir iyzico'ya sorulur: ödenmişse onaylanır, ödenmemişse iptal edilip stok iade edilir
 - İletişim formu veritabanına kaydedilir; IP başına 10 dakikada 5 mesaj sınırı ve spam tuzağı
+
+### Son değişiklikler
+
+**13 Kasım 2026**
+- Giriş / üye ol ekranı sitenin tasarımına uygun yeniden yapıldı (`keycloak/themes/soykok`)
+- Taksit: ürün sayfasında "Peşin fiyatına N taksit" satırı ve **Taksit Seçenekleri** sekmesi, ödemede taksit özeti (iyzico taksit sorgusu)
+- Mağazadan teslim: sipariş sayfasında, Siparişlerim'de ve "Siparişiniz hazır" e-postasında adres, saatler ve yol tarifi
+- Metin temizliği: parke döneminden kalan "numune", "montaj", "metrekare" ifadeleri kaldırıldı; birimi girilmemiş ürünlerde varsayılan birim "adet"
+- Üye hesabı: **Profilim** (ad, soyad, telefon, kampanya izni) ve **Adreslerim** (adres defteri); ödeme formu bu bilgilerle dolar, kayıtlı adres tek tıkla seçilir
+- Markalar: 8 markanın resmi logosu, kayan marka bandı geri geldi; **Admin → Markalar** ile logo yükleme / değiştirme, marka ekleme / silme, sıralama
+- Migration'lar: `AddBrands` (catalog.brands + ilk 8 marka)
+
+**11–12 Kasım 2026**
+- Ürün yorumları ve admin onayı, firma bilgileri, yapı malzemeleri kataloğu, erişilebilirlik (WCAG 2.2 AA), iletişim formu, kartla ödemede yarım kalan ödemelerin takibi
 
 ### Eksikler / sıradaki işler
 
@@ -157,7 +174,7 @@ backend/
 ├── Directory.Build.props        # ortak ayarlar (net10.0, nullable ...)
 └── src/
     ├── Soykok.Domain/           # varlıklar ve iş kuralları — hiçbir şeye bağımlı değil
-    │   ├── Catalog/             # Product, Category, CategoryGroup
+    │   ├── Catalog/             # Product, Category, CategoryGroup, Brand
     │   ├── Customers/           # Customer, CustomerAddress, FavoriteProduct
     │   ├── Ordering/            # Order, OrderItem, OrderStatusChange (durum geçişleri)
     │   ├── Inventory/           # StockItem
@@ -166,7 +183,8 @@ backend/
     │   └── Common/              # PostalAddress, InvoiceInfo, DomainException
     ├── Soykok.Application/      # kullanım senaryoları — yalnızca Domain'e bağlı
     │   ├── Common/              # Result/Error, IQueryHandler/ICommandHandler, arayüzler (repository, cache, olay)
-    │   ├── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Admin (kategoriler), Contracts (DTO)
+    │   ├── Catalog/             # Queries (GetProducts ...), Commands (CreateProduct ...), Admin (kategoriler, markalar), Contracts (DTO)
+    │   ├── Customers/           # üye profili, adres defteri
     │   ├── Ordering/            # sipariş verme, takip, admin durum değişikliği
     │   ├── Payments/            # kart ödemesi sonucu, yarım kalan ödemeler
     │   ├── Reviews/             # ürün yorumları (site + admin onayı)
@@ -436,6 +454,10 @@ docker compose logs migrator                        # sonucu gör
 
 Ayrıntılar: [`backend/docs/database.md`](backend/docs/database.md).
 
+> Not: Bazı migration'lar .NET SDK olmadan elle yazıldı (Designer dosyası yok). Bu migration'larda
+> `migrationBuilder.InsertData(...)` çalışmaz ("There is no entity type mapped to the table ..." hatası);
+> başlangıç verisini `migrationBuilder.Sql("INSERT ...")` ile ekleyin.
+
 ## Klasör yapısı
 
 ```
@@ -479,6 +501,8 @@ docker compose down -v                # durdur + tüm verileri sil
 | Admin panelinde "An error occurred" / 500 | Yeni migration uygulanmamış: `docker compose up -d --build migrator api` |
 | Ürün görselleri açılmıyor (403) | Görsel dosyaları Mac'te kısıtlı izinle duruyordu; frontend Dockerfile derlemede düzeltir. `docker compose up -d --build frontend` |
 | http://localhost `502 Bad Gateway` | nginx arayüze ulaşamıyor. Geliştirmede `npm run dev` çalışıyor mu? `.env`'deki `FRONTEND_UPSTREAM` doğru mu? Değiştirdiyseniz `docker compose up -d --force-recreate nginx` |
+| Sitede `502 Bad Gateway`, ama `/api/health` çalışıyor | Arayüz kapalı: geliştirmede `npm run dev` çalıştığı terminal kapanmış olabilir → `cd soykok-web && npm run dev`. Docker'da: `docker compose up -d --build frontend` |
+| Migrator `There is no entity type mapped to the table` | Elle yazılmış migration'da `InsertData` kullanılmış; `migrationBuilder.Sql("INSERT ...")` ile değiştirin |
 | Girişten sonra eski siteye / 3000 portuna dönmüyor | Siteyi http://localhost:3000 yerine http://localhost üzerinden açın; Keycloak dönüş adresi nginx'e göre ayarlı |
 | `frontend` derlemesi `npm ci` hatası veriyor | `soykok-web/package-lock.json` güncel değil. Bilgisayarda `cd soykok-web && npm install` çalıştırıp tekrar deneyin |
 | Keycloak realm değişikliği yansımıyor | Realm dosyası yalnızca realm yoksa içe aktarılır. Yerel ortamda: `docker compose down -v` |
